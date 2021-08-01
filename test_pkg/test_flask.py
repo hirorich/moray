@@ -8,6 +8,7 @@ import requests
 from threading import Thread
 
 from flask import Flask, render_template
+from my_package import browser
 app = Flask(__name__)
 
 HOST='localhost'
@@ -47,6 +48,16 @@ def daemon_thread():
             print('Exception: ' + url)
     
     print('daemon_thread STOP')
+    open(url)
+
+def open(url):
+    """
+    アプリモードで開く
+    """
+    
+    browser_name = 'chrome'
+    cmdline_args = ['--incognito']
+    browser.open(browser_name, url, cmdline_args)
 
 def test():
     main_t = Thread(target=run)
