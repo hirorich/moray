@@ -1,8 +1,16 @@
-# myGuiLib
+# moray
 ***
-## myGuiLib とは
+## moray とは
 - eelに代わるFlaskベースのGUI部品
-- Flask, React, Bootstrap, Axios を使用する想定
+- 使用想定ライブラリ
+  - Python
+    - Flask 2.0
+  - JavaScript
+    - React 17
+    - Axios
+    - socket.io
+  - CSS
+    - Bootstrap 5
 
 ***
 ## 環境構築
