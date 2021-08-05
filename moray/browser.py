@@ -4,8 +4,8 @@
 """
 
 import subprocess
-from my_package import chrome
-from my_package.exception import SupportError
+from moray import chrome
+from moray.exception import SupportError
 
 CHROME = chrome.name
 

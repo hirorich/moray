@@ -7,7 +7,7 @@ http://localhost:3500/
 import requests
 from threading import Thread
 
-from my_package import browser
+from moray import browser
 from test_pkg import test_flask
 from flask import render_template, Response
 app = test_flask.app
@@ -19,9 +19,9 @@ PORT=3500
 def show_html():
     return render_template('jsSample.html')
 
-@app.route('/my_package.js')
+@app.route('/moray.js')
 def js_sample():
-    res = Response('alert("my_package.js");')
+    res = Response('alert("moray.js");')
     res.content_type = 'text/javascript; charset=utf-8'
     return res
 

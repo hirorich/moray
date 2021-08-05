@@ -7,15 +7,15 @@ http://localhost:3500/
 import requests
 from threading import Thread
 
-from my_package import browser
+from moray import browser
 from test_pkg import test_flask
 app = test_flask.app
 
 HOST='localhost'
 PORT=3500
 
-@app.route('/my_package/')
-@app.route('/my_package/<name>')
+@app.route('/moray/')
+@app.route('/moray/<name>')
 def check(name=None):
     return 'Success'
 
@@ -32,7 +32,7 @@ def daemon_thread():
     """
     
     url = r'http://' + HOST + ':' + str(PORT) + '/'
-    check_url = url + 'my_package/'
+    check_url = url + 'moray/'
     connect_timeout = 3.0
     read_timeout = 5.0
     

@@ -1,9 +1,9 @@
 """
-my_package.browser のテスト
+moray.browser のテスト
 
 """
 
-from my_package import browser
+from moray import browser
 
 # main
 def test():

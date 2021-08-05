@@ -4,7 +4,7 @@ chromeをアプリモードで起動するためのコマンドを生成する
 """
 
 import sys, os
-from my_package.exception import SupportError
+from moray.exception import SupportError
 
 name = 'chrome'
 
