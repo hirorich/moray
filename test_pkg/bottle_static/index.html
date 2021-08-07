@@ -6,36 +6,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-<script>
-$(function() {
-    if (!window.WebSocket) {
-        if (window.MozWebSocket) {
-            window.WebSocket = window.MozWebSocket;
-        } else {
-            $('#result').append("Your browser doesn't support WebSockets.");
-        }
-    }
-    
-    ws = new WebSocket('ws://localhost:8080/websocket');
-    ws.onopen = function(evt) {
-        $('#result').append('<li>WebSocket connection opened.</li>');
-    }
-    ws.onmessage = function(evt) {
-        $('#result').append('<li>' + evt.data + '</li>');
-    }
-    ws.onclose = function(evt) {
-        $('#result').append('<li>WebSocket connection closed.</li>');
-    }
-    $('#send').submit(function() {
-        ws.send($('input:first').val());
-        $('input:first').val('').focus();
-        return false;
-    });
-    $('#message').on('keyup', function() {
-        ws.send($('#message').val());
-    });
-})
-</script>
+    <script src="./index.js" type="module"></script>
 </head>
 <body>
     <h3>WebSocket Sample</h3>
