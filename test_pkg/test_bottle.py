@@ -14,9 +14,9 @@ app = bottle.Bottle()
 def index():
     return bottle.static_file('index.html', root='./test_pkg/bottle_static')
 
-@app.route('/<file_path>')
-def file_path(file_path):
-    return bottle.static_file(file_path, root='./test_pkg/bottle_static')
+@app.route('/<path:path>')
+def file_path(path):
+    return bottle.static_file(path, root='./test_pkg/bottle_static')
 
 @app.route('/websocket', apply=[websocket])
 def bottle_websocket(ws):

@@ -1,4 +1,4 @@
-import {py_func, py_func2} from './my_module.js'
+import {py_func, py_func2} from '/molay/my_module.js'
 
 py_func('test', 123).then(
     v => console.log(v)
