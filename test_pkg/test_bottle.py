@@ -5,6 +5,7 @@ http://localhost:3500/
 """
 
 import bottle, json
+from bottle import HTTPResponse
 from bottle.ext.websocket import GeventWebSocketServer
 from bottle.ext.websocket import websocket
 
@@ -15,6 +16,9 @@ def py_module(py_module):
     print('  /moray/py/<py_module>')
     print('  ' + py_module)
     return bottle.static_file(py_module + '.js', root='./test_pkg/moray/py')
+    #res = HTTPResponse(status = 200, body='export let py_func = function() {console.log("py_module");}')
+    #res.set_header('Content-type', 'text/javascript')
+    #return res
 
 @app.route('/moray/core/<core_module>')
 def moray_core(core_module):
