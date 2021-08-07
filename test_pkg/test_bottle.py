@@ -4,7 +4,7 @@ http://localhost:3500/
 
 """
 
-import bottle
+import bottle, json
 from bottle.ext.websocket import GeventWebSocketServer
 from bottle.ext.websocket import websocket
 
@@ -23,7 +23,15 @@ def bottle_websocket(ws):
     while True:
         msg = ws.receive()
         if msg is not None:
-            ws.send('echo:' + msg)
+            print(msg)
+            msg_data = json.loads(msg)
+            print('  id: ' + msg_data['id'])
+            print('  module: ' + msg_data['module'])
+            print('  func: ' + msg_data['func'])
+            re_obj = {'id': msg_data['id'], 'data': msg}
+            re_msg = json.dumps(re_obj)
+            print(re_msg)
+            ws.send(re_msg)
         else:
             break
 
