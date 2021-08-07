@@ -1,6 +1,6 @@
 // 本来はサーバ側でモジュール毎に自動生成
-// /molay/py/my_module
-import {send_to_py} from '/molay/core.js'
+// /moray/py/my_module
+import {send_to_py} from '/moray/core/core'
 
 export let py_func = function() {
     return send_to_py('my_module', 'py_func', arguments);

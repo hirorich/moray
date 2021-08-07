@@ -7,7 +7,6 @@
   - Python
     - bottle 0.12
   - JavaScript
-    - socket.io
     - React 17
   - CSS
     - Bootstrap 5
@@ -90,7 +89,7 @@
 - js_module.js
   ``` javascript
   // 登録されたpythonモジュール読み込み
-  import {py_func} from 'moray/py/py_module'
+  import {py_func} from '/moray/py/py_module'
   
   return_value = py_func()
   ```

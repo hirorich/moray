@@ -1,5 +1,5 @@
 // 本来はサーバ側で自動生成
-// /molay/core
+// /moray/core
 let ws;
 let call_promise = {};
 let unsended_data = [];
@@ -13,7 +13,7 @@ let _init = function() {
         }
     }
     
-    ws = new WebSocket('ws://localhost:8080/websocket');
+    ws = new WebSocket('ws://localhost:8080/moray/ws');
     ws.onopen = function(evt) {
         console.log('ws.onopen');
         for(let i = 0; i < unsended_data.length; i++){
