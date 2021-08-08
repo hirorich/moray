@@ -11,6 +11,9 @@ CHROME = chrome.name
 
 _browser_modules = {CHROME: chrome}
 
+def is_supported(browser):
+    return browser in _browser_modules
+
 def open(browser, url, cmdline_args):
     """
     指定したブラウザで対象ページを開く
@@ -23,7 +26,7 @@ def open(browser, url, cmdline_args):
     """
     
     # 使用するブラウザモジュールを指定
-    if browser in _browser_modules:
+    if is_supported(browser):
         browser_module = _browser_modules[browser]
     else:
         
