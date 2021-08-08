@@ -5,7 +5,6 @@ cd %~dp0
 
 rem é¿çs
 call .venv\Scripts\activate.bat
-rem python test.py
 python main.py
 
 pause
