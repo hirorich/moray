@@ -15,3 +15,4 @@ host = 'localhost'
 port = 0
 
 is_initialized = False
+generated_port = 0

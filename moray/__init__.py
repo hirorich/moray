@@ -3,7 +3,7 @@ morayが提供するAPIのInterface
 
 """
 
-from moray import config, const, browser
+from moray import config, const, browser, runner
 from moray.exception import ConfigurationError, SupportError
 from pathlib import Path
 import re
@@ -127,7 +127,8 @@ def run(host = 'localhost', port = 0):
         raise ConfigurationError(msg)
     config.port = port
     
-    _execute_moray()
+    # サーバ起動・ブラウザ起動
+    runner.run()
 
 def expose(func):
     """
@@ -147,9 +148,6 @@ def expose(func):
     return wrapper
 
 # ===== 以下は別モジュールに実装する =====
-def _execute_moray():
-    print('_execute_moray')
-
 def _register(module, name, func):
     print('_register')
     print('  module: ' + module)
