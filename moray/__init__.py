@@ -1,3 +1,8 @@
+"""
+morayが提供するAPI
+
+"""
+
 from moray import browser, chrome
 from moray.exception import ConfigurationError, SupportError
 from pathlib import Path
@@ -25,6 +30,19 @@ _default_moray_args = {
 _moray_args = {}
 
 def init(root, **kwargs):
+    """
+    morayライブラリの初期化
+    
+    Attributes:
+        root (str): サーバのルートとなるフォルダ
+        start_page (str): 初期表示するページ
+        browser (str): 使用するブラウザ
+        cmdline_args (list<str>): ブラウザの起動引数
+        position (tuple<int, int>): ブラウザを開いた際の位置
+        size (tuple<int, int>): ブラウザを開いた際のサイズ
+    
+    """
+    
     _moray_args.update(_default_moray_args)
     _moray_args.update(kwargs)
     
@@ -91,6 +109,15 @@ def init(root, **kwargs):
         raise ConfigurationError(error_msg)
 
 def run(host = 'localhost', port = 0):
+    """
+    morayライブラリを実行
+    
+    Attributes:
+        host (str): サーバのホスト
+        port (int): サーバのポート番号
+    
+    """
+    
     if len(_moray_args) == 0:
         error_msg = '"moray" is not initialized. Call "moray.init(root)".'
         raise ConfigurationError(error_msg)
@@ -107,6 +134,15 @@ def run(host = 'localhost', port = 0):
     _execute_moray(_moray_args)
 
 def expose(func):
+    """
+    デコレータ
+    JavaScriptから呼び出すファンクションを登録
+    
+    Attributes:
+        func (function): 登録するファンクション
+    
+    """
+    
     
     _register(func.__module__, func.__name__, func)
     
