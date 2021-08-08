@@ -30,6 +30,10 @@
     ``` bash
     .venv\Scripts\activate
     ```
+  - pip最新化
+    ``` bash
+    python -m pip install --upgrade pip
+    ```
   - 使用ライブラリを一括インストール
     ``` bash
     pip install -r requirements.txt
@@ -55,17 +59,11 @@
 - [gevent](https://pypi.org/project/gevent/)
   - MIT License
   - bottle-websocketの依存ライブラリ
-  - 以下を実行することでインストール
-    ``` bash
-    pip install gevent
-    ```
+  - bottle-websocketインストール時にインストール
 - [gevent-websocket](https://pypi.org/project/gevent-websocket/)
   - [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0)
   - bottle-websocketの依存ライブラリ
-  - 以下を実行することでインストール
-    ``` bash
-    pip install gevent-websocket
-    ```
+  - bottle-websocketインストール時にインストール
 - [requests](https://pypi.org/project/requests/)
   - [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0)
   - サーバ起動確認に使用
@@ -91,7 +89,9 @@
   // 登録されたpythonモジュール読み込み
   import {py_func} from '/moray/py/py_module'
   
-  return_value = py_func()
+  py_func().then(
+      value => ・・・
+  )
   ```
 
 ### Python -> Javascript
