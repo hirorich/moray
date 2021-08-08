@@ -1,33 +1,12 @@
 """
-morayが提供するAPI
+morayが提供するAPIのInterface
 
 """
 
-from moray import browser, chrome
+from moray import config, const, browser
 from moray.exception import ConfigurationError, SupportError
 from pathlib import Path
-
-ROOT = 'root'
-START_PAGE = 'start_page'
-BROWSER = 'browser'
-CMDLINE_ARGS = 'cmdline_args'
-POSITION = 'position'
-SIZE = 'size'
-HOST = 'host'
-PORT = 'port'
-
-_default_moray_args = {
-    ROOT: None,
-    START_PAGE : None,
-    BROWSER: chrome.name,
-    CMDLINE_ARGS: ['--disable-http-cache', '--incognito'],
-    POSITION: None,
-    SIZE: None,
-    HOST: 'localhost',
-    PORT: 0
-}
-
-_moray_args = {}
+import re
 
 def init(root, **kwargs):
     """
@@ -35,78 +14,84 @@ def init(root, **kwargs):
     
     Attributes:
         root (str): サーバのルートとなるフォルダ
-        start_page (str): 初期表示するページ
-        browser (str): 使用するブラウザ
-        cmdline_args (list<str>): ブラウザの起動引数
-        position (tuple<int, int>): ブラウザを開いた際の位置
-        size (tuple<int, int>): ブラウザを開いた際のサイズ
+        start_page (str, optional): 初期表示するページ
+        browser (str, optional): 使用するブラウザ
+        cmdline_args (list<str>, optional): ブラウザの起動引数
+        position (tuple<int, int>, optional): ブラウザを開いた際の位置
+        size (tuple<int, int>, optional): ブラウザを開いた際のサイズ
     
     """
     
-    _moray_args.update(_default_moray_args)
-    _moray_args.update(kwargs)
+    # Noneを指定された項目を排除
+    args = dict(
+        filter(
+            lambda item: item[1] is not None, kwargs.items()
+        )
+    )
     
-    # ROOTの初期値設定
+    # ROOTの値設定
     if root is None or root.strip(' ') == '':
-        error_msg = '"' + ROOT + '" is unspecified or whitespace.'
-        raise ConfigurationError(error_msg)
-    root = root.strip(' ')
+        msg = '"' + const.ROOT + '" is unspecified or whitespace.'
+        raise ConfigurationError(msg)
+    config.root = root.strip(' ')
     
     # ROOTフォルダの存在チェック
-    root_path = Path(root)
+    root_path = Path(config.root)
     if not root_path.exists():
-        error_msg = '"' + str(root_path) + '" is not exist.'
-        raise ConfigurationError(error_msg)
-    _moray_args[ROOT] = root
+        msg = '"' + str(root_path) + '" is not exist.'
+        raise ConfigurationError(msg)
     
-    # START_PAGEの初期値設定
-    start_page = _moray_args[START_PAGE]
-    if start_page is None or start_page.strip(' ') == '':
-        start_page = 'index.html'
-    else:
-        start_page = start_page.strip(' ')
+    # START_PAGEの値設定
+    if const.START_PAGE in args:
+        start_page = args[const.START_PAGE]
+        if start_page is None or start_page.strip(' ') == '':
+            config.start_page = 'index.html'
+        else:
+            config.start_page = start_page.strip(' ')
     
     # ROOT/START_PAGEの存在チェック
-    start_path = root_path.joinpath(start_page)
+    start_path = root_path.joinpath(config.start_page)
     if not start_path.exists():
-        error_msg = '"' + str(start_path) + '" is not exist.'
-        raise ConfigurationError(error_msg)
-    _moray_args[START_PAGE] = start_page
+        msg = '"' + str(start_path) + '" is not exist.'
+        raise ConfigurationError(msg)
+    
+    # ブラウザの値設定
+    if const.BROWSER in args:
+        config.browser = args[const.BROWSER].strip(' ')
     
     # ブラウザのサポートチェック
-    if _moray_args[BROWSER] is None:
-        error_msg = '"' + BROWSER + '" is unspecified.'
-        raise ConfigurationError(error_msg)
-    elif not browser.is_supported(_moray_args[BROWSER]):
-        error_msg = '"' + _moray_args[BROWSER] + '" is not a supported browser.'
-        raise SupportError(error_msg)
+    if not browser.is_supported(config.browser):
+        msg = '"' + config.browser + '" is not a supported browser.'
+        raise SupportError(msg)
     
     # CMDLINE_ARGSの型チェック
-    if not type(_moray_args[CMDLINE_ARGS]) is list:
-        error_msg = '"' + CMDLINE_ARGS + '" is not list.'
-        raise ConfigurationError(error_msg)
+    if const.CMDLINE_ARGS in args:
+        if not type(args[const.CMDLINE_ARGS]) is list:
+            msg = '"' + const.CMDLINE_ARGS + '" is not list.'
+            raise ConfigurationError(msg)
+        config.cmdline_args.update(args[const.CMDLINE_ARGS])
     
     # POSITIONの型チェック
-    if _moray_args[POSITION] is None:
-        pass
-    elif type(_moray_args[POSITION]) is tuple:
-        if len(_moray_args[POSITION]) != 2:
-            error_msg = '"' + POSITION + '" has only 2 integer.'
-            raise ConfigurationError(error_msg)
-    else:
-        error_msg = '"' + POSITION + '" is not tuple or None.'
-        raise ConfigurationError(error_msg)
+    if const.POSITION in args:
+        if not type(args[const.POSITION]) is tuple:
+            msg = '"' + const.POSITION + '" is not tuple.'
+            raise ConfigurationError(msg)
+        elif len(args[const.POSITION]) != 2:
+            msg = '"' + const.POSITION + '" has only 2 integer.'
+            raise ConfigurationError(msg)
+        config.position = tuple(args[const.POSITION])
     
     # SIZEの型チェック
-    if _moray_args[SIZE] is None:
-        pass
-    elif type(_moray_args[SIZE]) is tuple:
-        if len(_moray_args[SIZE]) != 2:
-            error_msg = '"' + SIZE + '" has only 2 integer.'
-            raise ConfigurationError(error_msg)
-    else:
-        error_msg = '"' + SIZE + '" is not tuple or None.'
-        raise ConfigurationError(error_msg)
+    if const.SIZE in args:
+        if not type(args[const.SIZE]) is tuple:
+            msg = '"' + const.SIZE + '" is not tuple.'
+            raise ConfigurationError(msg)
+        elif len(args[const.SIZE]) != 2:
+            msg = '"' + const.SIZE + '" has only 2 integer.'
+            raise ConfigurationError(msg)
+        config.size = tuple(args[const.SIZE])
+    
+    config.is_initialized = True
 
 def run(host = 'localhost', port = 0):
     """
@@ -118,20 +103,31 @@ def run(host = 'localhost', port = 0):
     
     """
     
-    if len(_moray_args) == 0:
-        error_msg = '"moray" is not initialized. Call "moray.init(root)".'
-        raise ConfigurationError(error_msg)
+    # 設定が初期化済みかチェック
+    if not config.is_initialized:
+        msg = '"moray" is not initialized. Call "moray.init(root)".'
+        raise ConfigurationError(msg)
     
     # HOSTチェック
-    if host != 'localhost':
-        error_msg = '"' + _HOST + '" is only "localhost".'
-        raise SupportError(error_msg)
-    _moray_args[HOST] = host
+    if host is None or host == 'localhost':
+        config.host = 'localhost'
+    elif re.match(r'\d+\.\d+\.\d+\.\d+', host) is None:
+        msg = '"' + const.HOST + '" is not "localhost" or "xxx.xxx.xxx.xxx".'
+        raise ConfigurationError(msg)
+    else:
+        for num in host.split('.'):
+            if int(num) < 0 or 255 < int(num):
+                msg = '"' + const.HOST + '" is not "localhost" or "xxx.xxx.xxx.xxx".'
+                raise ConfigurationError(msg)
+        config.host = host
     
     # PORTチェック
-    _moray_args[PORT] = port
+    if port < 0 or 65535 < port:
+        msg = '"' + const.PORT + '" is less than 0 or greater than 65535.'
+        raise ConfigurationError(msg)
+    config.port = port
     
-    _execute_moray(_moray_args)
+    _execute_moray()
 
 def expose(func):
     """
@@ -143,7 +139,6 @@ def expose(func):
     
     """
     
-    
     _register(func.__module__, func.__name__, func)
     
     def wrapper(*args, **kwargs):
@@ -152,9 +147,8 @@ def expose(func):
     return wrapper
 
 # ===== 以下は別モジュールに実装する =====
-def _execute_moray(moray_args):
+def _execute_moray():
     print('_execute_moray')
-    print(moray_args)
 
 def _register(module, name, func):
     print('_register')
