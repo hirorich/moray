@@ -3,10 +3,19 @@ morayが提供するAPIのInterface
 
 """
 
-from moray import config, chrome, const, browser as bw, runner
+from moray import config, chrome, browser as bw, runner
 from moray.exception import ConfigurationError, SupportError
 from pathlib import Path
 import re
+
+_ROOT = 'root'
+_START_PAGE = 'start_page'
+_BROWSER = 'browser'
+_CMDLINE_ARGS = 'cmdline_args'
+_POSITION = 'position'
+_SIZE = 'size'
+_HOST = 'host'
+_PORT = 'port'
 
 def run(
         root,
@@ -34,15 +43,15 @@ def run(
     """
     
     # root入力チェック
-    _check_not_None(root, const.ROOT)
-    _check_not_str(root, const.ROOT)
-    _check_not_whitespace(root, const.ROOT)
+    _check_not_None(root, _ROOT)
+    _check_not_str(root, _ROOT)
+    _check_not_whitespace(root, _ROOT)
     _check_not_exist(root)
     root = root.strip(' ')
     
     # start_page入力チェック
-    _check_not_None(start_page, const.START_PAGE)
-    _check_not_str(start_page, const.START_PAGE)
+    _check_not_None(start_page, _START_PAGE)
+    _check_not_str(start_page, _START_PAGE)
     start_page = start_page.strip(' ')
     
     # host入力チェック
@@ -53,24 +62,24 @@ def run(
     _check_port(port)
     
     # browser入力チェック
-    _check_not_None(browser, const.BROWSER)
-    _check_not_str(browser, const.BROWSER)
+    _check_not_None(browser, _BROWSER)
+    _check_not_str(browser, _BROWSER)
     browser = browser.strip(' ')
     if not bw.is_supported(browser):
         msg = '"{0}" is not a supported browser.'.format(browser)
         raise SupportError(msg)
     
     # cmdline_args入力チェック
-    _check_not_None(cmdline_args, const.CMDLINE_ARGS)
-    _check_not_list_or_tuple(cmdline_args, const.CMDLINE_ARGS)
+    _check_not_None(cmdline_args, _CMDLINE_ARGS)
+    _check_not_list_or_tuple(cmdline_args, _CMDLINE_ARGS)
     
     # position入力チェック
     if position is not None:
-        _check_2_int_list_or_tuple(position, const.POSITION)
+        _check_2_int_list_or_tuple(position, _POSITION)
     
     # size入力チェック
     if size is not None:
-        _check_2_int_list_or_tuple(size, const.SIZE)
+        _check_2_int_list_or_tuple(size, _SIZE)
     
     config.root = root
     config.start_page = start_page
@@ -219,12 +228,12 @@ def _check_host(host):
         ConfigurationError: チェックエラー
     """
     
-    _check_not_None(host, const.HOST)
-    _check_not_str(host, const.HOST)
-    _check_not_whitespace(host, const.HOST)
+    _check_not_None(host, _HOST)
+    _check_not_str(host, _HOST)
+    _check_not_whitespace(host, _HOST)
     host = host.strip(' ')
     
-    msg = '"{0}" is not "localhost" or "xxx.xxx.xxx.xxx".(0 <= xxx <= 255)'.format(const.HOST)
+    msg = '"{0}" is not "localhost" or "xxx.xxx.xxx.xxx".(0 <= xxx <= 255)'.format(_HOST)
     if host == 'localhost':
         return
     elif re.match(r'\d+\.\d+\.\d+\.\d+', host) is None:
@@ -246,11 +255,11 @@ def _check_port(port):
         ConfigurationError: チェックエラー
     """
     
-    _check_not_None(port, const.PORT)
-    _check_not_int(port, const.PORT)
+    _check_not_None(port, _PORT)
+    _check_not_int(port, _PORT)
     
     if port < 0 or 65535 < port:
-        msg = '"{0}" is less than 0 or greater than 65535.'.format(const.PORT)
+        msg = '"{0}" is less than 0 or greater than 65535.'.format(_PORT)
         raise ConfigurationError(msg)
 
 def expose(func):
