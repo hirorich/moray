@@ -3,18 +3,29 @@ morayが提供するAPIのInterface
 
 """
 
-from moray import config, const, browser, runner
+from moray import config, chrome, const, browser as bw, runner
 from moray.exception import ConfigurationError, SupportError
 from pathlib import Path
 import re
 
-def init(root, **kwargs):
+def run(
+        root,
+        start_page = '',
+        host = 'localhost',
+        port = 0,
+        browser = chrome.name,
+        cmdline_args = [],
+        position = None,
+        size = None
+    ):
     """
-    morayライブラリの初期化
+    moray起動
     
     Attributes:
         root (str): サーバのルートとなるフォルダ
         start_page (str, optional): 初期表示するページ
+        host (str, optional): サーバのホスト
+        port (int, optional): サーバのポート番号
         browser (str, optional): 使用するブラウザ
         cmdline_args (list<str>, optional): ブラウザの起動引数
         position (tuple<int, int>, optional): ブラウザを開いた際の位置
@@ -22,113 +33,225 @@ def init(root, **kwargs):
     
     """
     
-    # Noneを指定された項目を排除
-    args = dict(
-        filter(
-            lambda item: item[1] is not None, kwargs.items()
-        )
-    )
+    # root入力チェック
+    _check_not_None(root, const.ROOT)
+    _check_not_str(root, const.ROOT)
+    _check_not_whitespace(root, const.ROOT)
+    _check_not_exist(root)
+    root = root.strip(' ')
     
-    # ROOTの値設定
-    if root is None or root.strip(' ') == '':
-        msg = '"' + const.ROOT + '" is unspecified or whitespace.'
-        raise ConfigurationError(msg)
-    config.root = root.strip(' ')
+    # start_page入力チェック
+    _check_not_None(start_page, const.START_PAGE)
+    _check_not_str(start_page, const.START_PAGE)
+    start_page = start_page.strip(' ')
     
-    # ROOTフォルダの存在チェック
-    root_path = Path(config.root)
-    if not root_path.exists():
-        msg = '"' + str(root_path) + '" is not exist.'
-        raise ConfigurationError(msg)
+    # host入力チェック
+    _check_host(host)
+    host = host.strip(' ')
     
-    # START_PAGEの値設定
-    if const.START_PAGE in args:
-        start_page = args[const.START_PAGE]
-        if start_page is None or start_page.strip(' ') == '':
-            config.start_page = 'index.html'
-        else:
-            config.start_page = start_page.strip(' ')
+    # port入力チェック
+    _check_port(port)
     
-    # ROOT/START_PAGEの存在チェック
-    start_path = root_path.joinpath(config.start_page)
-    if not start_path.exists():
-        msg = '"' + str(start_path) + '" is not exist.'
-        raise ConfigurationError(msg)
-    
-    # ブラウザの値設定
-    if const.BROWSER in args:
-        config.browser = args[const.BROWSER].strip(' ')
-    
-    # ブラウザのサポートチェック
-    if not browser.is_supported(config.browser):
-        msg = '"' + config.browser + '" is not a supported browser.'
+    # browser入力チェック
+    _check_not_None(browser, const.BROWSER)
+    _check_not_str(browser, const.BROWSER)
+    browser = browser.strip(' ')
+    if not bw.is_supported(browser):
+        msg = '"{0}" is not a supported browser.'.format(browser)
         raise SupportError(msg)
     
-    # CMDLINE_ARGSの型チェック
-    if const.CMDLINE_ARGS in args:
-        if not type(args[const.CMDLINE_ARGS]) is list:
-            msg = '"' + const.CMDLINE_ARGS + '" is not list.'
-            raise ConfigurationError(msg)
-        config.cmdline_args.update(args[const.CMDLINE_ARGS])
+    # cmdline_args入力チェック
+    _check_not_None(cmdline_args, const.CMDLINE_ARGS)
+    _check_not_list_or_tuple(cmdline_args, const.CMDLINE_ARGS)
     
-    # POSITIONの型チェック
-    if const.POSITION in args:
-        if not type(args[const.POSITION]) is tuple:
-            msg = '"' + const.POSITION + '" is not tuple.'
-            raise ConfigurationError(msg)
-        elif len(args[const.POSITION]) != 2:
-            msg = '"' + const.POSITION + '" has only 2 integer.'
-            raise ConfigurationError(msg)
-        config.position = tuple(args[const.POSITION])
+    # position入力チェック
+    if position is not None:
+        _check_2_int_list_or_tuple(position, const.POSITION)
     
-    # SIZEの型チェック
-    if const.SIZE in args:
-        if not type(args[const.SIZE]) is tuple:
-            msg = '"' + const.SIZE + '" is not tuple.'
-            raise ConfigurationError(msg)
-        elif len(args[const.SIZE]) != 2:
-            msg = '"' + const.SIZE + '" has only 2 integer.'
-            raise ConfigurationError(msg)
-        config.size = tuple(args[const.SIZE])
+    # size入力チェック
+    if size is not None:
+        _check_2_int_list_or_tuple(size, const.SIZE)
     
-    config.is_initialized = True
+    config.root = root
+    config.start_page = start_page
+    config.host = host
+    config.port = port
+    config.browser = browser
+    config.cmdline_args = cmdline_args
+    config.position = position
+    config.size = size
 
-def run(host = 'localhost', port = 0):
+    # サーバ起動・ブラウザ起動
+    runner.run()
+
+def _check_not_None(value, name):
     """
-    morayライブラリを実行
+    Noneチェック
+    
+    Attributes:
+        value (str): チェック対象変数
+        name (str): チェック対象項目名
+    
+    Raises:
+        ConfigurationError: チェックエラー
+    """
+    
+    if value is None:
+        msg = '"{0}" is None.'.format(name)
+        raise ConfigurationError(msg)
+
+def _check_not_str(value, name):
+    """
+    strチェック
+    
+    Attributes:
+        value (str): チェック対象変数
+        name (str): チェック対象項目名
+    
+    Raises:
+        ConfigurationError: チェックエラー
+    """
+    
+    if type(value) is not str:
+        msg = '"{0}" is not "str" type.'.format(name)
+        raise ConfigurationError(msg)
+
+def _check_not_int(value, name):
+    """
+    intチェック
+    
+    Attributes:
+        value (str): チェック対象変数
+        name (str): チェック対象項目名
+    
+    Raises:
+        ConfigurationError: チェックエラー
+    """
+    
+    if type(value) is not int:
+        msg = '"{0}" is not "int" type.'.format(name)
+        raise ConfigurationError(msg)
+
+def _check_not_list_or_tuple(value, name):
+    """
+    list of tupleチェック
+    
+    Attributes:
+        value (str): チェック対象変数
+        name (str): チェック対象項目名
+    
+    Raises:
+        ConfigurationError: チェックエラー
+    """
+    
+    if type(value) is not list and type(value) is not tuple:
+        msg = '"{0}" is not "list" or "tuple" type.'.format(name)
+        raise ConfigurationError(msg)
+
+def _check_not_whitespace(value, name):
+    """
+    空白はエラー
+    
+    Attributes:
+        value (str): チェック対象変数
+        name (str): チェック対象項目名
+    
+    Raises:
+        ConfigurationError: チェックエラー
+    """
+    
+    value = value.strip(' ')
+    if value == '':
+        msg = '"{0}" is whitespace.'.format(name)
+        raise ConfigurationError(msg)
+
+def _check_not_exist(value):
+    """
+    存在チェック
+    
+    Attributes:
+        value (str): チェック対象変数
+    
+    Raises:
+        ConfigurationError: チェックエラー
+    """
+    
+    value = Path(value.strip(' '))
+    if not value.exists():
+        msg = '"{0}" is not exist.'.format(str(value))
+        raise ConfigurationError(msg)
+
+def _check_2_int_list_or_tuple(value, name):
+    """
+    list<int, int> or tuple<int, int>チェック
+    
+    Attributes:
+        value (str): チェック対象変数
+        name (str): チェック対象項目名
+    
+    Raises:
+        ConfigurationError: チェックエラー
+    """
+    
+    # 型チェック
+    _check_not_list_or_tuple(value, name)
+    
+    # 要素数チェック
+    msg = '"{0}" has only 2 "int" type.'.fomat(name)
+    if len(value) != 2:
+        raise ConfigurationError(msg)
+    
+    # 要素内の型チェック
+    for item in value:
+        if type(item) is not int:
+            raise ConfigurationError(msg)
+
+def _check_host(host):
+    """
+    HOSTチェック
+        localhost
+        xxx.xxx.xxx.xxx(0 <= xxx <= 255)
     
     Attributes:
         host (str): サーバのホスト
-        port (int): サーバのポート番号
     
+    Raises:
+        ConfigurationError: チェックエラー
     """
     
-    # 設定が初期化済みかチェック
-    if not config.is_initialized:
-        msg = '"moray" is not initialized. Call "moray.init(root)".'
-        raise ConfigurationError(msg)
+    _check_not_None(host, const.HOST)
+    _check_not_str(host, const.HOST)
+    _check_not_whitespace(host, const.HOST)
+    host = host.strip(' ')
     
-    # HOSTチェック
-    if host is None or host == 'localhost':
-        config.host = 'localhost'
+    msg = '"{0}" is not "localhost" or "xxx.xxx.xxx.xxx".(0 <= xxx <= 255)'.format(const.HOST)
+    if host == 'localhost':
+        return
     elif re.match(r'\d+\.\d+\.\d+\.\d+', host) is None:
-        msg = '"' + const.HOST + '" is not "localhost" or "xxx.xxx.xxx.xxx".'
         raise ConfigurationError(msg)
     else:
         for num in host.split('.'):
             if int(num) < 0 or 255 < int(num):
-                msg = '"' + const.HOST + '" is not "localhost" or "xxx.xxx.xxx.xxx".'
                 raise ConfigurationError(msg)
-        config.host = host
+
+def _check_port(port):
+    """
+    PORTチェック
+        0 <= port <= 65535)
     
-    # PORTチェック
+    Attributes:
+        port (int): サーバのポート番号
+    
+    Raises:
+        ConfigurationError: チェックエラー
+    """
+    
+    _check_not_None(port, const.PORT)
+    _check_not_int(port, const.PORT)
+    
     if port < 0 or 65535 < port:
-        msg = '"' + const.PORT + '" is less than 0 or greater than 65535.'
+        msg = '"{0}" is less than 0 or greater than 65535.'.format(const.PORT)
         raise ConfigurationError(msg)
-    config.port = port
-    
-    # サーバ起動・ブラウザ起動
-    runner.run()
 
 def expose(func):
     """
@@ -137,7 +260,6 @@ def expose(func):
     
     Attributes:
         func (function): 登録するファンクション
-    
     """
     
     _register(func.__module__, func.__name__, func)
