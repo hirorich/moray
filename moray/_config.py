@@ -3,7 +3,7 @@ morayの設定情報
 
 """
 
-from moray import chrome
+from moray._browser import chrome
 
 root = None
 start_page = 'index.html'

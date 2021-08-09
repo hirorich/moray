@@ -6,7 +6,6 @@
 class SupportError(RuntimeError):
     """
     サポート対象外のものに対する例外
-    
     """
     
     pass
@@ -14,7 +13,6 @@ class SupportError(RuntimeError):
 class ConfigurationError(RuntimeError):
     """
     設定に関する例外
-    
     """
     
     pass

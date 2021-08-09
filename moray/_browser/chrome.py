@@ -4,6 +4,7 @@ chromeをアプリモードで起動するためのコマンドを生成する
 """
 
 import sys, os
+
 from moray.exception import SupportError
 
 name = 'chrome'
@@ -19,7 +20,6 @@ def create_command(path, url, cmdline_args):
     
     Returns:
         list<str>: 生成された起動コマンド
-    
     """
     
     return [path, '--app=' + url] + cmdline_args
@@ -30,7 +30,6 @@ def find_path():
     
     Returns:
         str: chromeの実行ファイルパス
-    
     """
     
     if sys.platform in ('win32', 'win64'):
@@ -50,7 +49,6 @@ def _find_chrome_windows():
     
     Returns:
         str: Windowsのchromeの実行ファイルパス
-    
     """
     
     import winreg

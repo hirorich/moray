@@ -3,6 +3,6 @@ morayを開発モードに切り替え
 
 """
 
-from moray import config
+from moray import _config
 
-config.develop_mode = True
+_config.develop_mode = True

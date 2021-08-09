@@ -4,11 +4,11 @@ http://localhost:port/
 
 """
 
-from moray import config
 import bottle, json
 from bottle import HTTPResponse
-from bottle.ext.websocket import GeventWebSocketServer
-from bottle.ext.websocket import websocket
+from bottle.ext.websocket import GeventWebSocketServer, websocket
+
+from moray import _config
 
 app = bottle.Bottle()
 
@@ -19,10 +19,9 @@ def py_module_script(py_module):
     生成したモジュールを返却
     
     Return: JavaScriptからPythonを呼び出すためのjsモジュール
-    
     """
     
-    return bottle.static_file(py_module + '.js', root='moray/js/py')
+    return bottle.static_file('{0}.js'.format(py_module), root='moray/js/py')
 
 @app.route('/moray/core/<core_module>')
 def core_module_script(core_module):
@@ -31,10 +30,9 @@ def core_module_script(core_module):
     生成したモジュールを返却
     
     Return: 生成したjsモジュール内で呼び出されるjsモジュール
-    
     """
     
-    return bottle.static_file(core_module + '.js', root='moray/js/core')
+    return bottle.static_file('{0}.js'.format(core_module), root='moray/js/core')
 
 @app.route('/moray/ws', apply=[websocket])
 def bottle_websocket(ws):
@@ -42,7 +40,6 @@ def bottle_websocket(ws):
     WebSocketの受け取り口
     
     Return: pyモジュールの実行結果
-    
     """
     
     while True:
@@ -57,16 +54,15 @@ def bottle_websocket(ws):
 
 @app.route('/')
 @app.route('/<path:path>')
-def page(path = config.start_page):
+def page(path = 'index.html'):
     """
     root配下のファイルを返却
         .html, .js, .css など
     
     Return: root配下のファイル
-    
     """
     
-    return bottle.static_file(path, root=config.root)
+    return bottle.static_file(path, root=_config.root)
 
 def run(port):
     """
@@ -74,14 +70,13 @@ def run(port):
     
     Attributes:
         port (int): ポート番号
-    
     """
     
     app.run(
-        host = config.host,
+        host = _config.host,
         port = port,
-        reloader = config.develop_mode,
-        debug = config.develop_mode,
+        reloader = _config.develop_mode,
+        debug = _config.develop_mode,
         server = GeventWebSocketServer
     )
 

@@ -3,10 +3,12 @@ morayが提供するAPIのInterface
 
 """
 
-from moray import config, chrome, browser as bw, runner
-from moray.exception import ConfigurationError, SupportError
-from pathlib import Path
 import re
+from pathlib import Path
+
+from moray import _browser, _config, _runner
+from moray._browser import chrome
+from moray.exception import ConfigurationError, SupportError
 
 _ROOT = 'root'
 _START_PAGE = 'start_page'
@@ -65,7 +67,7 @@ def run(
     _check_not_None(browser, _BROWSER)
     _check_not_str(browser, _BROWSER)
     browser = browser.strip(' ')
-    if not bw.is_supported(browser):
+    if not _browser.is_supported(browser):
         msg = '"{0}" is not a supported browser.'.format(browser)
         raise SupportError(msg)
     
@@ -81,17 +83,17 @@ def run(
     if size is not None:
         _check_2_int_list_or_tuple(size, _SIZE)
     
-    config.root = root
-    config.start_page = start_page
-    config.host = host
-    config.port = port
-    config.browser = browser
-    config.cmdline_args = cmdline_args
-    config.position = position
-    config.size = size
+    _config.root = root
+    _config.start_page = start_page
+    _config.host = host
+    _config.port = port
+    _config.browser = browser
+    _config.cmdline_args = cmdline_args
+    _config.position = position
+    _config.size = size
 
     # サーバ起動・ブラウザ起動
-    runner.run()
+    _runner.run()
 
 def _check_not_None(value, name):
     """
