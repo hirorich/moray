@@ -14,5 +14,6 @@ size = None
 host = 'localhost'
 port = 0
 
+develop_mode = False
 is_initialized = False
 generated_port = 0

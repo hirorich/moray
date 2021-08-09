@@ -78,10 +78,10 @@ def run(port):
     """
     
     app.run(
-        host=config.host,
-        port=port,
-        reloader=True,
-        debug=True,
-        server=GeventWebSocketServer
+        host = config.host,
+        port = port,
+        reloader = config.develop_mode,
+        debug = config.develop_mode,
+        server = GeventWebSocketServer
     )
 

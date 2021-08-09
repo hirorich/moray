@@ -18,10 +18,19 @@ def run():
     # ポート番号生成
     generate_port()
     
-    # サーバとブラウザ起動
-    deamon_t = Thread(target=daemon_thread)
-    deamon_t.setDaemon(True)
-    deamon_t.start()
+    # 初期表示URL生成
+    url = generate_start_url()
+    
+    # ブラウザ起動(別スレッド)
+    if config.develop_mode:
+        print('This is develop mode. Open your browser.')
+        print(f'  URL: {url}')
+    else:
+        deamon_t = Thread(target=open_browser, args=(url,))
+        deamon_t.setDaemon(True)
+        deamon_t.start()
+    
+    # サーバ起動
     run_server()
 
 def generate_port():
@@ -38,6 +47,14 @@ def generate_port():
     
     config.generated_port = port
 
+def generate_start_url():
+    """
+    初期表示URLを生成
+    
+    """
+    
+    return f'http://{config.host}:{str(config.generated_port)}/{config.start_page}'
+
 def run_server():
     """
     内部サーバ起動
@@ -46,12 +63,12 @@ def run_server():
     
     server.run(config.generated_port)
 
-def daemon_thread():
+def open_browser(url):
     """
     requestsによるGETでサーバーが起動しているか確認
-    """
+    アプリモードでブラウザ表示
     
-    url = r'http://' + config.host + ':' + str(config.generated_port) + '/'
+    """
     
     # 確認が取れるまで接続
     connect_timeout = 3.0
