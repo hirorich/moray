@@ -51,7 +51,7 @@ def generate_start_url():
     初期表示URLを生成
     """
     
-    return 'http://{0}:{1}/{2}'.format(_config.host, _config.generated_port, _config.start_page)
+    return 'http://localhost:{0}/{1}'.format(_config.generated_port, _config.start_page)
 
 def run_server():
     """
