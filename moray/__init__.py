@@ -6,7 +6,7 @@ morayが提供するAPIのInterface
 import re
 from pathlib import Path
 
-from moray import _browser, _config, _runner
+from moray import _browser, _config, _runner, _server
 from moray._browser import chrome
 from moray.exception import ConfigurationError, SupportError
 
@@ -62,6 +62,7 @@ def run(
     
     # port入力チェック
     _check_port(port)
+    port = _server.generate_port(port)
     
     # browser入力チェック
     _check_not_None(browser, _BROWSER)

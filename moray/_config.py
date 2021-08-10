@@ -15,4 +15,3 @@ host = 'localhost'
 port = 0
 
 develop_mode = False
-generated_port = 0

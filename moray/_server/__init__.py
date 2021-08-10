@@ -4,7 +4,7 @@ http://localhost:port/
 
 """
 
-import bottle, json
+import bottle, json, socket
 from bottle import HTTPResponse
 from bottle.ext.websocket import GeventWebSocketServer, websocket
 
@@ -64,7 +64,7 @@ def page(path = 'index.html'):
     
     return bottle.static_file(path, root=_config.root)
 
-def run(port):
+def run():
     """
     サーバ起動
     
@@ -74,9 +74,27 @@ def run(port):
     
     app.run(
         host = _config.host,
-        port = port,
+        port = _config.port,
         reloader = _config.develop_mode,
         debug = _config.develop_mode,
         server = GeventWebSocketServer
     )
 
+def generate_port(port):
+    """
+    ポート番号を生成
+    """
+    
+    if port == 0:
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+            sock.bind(('localhost', 0))
+            port = sock.getsockname()[1]
+    
+    return port
+
+def generate_start_url():
+    """
+    初期表示URLを生成
+    """
+    
+    return 'http://localhost:{0}/{1}'.format(_config.port, _config.start_page)

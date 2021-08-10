@@ -3,7 +3,7 @@
 
 """
 
-import requests, socket
+import requests
 from threading import Thread
 
 from moray import _browser, _config, _server
@@ -15,11 +15,8 @@ def run():
     デーモンスレッド: 起動確認 -> ブラウザ起動
     """
     
-    # ポート番号生成
-    generate_port()
-    
     # 初期表示URL生成
-    url = generate_start_url()
+    url = _server.generate_start_url()
     
     # ブラウザ起動(別スレッド)
     if _config.develop_mode:
@@ -33,32 +30,12 @@ def run():
     # サーバ起動
     run_server()
 
-def generate_port():
-    """
-    ポート番号を生成
-    """
-    
-    port = _config.port
-    if port == 0:
-        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
-            sock.bind(('localhost', 0))
-            port = sock.getsockname()[1]
-    
-    _config.generated_port = port
-
-def generate_start_url():
-    """
-    初期表示URLを生成
-    """
-    
-    return 'http://localhost:{0}/{1}'.format(_config.generated_port, _config.start_page)
-
 def run_server():
     """
     内部サーバ起動
     """
     
-    _server.run(_config.generated_port)
+    _server.run()
 
 def open_browser(url):
     """
