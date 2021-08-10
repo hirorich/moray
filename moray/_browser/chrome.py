@@ -63,7 +63,7 @@ def _find_chrome_windows():
             with winreg.OpenKey(reg_entry, reg_path, 0, winreg.KEY_READ) as reg_key:
                 chrome_path = winreg.QueryValue(reg_key, None)
                 if not os.path.isfile(chrome_path):
-                    continue
+                    chrome_path = None
         except Exception as e:
             chrome_path = None
         else:
