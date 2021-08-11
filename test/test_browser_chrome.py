@@ -27,18 +27,18 @@ class ChromeTest(unittest.TestCase):
     def test_find_chrome_windows_1(self):
         
         mock_value = [
-            {'key' : [MagicMock(), MagicMock()], 'value' : [('chrome1', None), ('chrome2', None)], 'file' : [True, False], 'correct' : 'chrome1'},
-            {'key' : [MagicMock(), MagicMock()], 'value' : [('chrome1', None), ('chrome2', None)], 'file' : [False, True], 'correct' : 'chrome2'},
-            {'key' : [MagicMock(), MagicMock()], 'value' : [('chrome1', None), ('chrome2', None)], 'file' : [True, True], 'correct' : 'chrome1'}
+            ([MagicMock(), MagicMock()], [('chrome1', None), ('chrome2', None)], [True, False], 'chrome1'),
+            ([MagicMock(), MagicMock()], [('chrome1', None), ('chrome2', None)], [False, True], 'chrome2'),
+            ([MagicMock(), MagicMock()], [('chrome1', None), ('chrome2', None)], [True, True], 'chrome1')
         ]
         
-        for value in mock_value:
-            with (patch('winreg.OpenKey', side_effect = value['key']) as ok,
-                patch('winreg.QueryValueEx', side_effect = value['value']) as ove,
-                patch('os.path.isfile', side_effect = value['file']) as opi
+        for key, value, file, correct in mock_value:
+            with (patch('winreg.OpenKey', side_effect = key) as ok,
+                patch('winreg.QueryValueEx', side_effect = value) as ove,
+                patch('os.path.isfile', side_effect = file) as opi
             ):
                 try:
-                    self.assertEqual(chrome._find_chrome_windows(), value['correct'])
+                    self.assertEqual(chrome._find_chrome_windows(), correct)
                 except Exception as e:
                     self.fail()
     
@@ -46,15 +46,15 @@ class ChromeTest(unittest.TestCase):
         error_msg = '"chrome.exe" is not found.'
         
         mock_value = [
-            {'key' : [OSError('OpenKey'), OSError('OpenKey')], 'value' : [None, None], 'file' : [True, True]},
-            {'key' : [MagicMock(), MagicMock()], 'value' : [OSError('QueryValueEx'), OSError('QueryValueEx')], 'file' : [True, True]},
-            {'key' : [MagicMock(), MagicMock()], 'value' : [(None, None), (None, None)], 'file' : [False, False]}
+            ([OSError('OpenKey'), OSError('OpenKey')], [None, None], [True, True]),
+            ([MagicMock(), MagicMock()], [OSError('QueryValueEx'), OSError('QueryValueEx')], [True, True]),
+            ([MagicMock(), MagicMock()], [(None, None), (None, None)], [False, False])
         ]
         
-        for value in mock_value:
-            with (patch('winreg.OpenKey', side_effect = value['key']) as ok,
-                patch('winreg.QueryValueEx', side_effect = value['value']) as ove,
-                patch('os.path.isfile', side_effect = value['file']) as opi
+        for key, value, file in mock_value:
+            with (patch('winreg.OpenKey', side_effect = key) as ok,
+                patch('winreg.QueryValueEx', side_effect = value) as ove,
+                patch('os.path.isfile', side_effect = file) as opi
             ):
                 try:
                     chrome._find_chrome_windows()
