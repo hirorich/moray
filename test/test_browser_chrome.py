@@ -78,6 +78,7 @@ class ChromeTest(unittest.TestCase):
         
         try:
             chrome.find_path()
+            self.fail()
         except Exception as e:
             self.assertIs(type(e), SupportError)
             self.assertEqual(e.args[0], error_msg)
