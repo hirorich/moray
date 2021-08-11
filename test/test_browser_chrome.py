@@ -33,7 +33,6 @@ class ChromeTest(unittest.TestCase):
         ]
         
         for value in mock_value:
-            
             with (patch('winreg.OpenKey', side_effect = value['key']) as ok,
                 patch('winreg.QueryValueEx', side_effect = value['value']) as ove,
                 patch('os.path.isfile', side_effect = value['file']) as opi
@@ -53,7 +52,6 @@ class ChromeTest(unittest.TestCase):
         ]
         
         for value in mock_value:
-            
             with (patch('winreg.OpenKey', side_effect = value['key']) as ok,
                 patch('winreg.QueryValueEx', side_effect = value['value']) as ove,
                 patch('os.path.isfile', side_effect = value['file']) as opi
@@ -65,25 +63,21 @@ class ChromeTest(unittest.TestCase):
                     self.assertIs(type(e), FileNotFoundError)
                     self.assertEqual(e.args[0], error_msg)
     
-    def test_find_path_1(self):
-        correct = "chrome.exe"
-        
+    @patch('moray._browser.chrome._find_chrome_windows', return_value = "chrome.exe")
+    def test_find_path_1(self, mock_obj):
         for platform in 'win32', 'win64':
-            with (
-                patch('sys.platform', platform) as sys_platform,
-                patch('moray._browser.chrome._find_chrome_windows', return_value = correct) as find_chrome_windows
-            ):
+            with patch('sys.platform', platform) as sys_platform:
                 try:
-                    self.assertEqual(chrome.find_path(), correct)
+                    self.assertEqual(chrome.find_path(), "chrome.exe")
                 except Exception as e:
                     self.fail()
     
+    @patch('sys.platform', 'IE')
     def test_find_path_2(self):
         error_msg = 'This OS is not a supported OS.'
         
-        with patch('sys.platform', 'IE') as platform:
-            try:
-                chrome.find_path()
-            except Exception as e:
-                self.assertIs(type(e), SupportError)
-                self.assertEqual(e.args[0], error_msg)
+        try:
+            chrome.find_path()
+        except Exception as e:
+            self.assertIs(type(e), SupportError)
+            self.assertEqual(e.args[0], error_msg)
