@@ -1,5 +1,5 @@
 import unittest
-from unittest.mock import patch
+from unittest.mock import patch, MagicMock
 
 from moray._browser import chrome
 from moray.exception import SupportError
@@ -27,9 +27,9 @@ class ChromeTest(unittest.TestCase):
     def test_find_chrome_windows_1(self):
         
         mock_value = [
-            {'key' : [None, None], 'value' : [('chrome1', None), ('chrome2', None)], 'file' : [True, False], 'correct' : 'chrome1'},
-            {'key' : [None, None], 'value' : [('chrome1', None), ('chrome2', None)], 'file' : [False, True], 'correct' : 'chrome2'},
-            {'key' : [None, None], 'value' : [('chrome1', None), ('chrome2', None)], 'file' : [True, True], 'correct' : 'chrome1'}
+            {'key' : [MagicMock(), MagicMock()], 'value' : [('chrome1', None), ('chrome2', None)], 'file' : [True, False], 'correct' : 'chrome1'},
+            {'key' : [MagicMock(), MagicMock()], 'value' : [('chrome1', None), ('chrome2', None)], 'file' : [False, True], 'correct' : 'chrome2'},
+            {'key' : [MagicMock(), MagicMock()], 'value' : [('chrome1', None), ('chrome2', None)], 'file' : [True, True], 'correct' : 'chrome1'}
         ]
         
         for value in mock_value:
@@ -48,8 +48,8 @@ class ChromeTest(unittest.TestCase):
         
         mock_value = [
             {'key' : [OSError('OpenKey'), OSError('OpenKey')], 'value' : [None, None], 'file' : [True, True]},
-            {'key' : [None, None], 'value' : [OSError('QueryValueEx'), OSError('QueryValueEx')], 'file' : [True, True]},
-            {'key' : [None, None], 'value' : [(None, None), (None, None)], 'file' : [False, False]}
+            {'key' : [MagicMock(), MagicMock()], 'value' : [OSError('QueryValueEx'), OSError('QueryValueEx')], 'file' : [True, True]},
+            {'key' : [MagicMock(), MagicMock()], 'value' : [(None, None), (None, None)], 'file' : [False, False]}
         ]
         
         for value in mock_value:
