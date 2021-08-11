@@ -89,7 +89,7 @@ def run(
     _config.host = host
     _config.port = port
     _config.browser = browser
-    _config.cmdline_args = cmdline_args
+    _config.cmdline_args += list(cmdline_args)
     _config.position = position
     _config.size = size
 
