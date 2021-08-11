@@ -25,49 +25,62 @@ class ChromeTest(unittest.TestCase):
         self.assertEqual(chrome.create_command(path, url, cmdline_args), correct)
     
     def test_find_chrome_windows_1(self):
-        correct = "C:\Program Files\Google\Chrome\Application\chrome.exe"
         
-        self.assertEqual(chrome._find_chrome_windows(), correct)
+        mock_value = [
+            {'key' : [None, None], 'value' : [('chrome1', None), ('chrome2', None)], 'file' : [True, False], 'correct' : 'chrome1'},
+            {'key' : [None, None], 'value' : [('chrome1', None), ('chrome2', None)], 'file' : [False, True], 'correct' : 'chrome2'},
+            {'key' : [None, None], 'value' : [('chrome1', None), ('chrome2', None)], 'file' : [True, True], 'correct' : 'chrome1'}
+        ]
+        
+        for value in mock_value:
+            
+            with (patch('winreg.OpenKey', side_effect = value['key']) as ok,
+                patch('winreg.QueryValueEx', side_effect = value['value']) as ove,
+                patch('os.path.isfile', side_effect = value['file']) as opi
+            ):
+                try:
+                    self.assertEqual(chrome._find_chrome_windows(), value['correct'])
+                except Exception as e:
+                    self.fail()
     
     def test_find_chrome_windows_2(self):
         error_msg = '"chrome.exe" is not found.'
         
-        with patch('winreg.OpenKey', return_value = None) as m:
-            try:
-                chrome._find_chrome_windows()
-            except Exception as e:
-                self.assertIs(type(e), FileNotFoundError)
-                self.assertEqual(e.args[0], error_msg)
-    
-    def test_find_chrome_windows_3(self):
-        error_msg = '"chrome.exe" is not found.'
+        mock_value = [
+            {'key' : [OSError('OpenKey'), OSError('OpenKey')], 'value' : [], 'file' : []},
+            {'key' : [None, None], 'value' : [OSError('QueryValueEx'), OSError('QueryValueEx')], 'file' : []},
+            {'key' : [None, None], 'value' : [(None, None), (None, None)], 'file' : [False, False]}
+        ]
         
-        with patch('winreg.QueryValue', return_value = None) as m:
-            try:
-                chrome._find_chrome_windows()
-            except Exception as e:
-                self.assertIs(type(e), FileNotFoundError)
-                self.assertEqual(e.args[0], error_msg)
-    
-    def test_find_chrome_windows_4(self):
-        error_msg = '"chrome.exe" is not found.'
-        
-        with patch('os.path.isfile', return_value = False) as m:
-            try:
-                chrome._find_chrome_windows()
-            except Exception as e:
-                self.assertIs(type(e), FileNotFoundError)
-                self.assertEqual(e.args[0], error_msg)
+        for value in mock_value:
+            
+            with (patch('winreg.OpenKey', side_effect = value['key']) as ok,
+                patch('winreg.QueryValueEx', side_effect = value['value']) as ove,
+                patch('os.path.isfile', side_effect = value['file']) as opi
+            ):
+                try:
+                    chrome._find_chrome_windows()
+                    self.fail()
+                except Exception as e:
+                    self.assertIs(type(e), FileNotFoundError)
+                    self.assertEqual(e.args[0], error_msg)
     
     def test_find_path_1(self):
-        correct = "C:\Program Files\Google\Chrome\Application\chrome.exe"
+        correct = "chrome.exe"
         
-        self.assertEqual(chrome.find_path(), correct)
+        with (
+            patch('sys.platform', side_effect = ['win32', 'win64']) as platform,
+            patch('moray._browser.chrome._find_chrome_windows', return_value = correct) as find_chrome_windows
+        ):
+            try:
+                self.assertEqual(chrome.find_path(), correct)
+            except Exception as e:
+                self.fail()
     
     def test_find_path_2(self):
         error_msg = 'This OS is not a supported OS.'
         
-        with patch('sys.platform', return_value = 'IE') as m:
+        with patch('sys.platform', return_value = 'IE') as platform:
             try:
                 chrome.find_path()
             except Exception as e:

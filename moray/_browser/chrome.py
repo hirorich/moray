@@ -61,19 +61,12 @@ def _find_chrome_windows():
             
             # レジストリからchromeの実行ファイルパスを取得
             with winreg.OpenKey(reg_entry, reg_path, 0, winreg.KEY_READ) as reg_key:
-                chrome_path = winreg.QueryValue(reg_key, None)
-                if not os.path.isfile(chrome_path):
-                    chrome_path = None
+                chrome_path = winreg.QueryValueEx(reg_key, None)[0]
+                if os.path.isfile(chrome_path):
+                    return chrome_path
         except Exception as e:
-            chrome_path = None
-        else:
-            break
+            pass
     
-    # レジストリからの取得失敗 or ファイルが存在しない
-    if chrome_path is None:
-        
-        # chrome.exe が見つかりませんでした
-        error_msg = '"chrome.exe" is not found.'
-        raise FileNotFoundError(error_msg)
-    
-    return chrome_path
+    # chrome.exe が見つかりませんでした
+    error_msg = '"chrome.exe" is not found.'
+    raise FileNotFoundError(error_msg)
