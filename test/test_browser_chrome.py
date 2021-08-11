@@ -68,14 +68,15 @@ class ChromeTest(unittest.TestCase):
     def test_find_path_1(self):
         correct = "chrome.exe"
         
-        with (
-            patch('sys.platform', side_effect = ['win32', 'win64']) as platform,
-            patch('moray._browser.chrome._find_chrome_windows', return_value = correct) as find_chrome_windows
-        ):
-            try:
-                self.assertEqual(chrome.find_path(), correct)
-            except Exception as e:
-                self.fail()
+        for platform in 'win32', 'win64':
+            with (
+                patch('sys.platform', return_value = platform) as sys_platform,
+                patch('moray._browser.chrome._find_chrome_windows', return_value = correct) as find_chrome_windows
+            ):
+                try:
+                    self.assertEqual(chrome.find_path(), correct)
+                except Exception as e:
+                    self.fail()
     
     def test_find_path_2(self):
         error_msg = 'This OS is not a supported OS.'
