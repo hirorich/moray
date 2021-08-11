@@ -47,8 +47,8 @@ class ChromeTest(unittest.TestCase):
         error_msg = '"chrome.exe" is not found.'
         
         mock_value = [
-            {'key' : [OSError('OpenKey'), OSError('OpenKey')], 'value' : [], 'file' : []},
-            {'key' : [None, None], 'value' : [OSError('QueryValueEx'), OSError('QueryValueEx')], 'file' : []},
+            {'key' : [OSError('OpenKey'), OSError('OpenKey')], 'value' : [None, None], 'file' : [True, True]},
+            {'key' : [None, None], 'value' : [OSError('QueryValueEx'), OSError('QueryValueEx')], 'file' : [True, True]},
             {'key' : [None, None], 'value' : [(None, None), (None, None)], 'file' : [False, False]}
         ]
         
@@ -70,7 +70,7 @@ class ChromeTest(unittest.TestCase):
         
         for platform in 'win32', 'win64':
             with (
-                patch('sys.platform', return_value = platform) as sys_platform,
+                patch('sys.platform', platform) as sys_platform,
                 patch('moray._browser.chrome._find_chrome_windows', return_value = correct) as find_chrome_windows
             ):
                 try:
@@ -81,7 +81,7 @@ class ChromeTest(unittest.TestCase):
     def test_find_path_2(self):
         error_msg = 'This OS is not a supported OS.'
         
-        with patch('sys.platform', return_value = 'IE') as platform:
+        with patch('sys.platform', 'IE') as platform:
             try:
                 chrome.find_path()
             except Exception as e:
