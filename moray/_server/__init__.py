@@ -12,6 +12,16 @@ from moray import _config
 
 app = bottle.Bottle()
 
+@app.route('/moray/confirm_running')
+def run_check():
+    """
+    サーバ起動確認用
+    
+    Return: 固定メッセージ
+    """
+    
+    return 'Success'
+
 @app.route('/moray/py/<py_module>')
 def py_module_script(py_module):
     """
@@ -98,3 +108,10 @@ def generate_start_url():
     """
     
     return 'http://localhost:{0}/{1}'.format(_config.port, _config.start_page)
+
+def generate_confirm_running_url():
+    """
+    サーバ起動確認用URLを生成
+    """
+    
+    return 'http://localhost:{0}/moray/confirm_running'.format(_config.port)
