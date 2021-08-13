@@ -23,7 +23,8 @@ def create_command(path, url, cmdline_args):
         list<str>: 生成された起動コマンド
     """
     
-    return [path, '--app=' + url] + list(set(_cmdline_args + cmdline_args))
+    args = list(filter(lambda x: x not in _cmdline_args, cmdline_args))
+    return [path, '--app=' + url] +_cmdline_args + args
 
 def find_path():
     """

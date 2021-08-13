@@ -13,20 +13,16 @@ class ChromeTest(unittest.TestCase):
         
         correct = [path, '--app={0}'.format(url), '--disable-http-cache', '--incognito']
         
-        cmd = chrome.create_command(path, url, cmdline_args)
-        self.assertEqual(cmd[:2], correct[:2])
-        self.assertEqual(set(cmd[2:]), set(correct[2:]))
+        self.assertEqual(chrome.create_command(path, url, cmdline_args), correct)
     
     def test_create_command_2(self):
         path = 'path'
         url = 'url'
-        cmdline_args = ['--disable-http-cache', '--incognito']
+        cmdline_args = ['--incognito', 'aaa', '--disable-http-cache', 'bbb']
         
-        correct = [path, '--app={0}'.format(url), '--disable-http-cache', '--incognito']
+        correct = [path, '--app={0}'.format(url), '--disable-http-cache', '--incognito', 'aaa', 'bbb']
         
-        cmd = chrome.create_command(path, url, cmdline_args)
-        self.assertEqual(cmd[:2], correct[:2])
-        self.assertEqual(set(cmd[2:]), set(correct[2:]))
+        self.assertEqual(chrome.create_command(path, url, cmdline_args), correct)
     
     def test_find_chrome_windows_1(self):
         
