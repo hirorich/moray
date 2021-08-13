@@ -47,8 +47,4 @@ def open_browser():
     url = _server.generate_start_url()
     
     # 初期ページ表示
-    if _config.develop_mode:
-        print('This is develop mode. Open your browser.')
-        print('  URL: {0}'.format(url))
-    else:
-        _browser.open(_config.browser, url, _config.cmdline_args)
+    _browser.open(_config.browser, url, _config.cmdline_args)

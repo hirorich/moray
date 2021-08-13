@@ -275,10 +275,7 @@ def expose(func):
     
     _register(func.__module__, func.__name__, func)
     
-    def wrapper(*args, **kwargs):
-        func(*args, **kwargs)
-    
-    return wrapper
+    return func
 
 # ===== 以下は別モジュールに実装する =====
 def _register(module, name, func):

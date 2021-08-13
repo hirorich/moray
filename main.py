@@ -1,5 +1,4 @@
 import moray
-import _moray_dev #開発モードで実行
 
 # main
 if __name__ == "__main__":

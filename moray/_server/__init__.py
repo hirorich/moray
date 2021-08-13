@@ -85,8 +85,8 @@ def run():
     app.run(
         host = _config.host,
         port = _config.port,
-        reloader = _config.develop_mode,
-        debug = _config.develop_mode,
+        reloader = False,
+        debug = False,
         server = GeventWebSocketServer
     )
 

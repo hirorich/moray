@@ -13,5 +13,3 @@ position = None
 size = None
 host = 'localhost'
 port = 0
-
-develop_mode = False
