@@ -46,27 +46,32 @@ def run(
     
     # root入力チェック
     _check_not_None(root, _ROOT)
-    _check_not_str(root, _ROOT)
+    _check_str(root, _ROOT)
     _check_not_whitespace(root, _ROOT)
-    _check_not_exist(root)
+    _check_exist(root)
     root = root.strip(' ')
     
     # start_page入力チェック
     _check_not_None(start_page, _START_PAGE)
-    _check_not_str(start_page, _START_PAGE)
+    _check_str(start_page, _START_PAGE)
     start_page = start_page.strip(' ')
     
     # host入力チェック
-    _check_host(host)
+    _check_not_None(host, _HOST)
+    _check_str(host, _HOST)
+    _check_not_whitespace(host, _HOST)
     host = host.strip(' ')
+    _check_host(host)
     
     # port入力チェック
+    _check_not_None(port, _PORT)
+    _check_int(port, _PORT)
     _check_port(port)
     port = _server.generate_port(port)
     
     # browser入力チェック
     _check_not_None(browser, _BROWSER)
-    _check_not_str(browser, _BROWSER)
+    _check_str(browser, _BROWSER)
     browser = browser.strip(' ')
     if not _browser.is_supported(browser):
         msg = '"{0}" is not a supported browser.'.format(browser)
@@ -74,16 +79,18 @@ def run(
     
     # cmdline_args入力チェック
     _check_not_None(cmdline_args, _CMDLINE_ARGS)
-    _check_not_list_or_tuple(cmdline_args, _CMDLINE_ARGS)
+    _check_list_or_tuple(cmdline_args, _CMDLINE_ARGS)
     cmdline_args = list(cmdline_args)
     
     # position入力チェック
     if position is not None:
+        _check_list_or_tuple(position, _POSITION)
         _check_2_int_list_or_tuple(position, _POSITION)
         position = tuple(position)
     
     # size入力チェック
     if size is not None:
+        _check_list_or_tuple(size, _SIZE)
         _check_2_int_list_or_tuple(size, _SIZE)
         size = tuple(size)
     
@@ -104,7 +111,7 @@ def _check_not_None(value, name):
     Noneチェック
     
     Attributes:
-        value (str): チェック対象変数
+        value: チェック対象変数
         name (str): チェック対象項目名
     
     Raises:
@@ -115,12 +122,12 @@ def _check_not_None(value, name):
         msg = '"{0}" is None.'.format(name)
         raise ConfigurationError(msg)
 
-def _check_not_str(value, name):
+def _check_str(value, name):
     """
     strチェック
     
     Attributes:
-        value (str): チェック対象変数
+        value: チェック対象変数
         name (str): チェック対象項目名
     
     Raises:
@@ -131,12 +138,12 @@ def _check_not_str(value, name):
         msg = '"{0}" is not "str" type.'.format(name)
         raise ConfigurationError(msg)
 
-def _check_not_int(value, name):
+def _check_int(value, name):
     """
     intチェック
     
     Attributes:
-        value (str): チェック対象変数
+        value: チェック対象変数
         name (str): チェック対象項目名
     
     Raises:
@@ -147,12 +154,12 @@ def _check_not_int(value, name):
         msg = '"{0}" is not "int" type.'.format(name)
         raise ConfigurationError(msg)
 
-def _check_not_list_or_tuple(value, name):
+def _check_list_or_tuple(value, name):
     """
     list of tupleチェック
     
     Attributes:
-        value (str): チェック対象変数
+        value: チェック対象変数
         name (str): チェック対象項目名
     
     Raises:
@@ -180,7 +187,7 @@ def _check_not_whitespace(value, name):
         msg = '"{0}" is whitespace.'.format(name)
         raise ConfigurationError(msg)
 
-def _check_not_exist(value):
+def _check_exist(value):
     """
     存在チェック
     
@@ -201,18 +208,15 @@ def _check_2_int_list_or_tuple(value, name):
     list<int, int> or tuple<int, int>チェック
     
     Attributes:
-        value (str): チェック対象変数
+        value (list or tuple): チェック対象変数
         name (str): チェック対象項目名
     
     Raises:
         ConfigurationError: チェックエラー
     """
     
-    # 型チェック
-    _check_not_list_or_tuple(value, name)
-    
     # 要素数チェック
-    msg = '"{0}" has only 2 "int" type.'.fomat(name)
+    msg = '"{0}" has only 2 "int" type.'.format(name)
     if len(value) != 2:
         raise ConfigurationError(msg)
     
@@ -233,11 +237,6 @@ def _check_host(host):
     Raises:
         ConfigurationError: チェックエラー
     """
-    
-    _check_not_None(host, _HOST)
-    _check_not_str(host, _HOST)
-    _check_not_whitespace(host, _HOST)
-    host = host.strip(' ')
     
     msg = '"{0}" is not "localhost" or "xxx.xxx.xxx.xxx".(0 <= xxx <= 255)'.format(_HOST)
     if host == 'localhost':
@@ -260,9 +259,6 @@ def _check_port(port):
     Raises:
         ConfigurationError: チェックエラー
     """
-    
-    _check_not_None(port, _PORT)
-    _check_not_int(port, _PORT)
     
     if port < 0 or 65535 < port:
         msg = '"{0}" is less than 0 or greater than 65535.'.format(_PORT)
