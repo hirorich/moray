@@ -406,4 +406,64 @@ class MorayTest_Run(unittest.TestCase):
                 self.assertEqual(_config.cmdline_args, correct)
             except Exception as e:
                 self.fail()
+    
+    def test_run_position_1(self):
+        
+        self.init_config()
+        
+        for target in [
+            _INT, _FLOAT, _STR, _BOOL, _DICT, _CLASS,
+            [], [6184], [32, 165, 56], (), (69, ), (6, 65, 258),
+            [32, '165'], ['32', 165], (65, '258'), ('65', 258)
+        ]:
+            try:
+                moray.run('web', position = target)
+                self.fail()
+            except Exception as e:
+                pass
+    
+    def test_run_position_2(self):
+        
+        for target, correct in [
+            (None, None),
+            ([32, 165], (32, 165)),
+            ((65, 258), (65, 258))
+        ]:
+            self.init_config()
+            
+            try:
+                moray.run('web', position = target)
+                self.assertEqual(_config.position, correct)
+            except Exception as e:
+                self.fail()
+    
+    def test_run_size_1(self):
+        
+        self.init_config()
+        
+        for target in [
+            _INT, _FLOAT, _STR, _BOOL, _DICT, _CLASS,
+            [], [6184], [32, 165, 56], (), (69, ), (6, 65, 258),
+            [32, '165'], ['32', 165], (65, '258'), ('65', 258)
+        ]:
+            try:
+                moray.run('web', size = target)
+                self.fail()
+            except Exception as e:
+                pass
+    
+    def test_run_size_2(self):
+        
+        for target, correct in [
+            (None, None),
+            ([32, 165], (32, 165)),
+            ((65, 258), (65, 258))
+        ]:
+            self.init_config()
+            
+            try:
+                moray.run('web', size = target)
+                self.assertEqual(_config.size, correct)
+            except Exception as e:
+                self.fail()
 
