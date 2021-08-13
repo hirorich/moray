@@ -75,21 +75,24 @@ def run(
     # cmdline_args入力チェック
     _check_not_None(cmdline_args, _CMDLINE_ARGS)
     _check_not_list_or_tuple(cmdline_args, _CMDLINE_ARGS)
+    cmdline_args = list(cmdline_args)
     
     # position入力チェック
     if position is not None:
         _check_2_int_list_or_tuple(position, _POSITION)
+        position = tuple(position)
     
     # size入力チェック
     if size is not None:
         _check_2_int_list_or_tuple(size, _SIZE)
+        size = tuple(size)
     
     _config.root = root
     _config.start_page = start_page
     _config.host = host
     _config.port = port
     _config.browser = browser
-    _config.cmdline_args += list(cmdline_args)
+    _config.cmdline_args = cmdline_args
     _config.position = position
     _config.size = size
 
