@@ -17,7 +17,8 @@ def run_check():
     """
     サーバ起動確認用
     
-    Return: 固定メッセージ
+    Returns:
+        固定メッセージページ
     """
     
     return 'Success'
@@ -28,7 +29,8 @@ def py_module_script(py_module):
     JavaScriptからPythonを呼び出すためのjsモジュールを生成
     生成したモジュールを返却
     
-    Return: JavaScriptからPythonを呼び出すためのjsモジュール
+    Returns:
+        JavaScriptからPythonを呼び出すためのjsモジュール
     """
     
     return bottle.static_file('{0}.js'.format(py_module), root='moray/js/py')
@@ -39,7 +41,8 @@ def core_module_script(core_module):
     生成したjsモジュール内で呼び出されるjsモジュールを生成
     生成したモジュールを返却
     
-    Return: 生成したjsモジュール内で呼び出されるjsモジュール
+    Returns:
+        生成したjsモジュール内で呼び出されるjsモジュール
     """
     
     return bottle.static_file('{0}.js'.format(core_module), root='moray/js/core')
@@ -49,7 +52,8 @@ def bottle_websocket(ws):
     """
     WebSocketの受け取り口
     
-    Return: pyモジュールの実行結果
+    Returns:
+        pyモジュールの実行結果
     """
     
     while True:
@@ -69,7 +73,8 @@ def page(path = 'index.html'):
     root配下のファイルを返却
         .html, .js, .css など
     
-    Return: root配下のファイル
+    Returns:
+        root配下のページ
     """
     
     return bottle.static_file(path, root=_config.root)
@@ -77,9 +82,6 @@ def page(path = 'index.html'):
 def run():
     """
     サーバ起動
-    
-    Attributes:
-        port (int): ポート番号
     """
     
     app.run(
@@ -93,6 +95,9 @@ def run():
 def generate_port(port):
     """
     ポート番号を生成
+    
+    Returns:
+        int: 生成したポート番号
     """
     
     if port == 0:
@@ -105,6 +110,9 @@ def generate_port(port):
 def generate_start_url():
     """
     初期表示URLを生成
+    
+    Returns:
+        str: 初期表示URL
     """
     
     return 'http://localhost:{0}/{1}'.format(_config.port, _config.start_page)
@@ -112,6 +120,9 @@ def generate_start_url():
 def generate_confirm_running_url():
     """
     サーバ起動確認用URLを生成
+    
+    Returns:
+        str: サーバ起動確認用URL
     """
     
     return 'http://localhost:{0}/moray/confirm_running'.format(_config.port)

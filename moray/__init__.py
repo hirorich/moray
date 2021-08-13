@@ -1,6 +1,8 @@
 """
 morayが提供するAPIのInterface
 
+ToDo:
+    expose, _registerの実装によるPython関数の登録
 """
 
 import re
@@ -42,6 +44,18 @@ def run(
         position (tuple<int, int>, optional): ブラウザを開いた際の位置
         size (tuple<int, int>, optional): ブラウザを開いた際のサイズ
     
+    Examples:
+        >>> import moray
+        >>> moray.run(
+                'web',
+                start_page = 'index.html',
+                host = 'localhost',
+                port = 0,
+                browser = 'chrome',
+                cmdline_args = [],
+                position = (480, 270),
+                size = (960, 540)
+            )
     """
     
     # root入力チェック
@@ -251,7 +265,7 @@ def _check_host(host):
 def _check_port(port):
     """
     PORTチェック
-        0 <= port <= 65535)
+        0 <= port <= 65535
     
     Attributes:
         port (int): サーバのポート番号

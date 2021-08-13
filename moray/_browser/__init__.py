@@ -18,6 +18,9 @@ def is_supported(browser):
     
     Attributes:
         browser (str): チェック対象ブラウザ
+    
+    Returns:
+        bool: ブラウザのサポート有無
     """
     
     return browser in _browser_modules
