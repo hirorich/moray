@@ -36,14 +36,7 @@ def open(browser, url, cmdline_args):
     """
     
     # 使用するブラウザモジュールを指定
-    if is_supported(browser):
-        browser_module = _browser_modules[browser]
-    else:
-        
-        # 対象外ブラウザの場合
-        # browser はサポート対象外のブラウザです。
-        error_msg = '"{0}" is not a supported browser.'.format(browser)
-        raise SupportError(error_msg)
+    browser_module = _browser_modules[browser]
     
     # 対象ページを開く
     path = browser_module.find_path()

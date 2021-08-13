@@ -24,14 +24,3 @@ class BrowserTest(unittest.TestCase):
                 self.assertEqual(sp.call_args.args[0], ['T', 'E', 'S' , 'T'])
             except Exception as e:
                 self.fail()
-    
-    @patch('subprocess.Popen', MagicMock())
-    def test_open_2(self):
-        error_msg = '"edge" is not a supported browser.'
-        
-        try:
-            _browser.open('edge', 'url', ['test1', 'test2'])
-            self.fail()
-        except Exception as e:
-            self.assertIs(type(e), SupportError)
-            self.assertEqual(e.args[0], error_msg)
