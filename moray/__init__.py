@@ -48,8 +48,8 @@ def run(
     _check_not_None(root, _ROOT)
     _check_str(root, _ROOT)
     _check_not_whitespace(root, _ROOT)
-    _check_exist(root)
     root = root.strip(' ')
+    _check_exist(root)
     
     # start_page入力チェック
     _check_not_None(start_page, _START_PAGE)
