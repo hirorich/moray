@@ -7,7 +7,7 @@ from moray import _runner
 @patch('moray._runner._browser', MagicMock())
 @patch('moray._runner._server', MagicMock())
 class RunnerTest(unittest.TestCase):
-
+    
     @patch('requests.get', MagicMock(return_value = MagicMock(ok = True)))
     def test_open_browser_1(self):
         
