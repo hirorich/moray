@@ -9,7 +9,6 @@ class BrowserTest(unittest.TestCase):
     def test_is_supported_1(self):
         self.assertEqual(_browser.is_supported('chrome'), True)
     
-    
     def test_is_supported_2(self):
         self.assertEqual(_browser.is_supported('edge'), False)
     
