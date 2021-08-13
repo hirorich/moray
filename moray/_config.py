@@ -8,7 +8,7 @@ from moray._browser import chrome
 root = None
 start_page = 'index.html'
 browser = chrome.name
-cmdline_args = ['--disable-http-cache', '--incognito']
+cmdline_args = []
 position = None
 size = None
 host = 'localhost'

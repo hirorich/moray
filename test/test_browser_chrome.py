@@ -11,9 +11,11 @@ class ChromeTest(unittest.TestCase):
         url = 'http://localhost:port/'
         cmdline_args = []
         
-        correct = [path, '--app={0}'.format(url)]
+        correct = [path, '--app={0}'.format(url), '--disable-http-cache', '--incognito']
         
-        self.assertEqual(chrome.create_command(path, url, cmdline_args), correct)
+        cmd = chrome.create_command(path, url, cmdline_args)
+        self.assertEqual(cmd[:2], correct[:2])
+        self.assertEqual(set(cmd[2:]), set(correct[2:]))
     
     def test_create_command_2(self):
         path = 'path'
@@ -22,7 +24,9 @@ class ChromeTest(unittest.TestCase):
         
         correct = [path, '--app={0}'.format(url), '--disable-http-cache', '--incognito']
         
-        self.assertEqual(chrome.create_command(path, url, cmdline_args), correct)
+        cmd = chrome.create_command(path, url, cmdline_args)
+        self.assertEqual(cmd[:2], correct[:2])
+        self.assertEqual(set(cmd[2:]), set(correct[2:]))
     
     def test_find_chrome_windows_1(self):
         

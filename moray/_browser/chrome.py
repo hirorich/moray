@@ -8,6 +8,7 @@ import sys, os
 from moray.exception import SupportError
 
 name = 'chrome'
+_cmdline_args = ['--disable-http-cache', '--incognito']
 
 def create_command(path, url, cmdline_args):
     """
@@ -22,7 +23,7 @@ def create_command(path, url, cmdline_args):
         list<str>: 生成された起動コマンド
     """
     
-    return [path, '--app=' + url] + cmdline_args
+    return [path, '--app=' + url] + list(set(_cmdline_args + cmdline_args))
 
 def find_path():
     """
