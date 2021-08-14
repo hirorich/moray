@@ -115,7 +115,6 @@
 ***
 ## 参考
 - [eel](https://github.com/ChrisKnott/Eel)
-- [BottleフレームワークでWebsocket通信を行う](https://symfoware.blog.fc2.com/blog-entry-2426.html)
 - [bottleドキュメント](https://bottlepy.org/docs/dev/tutorial.html)
 - [bottleドキュメント(和訳版)](https://bottl-translate-ja.readthedocs.io/en/latest/01_1_tutorial.html)
 
