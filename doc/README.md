@@ -2,17 +2,21 @@
 - moray作成のために調査したものを区切りごとにナレッジとして残す
 - 技術的な仕組みよりも使い方がメイン
 
-## [Docstring](docstring_google.md)
+***
+## Python
+### [Docstring](docstring_google.md)
 - Pythonにおけるクラスやメソッド(関数)についての説明を記載したコメント文
 
-## [WebSocket](websocket.md)
+### [WebSocket](websocket.md)
 - クライアントとサーバの双方向通信を可能にする、単一のTCPコネクション上のプロトコル
 
-## Promise
-- JavaScript
-
-## Bottleについて
+### Bottleについて
 - 使用している機能のみ(routeなど)
 
-## 単体テストについて
+### 単体テストについて
 - unittest, mock, MagicMock
+
+***
+## JavaScript
+### [Promise](promise.md)
+- 非同期処理の最終的な完了もしくは失敗を表すオブジェクト
