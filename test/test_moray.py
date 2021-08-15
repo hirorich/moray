@@ -196,16 +196,16 @@ class MorayTest_Check(unittest.TestCase):
     
     def test_check_port_1(self):
         
-        for target in 0, 1, 65534, 65535:
+        for target in 0, 1025, 1026, 65534, 65535:
             try:
                 moray._check_port(target)
             except Exception as e:
                 self.fail()
     
     def test_check_port_2(self):
-        error_msg = '"port" is less than 0 or greater than 65535.'
+        error_msg = '"port" is less than 1025 or greater than 65535.'
         
-        for target in -2, -1, 65536, 65537:
+        for target in -1, 1, 1023, 1024, 65536, 65537:
             try:
                 moray._check_port(target)
                 self.fail()
@@ -311,7 +311,7 @@ class MorayTest_Run(unittest.TestCase):
         
         self.init_config()
         
-        for target in None, _FLOAT, _STR, _BOOL, _LIST, _TUPLE, _DICT, _CLASS, -2, -1, 65536, 65537:
+        for target in None, _FLOAT, _STR, _BOOL, _LIST, _TUPLE, _DICT, _CLASS, -1, 1, 1023, 1024, 65536, 65537:
             try:
                 moray.run('web', port = target)
                 self.fail()
@@ -320,7 +320,7 @@ class MorayTest_Run(unittest.TestCase):
     
     def test_run_port_2(self):
         
-        for target in 1, 2, 65534, 65535:
+        for target in 1025, 1026, 65534, 65535:
             self.init_config()
             
             try:

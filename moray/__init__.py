@@ -265,7 +265,7 @@ def _check_host(host):
 def _check_port(port):
     """
     PORTチェック
-        0 <= port <= 65535
+        port = 0 or 1025 <= port <= 65535
     
     Attributes:
         port (int): サーバのポート番号
@@ -274,8 +274,10 @@ def _check_port(port):
         ConfigurationError: チェックエラー
     """
     
-    if port < 0 or 65535 < port:
-        msg = '"{0}" is less than 0 or greater than 65535.'.format(_PORT)
+    if port == 0:
+        pass
+    elif port < 1025 or 65535 < port:
+        msg = '"{0}" is less than 1025 or greater than 65535.'.format(_PORT)
         raise ConfigurationError(msg)
 
 def expose(func):
