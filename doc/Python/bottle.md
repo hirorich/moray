@@ -6,8 +6,8 @@
 ## 目次
 - [ざっくりとした概要](#ざっくりとした概要)
 - [サンプルコード](#サンプルコード)
-- [API仕様](#API仕様)
-  - [Bottle](#Bottle)
+- [API仕様](#api仕様)
+  - [Bottle](#bottle-1)
     - [route](#route)
     - [run](#run)
   - [static_file](#staticfile)
