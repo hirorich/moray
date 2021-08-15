@@ -5,8 +5,8 @@
 ## 目次
 - [ざっくりとした仕組み](#ざっくりとした仕組み)
 - [サンプルコード](#サンプルコード)
-  - [サーバ（Python、Bottle）](#サーバ（Python、Bottle）)
-  - [クライアント（JavaScript）](#クライアント（JavaScript)
+  - [サーバ（Python、Bottle）](#サーバPythonBottle)
+  - [クライアント（JavaScript）](#クライアントJavaScript)
 - [参考](#参考)
 
 ***

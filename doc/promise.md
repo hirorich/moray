@@ -1,15 +1,22 @@
 # Promise
 - 非同期処理の最終的な完了もしくは失敗を表すオブジェクト
-- 詳細は以下を参照
-  - [Promise](https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/Promise)
-  - [Promiseを使う](https://developer.mozilla.org/ja/docs/Web/JavaScript/Guide/Using_promises)
 
 ***
 ## 目次
+- [ざっくりとした概要](#ざっくりとした概要)
 - [サンプルコード](#サンプルコード)
   - [基本形](#基本形)
   - [応用形](#応用形)
 - [参考](#参考)
+
+***
+## ざっくりとした概要
+- Promiseとは、JavaScriptにおいて非同期処理の操作が完了したときに結果を返すオブジェクト
+  - 非同期処理とは、ある処理が実行されてから終わるまで待たずに次に控えている別の処理を行うこと
+- 処理を待機することや、その結果に応じて次の処理をすること約束することができる
+- 詳細は以下を参照
+  - [Promise](https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/Promise)
+  - [Promiseを使う](https://developer.mozilla.org/ja/docs/Web/JavaScript/Guide/Using_promises)
 
 ***
 ## サンプルコード
@@ -121,3 +128,5 @@ my_trigger.reject('reject');
 ***
 ## 参考
 - [Promise](https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/Promise)
+- [【JavaScript】初心者にもわかるPromiseの使い方](https://techplay.jp/column/581)
+- [【ES6】 JavaScript初心者でもわかるPromise講座](https://qiita.com/cheez921/items/41b744e4e002b966391a)
