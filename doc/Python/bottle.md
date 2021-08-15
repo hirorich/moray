@@ -6,6 +6,11 @@
 ## 目次
 - [ざっくりとした概要](#ざっくりとした概要)
 - [サンプルコード](#サンプルコード)
+- [API仕様](#API仕様)
+  - [Bottle](#Bottle)
+    - [route](#route)
+    - [run](#run)
+  - [static_file](#staticfile)
 - [参考](#参考)
 
 ***
@@ -19,6 +24,44 @@
 
 ***
 ## サンプルコード
+``` python
+import bottle
+
+app = bottle.Bottle()
+
+@app.route('/')
+@app.route('/<path>')
+def index(path = 'index.html'):
+    return bottle.static_file(path, root = 'web')
+
+app.run(host = 'locahost', port = 8080)
+```
+
+***
+## API仕様
+### [Bottle](https://bottlepy.org/docs/dev/api.html#bottle.Bottle)
+- 各Bottleオブジェクトは1つの独立したWebアプリケーションを表す
+- インスタンスは呼び出し可能なWSGIアプリケーション
+- ルート、コールバック、プラグイン、リソース、設定で構成されている
+
+### [route](https://bottlepy.org/docs/dev/api.html#bottle.Bottle.route)
+- route(path=None, method='GET', callback=None, name=None, apply=None, skip=None, **config)
+- 関数をリクエストURLにバインドするデコレーター
+- <>で囲った部分はワイルドカード
+- 詳細は以下参照
+  - [Request Routing](https://bottlepy.org/docs/dev/routing.html?highlight=routing)
+
+### [run](https://bottlepy.org/docs/dev/api.html#bottle.run)
+- run(app=None, server='wsgiref', host='127.0.0.1', port=8080, interval=1, reloader=False, quiet=False, plugins=None, debug=None, config=None, **kargs)
+- サーバーインスタンスを起動
+- サーバーが終了するまでブロックする
+
+### [static_file](https://bottlepy.org/docs/dev/tutorial.html#routing-static-files)
+- 画像やCSSファイルなどの静的ファイルを提供する
+- path
+  - 対象のルートディレクトリからのパスを指定
+- root
+  - 検索対象のルートディレクトリを指定
 
 ***
 ## 参考

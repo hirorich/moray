@@ -11,7 +11,7 @@
 - クライアントとサーバの双方向通信を可能にする、単一のTCPコネクション上のプロトコル
 
 ### [Bottle](Python/bottle.md)
-- 使用している機能のみ(routeなど)
+- Python用のWSGIマイクロWebフレームワーク
 
 ### 単体テストについて
 - unittest, mock, MagicMock
