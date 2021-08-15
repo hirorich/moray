@@ -115,6 +115,4 @@
 ***
 ## 参考
 - [eel](https://github.com/ChrisKnott/Eel)
-- [bottleドキュメント](https://bottlepy.org/docs/dev/tutorial.html)
-- [bottleドキュメント(和訳版)](https://bottl-translate-ja.readthedocs.io/en/latest/01_1_tutorial.html)
 

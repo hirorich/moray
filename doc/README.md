@@ -10,7 +10,7 @@
 ### [WebSocket](Python/websocket.md)
 - クライアントとサーバの双方向通信を可能にする、単一のTCPコネクション上のプロトコル
 
-### Bottleについて
+### [Bottle](Python/bottle.md)
 - 使用している機能のみ(routeなど)
 
 ### 単体テストについて
