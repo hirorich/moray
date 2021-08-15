@@ -4,10 +4,10 @@
 
 ***
 ## Python
-### [Docstring](docstring_google.md)
+### [Docstring](Python/docstring_google.md)
 - Pythonにおけるクラスやメソッド(関数)についての説明を記載したコメント文
 
-### [WebSocket](websocket.md)
+### [WebSocket](Python/websocket.md)
 - クライアントとサーバの双方向通信を可能にする、単一のTCPコネクション上のプロトコル
 
 ### Bottleについて
@@ -18,5 +18,5 @@
 
 ***
 ## JavaScript
-### [Promise](promise.md)
+### [Promise](JavaScript/promise.md)
 - 非同期処理の最終的な完了もしくは失敗を表すオブジェクト
