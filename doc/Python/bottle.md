@@ -58,6 +58,7 @@ app.run(host = 'locahost', port = 8080)
 
 ### [static_file](https://bottlepy.org/docs/dev/tutorial.html#routing-static-files)
 - 画像やCSSファイルなどの静的ファイルを提供する
+- 返却値は [bottle.HTTPResponse](https://bottlepy.org/docs/dev/api.html#bottle.HTTPResponse) 型
 - path
   - 対象のルートディレクトリからのパスを指定
 - root
