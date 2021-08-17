@@ -6,6 +6,11 @@
 - [ざっくりとした概要](#ざっくりとした概要)
 - [サンプルコード](#サンプルコード)
 - [API仕様](#api仕様)
+  - [assertEqual](#assertequal)
+  - [assertRaises](#assertraises)
+  - [fail](#fail)
+  - [mock.patch](#mockpatch)
+  - [mock.MagicMock](#mockmagicmock)
 - [参考](#参考)
 
 ***
@@ -89,6 +94,7 @@ class MyModuleTest(unittest.TestCase):
             self.assertEqual(my_module.class_func(), True)
 ```
 - .vscode\setting.json
+  - testフォルダ直下の test_ から始まるモジュールがテストケースである場合
 ``` json
 {
     "python.testing.unittestArgs": [
@@ -103,12 +109,52 @@ class MyModuleTest(unittest.TestCase):
     "python.testing.unittestEnabled": true,
 }
 ```
+
 ***
 ## API仕様
+### [assertEqual](https://docs.python.org/ja/3/library/unittest.html#unittest.TestCase.assertEqual)
+``` python
+assertEqual(first, second, msg=None)
+```
+- first と second が等しいことをテスト
+
+### [assertRaises](https://docs.python.org/ja/3/library/unittest.html#unittest.TestCase.assertRaises)
+``` python
+assertRaises(exception, callable, *args, **kwds)
+assertRaises(exception, *, msg=None)
+```
+- callable を呼び出した時に例外が発生することをテスト
+
+### [fail](https://docs.python.org/ja/3/library/unittest.html#unittest.TestCase.fail)
+- 無条件にテストを失敗させる
+
+### [mock.patch](https://docs.python.org/ja/3/library/unittest.mock.html#unittest.mock.patch)
+- with句またはデコレータ内にモックを適用する
+- モック対象はimportできる形でパスを指定する必要がある
+
+### [mock.MagicMock](https://docs.python.org/ja/3/library/unittest.mock.html#unittest.mock.MagicMock)
+- アクセスしたすべての属性とメソッドを作成
+- どのように使用されたかについての詳細な情報を格納
+``` python
+MagicMock('abc')
+```
+- 変数に対するモック
+``` python
+MagicMock(return_value=3)
+```
+- 関数に対するモック
+``` python
+MagicMock(side_effect=[1, 2, 3])
+```
+- 呼び出すごとに異なる値を返させたい場合の関数に対するモック
+``` python
+MagicMock(side_effect=KeyError('foo'))
+```
+- 任意のエラーを発生させる
 
 ***
 ## 参考
 - [unittest --- ユニットテストフレームワーク](https://docs.python.org/ja/3/library/unittest.html)
+- [unittest.mock --- モックオブジェクトライブラリ](https://docs.python.org/ja/3/library/unittest.mock.html)
 - [Python testing in Visual Studio Code](https://code.visualstudio.com/docs/python/testing)
 - [Visual Studio CodeでのPython単体テストが便利すぎる件](https://hiroronn.hatenablog.jp/entry/20180905/1536146652)
-- [VSCode で Python のテストをする](http://var.blog.jp/archives/81934625.html)
