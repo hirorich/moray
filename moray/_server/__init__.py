@@ -35,9 +35,9 @@ def py_module_script(py_module):
         JavaScriptからPythonを呼び出すためのjsモジュール
     """
     
-    return bottle.static_file('{0}.js'.format(py_module), root='moray/js/py')
+    return bottle.static_file('{0}.js'.format(py_module), root='sample_module/js/py')
 
-@app.route('/moray/core/<core_module>')
+@app.route('/moray/js/<core_module>')
 def core_module_script(core_module):
     """
     生成したjsモジュール内で呼び出されるjsモジュールを生成
@@ -47,7 +47,7 @@ def core_module_script(core_module):
         生成したjsモジュール内で呼び出されるjsモジュール
     """
     
-    return bottle.static_file('{0}.js'.format(core_module), root='moray/js/core')
+    return bottle.static_file('{0}.js'.format(core_module), root='sample_module/js/core')
 
 @app.route('/moray/ws', apply=[websocket])
 def bottle_websocket(ws):

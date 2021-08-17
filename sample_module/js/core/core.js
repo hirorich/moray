@@ -1,5 +1,5 @@
 // 本来はサーバ側で自動生成
-// /moray/core
+// /moray/js/core
 let ws;
 let call_promise = {};
 let unsended_data = [];

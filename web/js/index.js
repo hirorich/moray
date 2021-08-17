@@ -1,13 +1,13 @@
-import {py_func, py_func2} from '/moray/py/my_module'
+import {get_module_name, sum, sum_list} from '/moray/py/sample_module'
 
-py_func('test', 123).then(
+get_module_name().then(
     v => console.log(v)
 );
 
-py_func2('test2').then(
+sum(5, 8).then(
     v => console.log(v)
 );
-py_func(456).then(
+sum_list([2, 7, 11]).then(
     v => console.log(v)
 );
 
