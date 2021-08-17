@@ -13,8 +13,8 @@
 ### [Bottle](Python/bottle.md)
 - Python用のWSGIマイクロWebフレームワーク
 
-### 単体テストについて
-- unittest, mock, MagicMock
+### [unittest](Python/unittest.md)
+- JUnitに触発されたPythonのユニットテストフレームワーク
 
 ***
 ## JavaScript
