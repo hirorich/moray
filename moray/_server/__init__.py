@@ -11,6 +11,7 @@ from bottle import HTTPResponse
 from bottle.ext.websocket import GeventWebSocketServer, websocket
 
 from moray import _config
+from moray._module import py
 
 app = bottle.Bottle()
 
@@ -69,8 +70,14 @@ def bottle_websocket(ws):
             print('return')
         else:
             print('call')
-        
-        ws.send(json.dumps(parsed_msg))
+            result = py.call(parsed_msg['module'], parsed_msg['func_name'], parsed_msg['args'])
+            
+            return_msg = {}
+            return_msg['id'] = parsed_msg['id']
+            return_msg['return'] = True
+            return_msg['result'] = result
+            
+            ws.send(json.dumps(return_msg))
 
 @app.route('/')
 @app.route('/<path:path>')

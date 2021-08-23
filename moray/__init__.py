@@ -10,6 +10,7 @@ from pathlib import Path
 
 from moray import _browser, _config, _runner, _server
 from moray._browser import chrome
+from moray._module import py
 from moray.exception import ConfigurationError, SupportError
 
 _ROOT = 'root'
@@ -283,18 +284,11 @@ def _check_port(port):
 def expose(func):
     """
     デコレータ
-    JavaScriptから呼び出すファンクションを登録
+    JavaScriptから呼び出せるようファンクションを公開
     
     Attributes:
         func (function): 登録するファンクション
     """
     
-    _register(func.__module__, func.__name__, func)
-    
+    py.register(func)
     return func
-
-# ===== 以下は別モジュールに実装する =====
-def _register(module, name, func):
-    print('_register')
-    print('  module: ' + module)
-    print('  name: ' + name)

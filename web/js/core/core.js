@@ -37,7 +37,7 @@ let uniqueId = function(digits) {
 };
 
 // pythonを呼び出す
-let call_python = function(module, func, args) {
+let call_python = function(module, func_name, args) {
     let id = uniqueId();
 
     let arg_array = [];
@@ -49,7 +49,7 @@ let call_python = function(module, func, args) {
         id: id,
         return: false,
         module: module,
-        func: func,
+        func_name: func_name,
         args: arg_array
     });
     
