@@ -22,7 +22,10 @@ let _init = function() {
     }
     ws.onmessage = function(evt) {
         console.log('ws.onmessage');
-        call_promise[JSON.parse(evt.data).id].resolve(evt.data);
+        let data = JSON.parse(evt.data);
+        if (data.return) {
+            call_promise[data.id].resolve(data.result);
+        }
     }
     ws.onclose = function(evt) {
         console.log('ws.onclose');
