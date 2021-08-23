@@ -37,7 +37,7 @@ let uniqueId = function(digits) {
 };
 
 // pythonを呼び出す
-let send_to_py = function(module, func, args) {
+let call_python = function(module, func, args) {
     let id = uniqueId();
 
     let arg_array = [];
@@ -47,6 +47,7 @@ let send_to_py = function(module, func, args) {
 
     let data = JSON.stringify({
         id: id,
+        return: false,
         module: module,
         func: func,
         args: arg_array
@@ -62,4 +63,4 @@ let send_to_py = function(module, func, args) {
     });
 };
 
-export {send_to_py};
+export {call_python};
