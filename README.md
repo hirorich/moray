@@ -71,6 +71,13 @@
     ``` bash
     pip install requests
     ```
+- [Jinja2](https://pypi.org/project/Jinja2/)
+  - BSD License (BSD-3-Clause)
+  - テンプレートエンジン
+  - 以下を実行することでインストール
+    ``` bash
+    pip install Jinja2
+    ```
 
 ***
 ## 使用方法(想定)
