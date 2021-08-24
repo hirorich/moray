@@ -51,7 +51,7 @@ def core_module_script(core_module):
         生成したjsモジュール内で呼び出されるjsモジュール
     """
     
-    return bottle.static_file('{0}.js'.format(core_module), root='web/js/core')
+    return bottle.static_file('{0}.js'.format(core_module), root='moray/_module/js')
 
 @app.route('/moray/ws', apply=[websocket])
 def bottle_websocket(ws):
