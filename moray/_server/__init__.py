@@ -26,7 +26,7 @@ def run_check():
     
     return 'Success'
 
-@app.route('/moray/py/<py_module>')
+@app.route('/moray/py/<py_module>.js')
 def py_module_script(py_module):
     """
     JavaScriptからPythonを呼び出すためのjsモジュールを生成

@@ -1,4 +1,4 @@
-import {get_module_name, sum, sum_list} from '/moray/py/sample_module'
+import {get_module_name, sum, sum_list} from '/moray/py/sample_module.js'
 
 export default {
     data() {
