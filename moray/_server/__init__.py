@@ -36,7 +36,10 @@ def py_module_script(py_module):
         JavaScriptからPythonを呼び出すためのjsモジュール
     """
     
-    return bottle.static_file('{0}.js'.format(py_module), root='web/js/py')
+    body = py.render(py_module)
+    res = HTTPResponse(status=200, body=body)
+    res.set_header('Content-type', 'text/javascript')
+    return res
 
 @app.route('/moray/js/<core_module>')
 def core_module_script(core_module):

@@ -1,3 +1,5 @@
+from jinja2 import PackageLoader, Environment
+
 _expose_module = {}
 
 def register(func):
@@ -27,3 +29,17 @@ def call(module, func_name, args):
     
     func = _expose_module[module][func_name]
     return func(*args)
+
+def render(module):
+    """
+    テンプレートからJavaScriptを生成
+    
+    Attributes:
+        module (str): 呼び出すモジュール名
+    """
+    
+    list_func_name = list(_expose_module[module].keys())
+    
+    loader = PackageLoader(package_name='moray._module.py', package_path='template')
+    template = Environment(loader=loader).get_template(name='js_module.js')
+    return template.render(module=module, list_func_name=list_func_name)
