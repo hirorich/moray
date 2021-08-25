@@ -76,7 +76,7 @@ def bottle_websocket(ws):
             print('return')
             id = parsed_msg['id']
             result = parsed_msg['result']
-            status = parsed_msg['status']
+            is_success = parsed_msg['is_success']
         else:
             print('call')
             id = parsed_msg['id']
@@ -84,13 +84,13 @@ def bottle_websocket(ws):
             func_name = parsed_msg['func_name']
             args = parsed_msg['args']
             
-            result, status = _call_py_func(module, func_name, args)
+            result, is_success = _call_py_func(module, func_name, args)
             
             return_msg = {}
             return_msg['id'] = id
             return_msg['return'] = True
             return_msg['result'] = result
-            return_msg['status'] = status
+            return_msg['is_success'] = is_success
             
             ws.send(json.dumps(return_msg))
 
@@ -131,16 +131,16 @@ def _call_py_func(module, func_name, args):
     
     Returns:
         ファンクションの実行結果
-        ステータスコード(200:成功, 500:失敗)
+        実行成否(True:成功, False:失敗)
     """
     
     try:
         result = py.call(module, func_name, args)
-        return result, 200
+        return result, True
     except:
         # ToDo: ログ出力
         result = 'calling python function is faild.'
-        return result, 500
+        return result, False
 
 def generate_port(port):
     """

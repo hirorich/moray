@@ -16,16 +16,24 @@ let _init = function() {
     let host = window.location.host;
     ws = new WebSocket('ws://' + host + '/moray/ws');
     ws.onopen = function(evt) {
-        console.log('ws.onopen');
         for(let i = 0; i < unsended_data.length; i++){
             ws.send(unsended_data[i]);
         }
     }
     ws.onmessage = function(evt) {
-        console.log('ws.onmessage');
         let data = JSON.parse(evt.data);
+
         if (data.return) {
-            call_promise[data.id].resolve(data.result);
+            if (!(data.id in call_promise)) {
+                return;
+            }
+
+            if (data.is_success) {
+                call_promise[data.id].resolve(data.result);
+            } else {
+                call_promise[data.id].reject(data.result);
+            }
+            delete call_promise[data.id];
         }
     }
     ws.onclose = function(evt) {
