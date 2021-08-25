@@ -1,6 +1,7 @@
 let ws;
 let call_promise = {};
 let unsended_data = [];
+let exposed_js = {};
 
 let _init = function() {
     if (!window.WebSocket) {
@@ -32,6 +33,24 @@ let _init = function() {
                 call_promise[data.id].reject(data.result);
             }
             delete call_promise[data.id];
+
+        } else {
+            let result;
+            let is_success = true;
+            try {
+                result = exposed_js[data.func_name].apply(null, data.args);
+            } catch (e) {
+                is_success = false;
+                result = 'calling javascript function is faild.';
+            }
+
+            let data = JSON.stringify({
+                id: data.id,
+                method: 'return',
+                result: result,
+                is_success: is_success
+            });
+            ws.send(data);
         }
     }
     ws.onclose = function(evt) {
@@ -81,6 +100,7 @@ let call_python = function(module, func_name, args) {
 // javascriptの関数を公開
 let expose = function(func) {
     let func_name = func.name;
+    exposed_js[func_name] = func;
 
     let data = JSON.stringify({
         method: 'expose',
