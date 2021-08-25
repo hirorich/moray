@@ -13,6 +13,10 @@ from bottle.ext.websocket import GeventWebSocketServer, websocket
 from moray import _config
 from moray._module import py
 
+_RETURN = 'return'
+_CALL = 'call'
+_EXPOSE = 'expose'
+
 root_module_js = pkg_resources.resource_filename('moray', r'_module\js')
 
 app = bottle.Bottle()
@@ -55,6 +59,18 @@ def core_module_script(core_module):
     
     return bottle.static_file('{0}.js'.format(core_module), root=root_module_js)
 
+@app.route('/moray.js')
+def moray_script():
+    """
+    生成したjsモジュール内で呼び出されるjsモジュールを生成
+    生成したモジュールを返却
+    
+    Returns:
+        生成したjsモジュール内で呼び出されるjsモジュール
+    """
+    
+    return bottle.static_file('moray.js', root=root_module_js)
+
 @app.route('/moray/ws', apply=[websocket])
 def bottle_websocket(ws):
     """
@@ -71,14 +87,10 @@ def bottle_websocket(ws):
         
         print(msg)
         parsed_msg = json.loads(msg)
+        method = parsed_msg['method']
         
-        if parsed_msg['return']:
-            print('return')
-            id = parsed_msg['id']
-            result = parsed_msg['result']
-            is_success = parsed_msg['is_success']
-        else:
-            print('call')
+        if method == _CALL:
+            print(_CALL)
             id = parsed_msg['id']
             module = parsed_msg['module']
             func_name = parsed_msg['func_name']
@@ -93,6 +105,17 @@ def bottle_websocket(ws):
             return_msg['is_success'] = is_success
             
             ws.send(json.dumps(return_msg))
+            
+        elif method == _RETURN:
+            print(_RETURN)
+            id = parsed_msg['id']
+            result = parsed_msg['result']
+            is_success = parsed_msg['is_success']
+            
+        elif method == _EXPOSE:
+            print(_EXPOSE)
+            func_name = parsed_msg['func_name']
+            print(func_name)
 
 @app.route('/')
 @app.route('/<path:path>')

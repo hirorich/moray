@@ -1,5 +1,3 @@
-// 本来はサーバ側で自動生成
-// /moray/js/core
 let ws;
 let call_promise = {};
 let unsended_data = [];
@@ -17,7 +15,7 @@ let _init = function() {
     ws = new WebSocket('ws://' + host + '/moray/ws');
     ws.onopen = function(evt) {
         for(let i = 0; i < unsended_data.length; i++){
-            ws.send(unsended_data[i]);
+            ws.send(unsended_data.pop());
         }
     }
     ws.onmessage = function(evt) {
@@ -48,6 +46,15 @@ let uniqueId = function(digits) {
     return Date.now().toString(16) + Math.floor(strong * Math.random()).toString(16);
 };
 
+// メッセージ送信
+let send_msg = function(data) {
+    if (ws.readyState == WebSocket.OPEN) {
+        ws.send(data);
+    } else {
+        unsended_data.push(data);
+    }
+};
+
 // pythonを呼び出す
 let call_python = function(module, func_name, args) {
     let id = uniqueId();
@@ -59,20 +66,27 @@ let call_python = function(module, func_name, args) {
 
     let data = JSON.stringify({
         id: id,
-        return: false,
+        method: 'call',
         module: module,
         func_name: func_name,
         args: arg_array
     });
     
     return new Promise((reso, reje) => {
-        if (ws.readyState == WebSocket.OPEN) {
-            ws.send(data);
-        } else {
-            unsended_data.push(data);
-        }
+        send_msg(data);
         call_promise[id] = {resolve: reso, reject: reje};
     });
 };
 
-export {call_python};
+// javascriptの関数を公開
+let expose = function(func) {
+    let func_name = func.name;
+
+    let data = JSON.stringify({
+        method: 'expose',
+        func_name: func_name
+    });
+    send_msg(data);
+}
+
+export {call_python, expose};
