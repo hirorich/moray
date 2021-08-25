@@ -6,12 +6,14 @@ ToDo:
     jsモジュール自動生成pyモジュール作成・呼び出し
 """
 
-import bottle, json, socket
+import bottle, json, pkg_resources, socket
 from bottle import HTTPResponse
 from bottle.ext.websocket import GeventWebSocketServer, websocket
 
 from moray import _config
 from moray._module import py
+
+root_module_js = pkg_resources.resource_filename('moray', r'_module\js')
 
 app = bottle.Bottle()
 
@@ -51,7 +53,7 @@ def core_module_script(core_module):
         生成したjsモジュール内で呼び出されるjsモジュール
     """
     
-    return bottle.static_file('{0}.js'.format(core_module), root='moray/_module/js')
+    return bottle.static_file('{0}.js'.format(core_module), root=root_module_js)
 
 @app.route('/moray/ws', apply=[websocket])
 def bottle_websocket(ws):
