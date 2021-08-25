@@ -71,16 +71,26 @@ def bottle_websocket(ws):
         
         print(msg)
         parsed_msg = json.loads(msg)
+        
         if parsed_msg['return']:
             print('return')
+            id = parsed_msg['id']
+            result = parsed_msg['result']
+            status = parsed_msg['status']
         else:
             print('call')
-            result = py.call(parsed_msg['module'], parsed_msg['func_name'], parsed_msg['args'])
+            id = parsed_msg['id']
+            module = parsed_msg['module']
+            func_name = parsed_msg['func_name']
+            args = parsed_msg['args']
+            
+            result, status = _call_py_func(module, func_name, args)
             
             return_msg = {}
-            return_msg['id'] = parsed_msg['id']
+            return_msg['id'] = id
             return_msg['return'] = True
             return_msg['result'] = result
+            return_msg['status'] = status
             
             ws.send(json.dumps(return_msg))
 
@@ -109,6 +119,28 @@ def run():
         debug = False,
         server = GeventWebSocketServer
     )
+
+def _call_py_func(module, func_name, args):
+    """
+    exposeしたファンクションを呼び出す
+    
+    Attributes:
+        module (str): 呼び出すモジュール名
+        func_name (str): 呼び出すファンクション名
+        args (dict): 引数
+    
+    Returns:
+        ファンクションの実行結果
+        ステータスコード(200:成功, 500:失敗)
+    """
+    
+    try:
+        result = py.call(module, func_name, args)
+        return result, 200
+    except:
+        # ToDo: ログ出力
+        result = 'calling python function is faild.'
+        return result, 500
 
 def generate_port(port):
     """

@@ -19,12 +19,15 @@ def register(func):
 
 def call(module, func_name, args):
     """
-    JavaScriptから呼び出すファンクションを登録
+    ファンクションを呼び出す
     
     Attributes:
         module (str): 呼び出すモジュール名
         func_name (str): 呼び出すファンクション名
         args (dict): 引数
+    
+    Returns:
+        ファンクションの実行結果
     """
     
     func = _expose_module[module][func_name]
@@ -36,6 +39,9 @@ def render(module):
     
     Attributes:
         module (str): 呼び出すモジュール名
+    
+    Returns:
+        str: 生成されたJavaScript
     """
     
     list_func_name = list(_expose_module[module].keys())

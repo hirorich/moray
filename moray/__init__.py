@@ -290,5 +290,9 @@ def expose(func):
         func (function): 登録するファンクション
     """
     
-    py.register(func)
+    if callable(func):
+        py.register(func)
+    else:
+        raise ConfigurationError('"moray.expose" can only be used for "function".')
+    
     return func
