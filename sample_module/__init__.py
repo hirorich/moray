@@ -48,6 +48,13 @@ def sum_list(items):
     
     return result
 
+@moray.expose
+def log_msg():
+    print('start: log_msg')
+    result = moray.js.log_msg('Python: exposed')()
+    print(result)
+    print('end: log_msg')
+
 def not_expose():
     """
     expose対象外関数

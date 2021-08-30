@@ -39,18 +39,22 @@ let _init = function() {
             let is_success = true;
             try {
                 result = exposed_js[data.func_name].apply(null, data.args);
+                if (typeof result === "undefined") {
+                    result = null;
+                }
             } catch (e) {
                 is_success = false;
                 result = 'calling javascript function is faild.';
+                console.log(e);
             }
 
-            let data = JSON.stringify({
+            let return_data = JSON.stringify({
                 id: data.id,
                 method: 'return',
                 result: result,
                 is_success: is_success
             });
-            ws.send(data);
+            ws.send(return_data);
         }
     }
     ws.onclose = function(evt) {

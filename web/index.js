@@ -18,6 +18,7 @@ const app = Vue.createApp(component);
 app.mount('#app');
 
 let log_msg = function(msg) {
-    console.log(meg);
+    console.log(msg);
+    return 'JavaScript: ' + msg
 };
 expose(log_msg);

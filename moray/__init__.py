@@ -22,6 +22,10 @@ _SIZE = 'size'
 _HOST = 'host'
 _PORT = 'port'
 
+class _CLASS():
+    pass
+js = _CLASS()
+
 def run(
         root,
         start_page = '',

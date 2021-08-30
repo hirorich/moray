@@ -10,8 +10,9 @@ import bottle, json, pkg_resources, socket
 from bottle import HTTPResponse
 from bottle.ext.websocket import GeventWebSocketServer, websocket
 
+import moray
 from moray import _config
-from moray._module import py
+from moray._module import py, js
 
 _RETURN = 'return'
 _CALL = 'call'
@@ -115,6 +116,7 @@ def bottle_websocket(ws):
         elif method == _EXPOSE:
             print(_EXPOSE)
             func_name = parsed_msg['func_name']
+            moray.js.__setattr__(func_name, js.create_js_func(ws, func_name))
             print(func_name)
 
 @app.route('/')
