@@ -48,6 +48,8 @@ def websocket_react(ws, msg):
         _returned(parsed_msg)
     elif method == _EXPOSE:
         _exposed(ws, parsed_msg)
+    else:
+        raise RuntimeError('"{0}" is not correct "{1}".'.format(method, _METHOD))
 
 def _called(ws, parsed_msg):
     """
