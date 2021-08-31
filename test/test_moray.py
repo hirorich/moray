@@ -10,6 +10,9 @@ from moray.exception import ConfigurationError, SupportError
 class Class():
     pass
 
+def _FUNC():
+    pass
+
 _INT = 5
 _FLOAT = 3.14
 _STR = 'None'
@@ -24,7 +27,7 @@ class MorayTest_Check(unittest.TestCase):
     
     def test_check_not_None_1(self):
         
-        for target in _INT, _FLOAT, _STR, _BOOL, _LIST, _TUPLE, _DICT, _CLASS:
+        for target in _INT, _FLOAT, _STR, _BOOL, _LIST, _TUPLE, _DICT, _CLASS, _FUNC:
             try:
                 moray._check_not_None(target, 'aaa')
             except Exception as e:
@@ -50,7 +53,7 @@ class MorayTest_Check(unittest.TestCase):
     def test_check_str_2(self):
         error_msg = '"aaa" is not "str" type.'
         
-        for target in None, _INT, _FLOAT, _BOOL, _LIST, _TUPLE, _DICT, _CLASS:
+        for target in None, _INT, _FLOAT, _BOOL, _LIST, _TUPLE, _DICT, _CLASS, _FUNC:
             try:
                 moray._check_str(target, 'aaa')
                 self.fail()
@@ -68,7 +71,7 @@ class MorayTest_Check(unittest.TestCase):
     def test_check_int_2(self):
         error_msg = '"aaa" is not "int" type.'
         
-        for target in None, _FLOAT, _STR, _BOOL, _LIST, _TUPLE, _DICT, _CLASS:
+        for target in None, _FLOAT, _STR, _BOOL, _LIST, _TUPLE, _DICT, _CLASS, _FUNC:
             try:
                 moray._check_int(target, 'aaa')
                 self.fail()
@@ -87,7 +90,7 @@ class MorayTest_Check(unittest.TestCase):
     def test_check_list_or_tuple_2(self):
         error_msg = '"aaa" is not "list" or "tuple" type.'
         
-        for target in None, _INT, _FLOAT, _STR, _BOOL, _DICT, _CLASS:
+        for target in None, _INT, _FLOAT, _STR, _BOOL, _DICT, _CLASS, _FUNC:
             try:
                 moray._check_list_or_tuple(target, 'aaa')
                 self.fail()
@@ -230,7 +233,7 @@ class MorayTest_Run(unittest.TestCase):
         
         self.init_config()
         
-        for target in None, _INT, _FLOAT, _BOOL, _LIST, _TUPLE, _DICT, _CLASS, '', '   ', 'tests':
+        for target in None, _INT, _FLOAT, _BOOL, _LIST, _TUPLE, _DICT, _CLASS, _FUNC, '', '   ', 'tests':
             try:
                 moray.run(target)
                 self.fail()
@@ -257,7 +260,7 @@ class MorayTest_Run(unittest.TestCase):
         
         self.init_config()
         
-        for target in None, _INT, _FLOAT, _BOOL, _LIST, _TUPLE, _DICT, _CLASS:
+        for target in None, _INT, _FLOAT, _BOOL, _LIST, _TUPLE, _DICT, _CLASS, _FUNC:
             try:
                 moray.run('web', start_page = target)
                 self.fail()
@@ -284,7 +287,7 @@ class MorayTest_Run(unittest.TestCase):
         
         self.init_config()
         
-        for target in None, _INT, _FLOAT, _BOOL, _LIST, _TUPLE, _DICT, _CLASS, '', '   ', 'tests':
+        for target in None, _INT, _FLOAT, _BOOL, _LIST, _TUPLE, _DICT, _CLASS, _FUNC, '', '   ', 'tests':
             try:
                 moray.run('web', host = target)
                 self.fail()
@@ -311,7 +314,7 @@ class MorayTest_Run(unittest.TestCase):
         
         self.init_config()
         
-        for target in None, _FLOAT, _STR, _BOOL, _LIST, _TUPLE, _DICT, _CLASS, -1, 1, 1023, 1024, 65536, 65537:
+        for target in None, _FLOAT, _STR, _BOOL, _LIST, _TUPLE, _DICT, _CLASS, _FUNC, -1, 1, 1023, 1024, 65536, 65537:
             try:
                 moray.run('web', port = target)
                 self.fail()
@@ -341,7 +344,7 @@ class MorayTest_Run(unittest.TestCase):
         
         self.init_config()
         
-        for target in None, _INT, _FLOAT, _BOOL, _LIST, _TUPLE, _DICT, _CLASS:
+        for target in None, _INT, _FLOAT, _BOOL, _LIST, _TUPLE, _DICT, _CLASS, _FUNC:
             try:
                 moray.run('web', browser = target)
                 self.fail()
@@ -382,7 +385,7 @@ class MorayTest_Run(unittest.TestCase):
         
         self.init_config()
         
-        for target in None, _INT, _FLOAT, _STR, _BOOL, _DICT, _CLASS, ('aaa'):
+        for target in None, _INT, _FLOAT, _STR, _BOOL, _DICT, _CLASS, _FUNC, ('aaa'):
             try:
                 moray.run('web', cmdline_args = target)
                 self.fail()
@@ -412,7 +415,7 @@ class MorayTest_Run(unittest.TestCase):
         self.init_config()
         
         for target in [
-            _INT, _FLOAT, _STR, _BOOL, _DICT, _CLASS,
+            _INT, _FLOAT, _STR, _BOOL, _DICT, _CLASS, _FUNC,
             [], [6184], [32, 165, 56], (), (69, ), (6, 65, 258),
             [32, '165'], ['32', 165], (65, '258'), ('65', 258)
         ]:
@@ -442,7 +445,7 @@ class MorayTest_Run(unittest.TestCase):
         self.init_config()
         
         for target in [
-            _INT, _FLOAT, _STR, _BOOL, _DICT, _CLASS,
+            _INT, _FLOAT, _STR, _BOOL, _DICT, _CLASS, _FUNC,
             [], [6184], [32, 165, 56], (), (69, ), (6, 65, 258),
             [32, '165'], ['32', 165], (65, '258'), ('65', 258)
         ]:
@@ -467,3 +470,24 @@ class MorayTest_Run(unittest.TestCase):
             except Exception as e:
                 self.fail()
 
+@patch('moray.py.register', MagicMock())
+class MorayTest_expose(unittest.TestCase):
+    
+    def test_expose_1(self):
+        
+        error_msg = '"moray.expose" can only be used for "function".'
+        
+        for target in None, _INT, _FLOAT, _STR, _BOOL, _LIST, _TUPLE, _DICT, _CLASS:
+            try:
+                moray.expose(target)
+                self.fail()
+            except Exception as e:
+                self.assertIs(type(e), ConfigurationError)
+                self.assertEqual(e.args[0], error_msg)
+    
+    def test_expose_2(self):
+        
+        try:
+            moray.expose(_FUNC)
+        except Exception as e:
+            self.fail()
