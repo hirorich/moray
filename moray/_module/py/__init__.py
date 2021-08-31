@@ -4,7 +4,7 @@ _expose_module = {}
 
 def register(func):
     """
-    デコレータ
+    デコレータ moray.expose の実装
     JavaScriptから呼び出すファンクションを登録
     
     Attributes:
