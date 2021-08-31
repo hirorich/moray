@@ -1,3 +1,8 @@
+"""
+呼び出される関数を管理
+呼び出し用ESモジュール(JavaScript)の生成
+"""
+
 from jinja2 import PackageLoader, Environment
 
 _expose_module = {}

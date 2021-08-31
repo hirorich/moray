@@ -1,12 +1,28 @@
+"""
+呼び出す関数を管理
+呼び出す・呼び出される関数を制御
+
+ToDo:
+    例外処理・ログ出力・エラー通知
+    RuntimeError を moray.exception 内の自作例外に置き換え
+"""
+
 import json, random, time
 from datetime import datetime
 
 import moray
 from moray._module import py
 
+_ID = 'id'
 _RETURN = 'return'
 _CALL = 'call'
 _EXPOSE = 'expose'
+_METHOD = 'method'
+_MODULE = 'module'
+_FUNC_NAME = 'func_name'
+_ARGS = 'args'
+_RESULT = 'result'
+_IS_SUCCESS = 'is_success'
 
 _call_result = {}
 
@@ -24,7 +40,7 @@ def websocket_react(ws, msg):
     
     print(msg)
     parsed_msg = json.loads(msg)
-    method = parsed_msg['method']
+    method = parsed_msg[_METHOD]
     
     if method == _CALL:
         _called(ws, parsed_msg)
@@ -42,18 +58,18 @@ def _called(ws, parsed_msg):
         parsed_msg (dict): 受信したメッセージ
     """
     
-    id = parsed_msg['id']
-    module = parsed_msg['module']
-    func_name = parsed_msg['func_name']
-    args = parsed_msg['args']
+    id = parsed_msg[_ID]
+    module = parsed_msg[_MODULE]
+    func_name = parsed_msg[_FUNC_NAME]
+    args = parsed_msg[_ARGS]
     
     result, is_success = _call_py_func(module, func_name, args)
     
     return_msg = {}
-    return_msg['id'] = id
-    return_msg['return'] = True
-    return_msg['result'] = result
-    return_msg['is_success'] = is_success
+    return_msg[_ID] = id
+    return_msg[_RETURN] = True
+    return_msg[_RESULT] = result
+    return_msg[_IS_SUCCESS] = is_success
     
     ws.send(json.dumps(return_msg))
 
@@ -65,13 +81,13 @@ def _returned(parsed_msg):
         parsed_msg (dict): 受信したメッセージ
     """
     
-    id = parsed_msg['id']
-    result = parsed_msg['result']
-    is_success = parsed_msg['is_success']
-
-    _call_result[id] = {}
-    _call_result[id]['is_success'] = is_success
-    _call_result[id]['result'] = result
+    id = parsed_msg[_ID]
+    is_success = parsed_msg[_IS_SUCCESS]
+    result = parsed_msg[_RESULT]
+    
+    _call_result.setdefault(id, {})
+    _call_result[id][_IS_SUCCESS] = is_success
+    _call_result[id][_RESULT] = result
 
 def _exposed(ws, parsed_msg):
     """
@@ -82,7 +98,7 @@ def _exposed(ws, parsed_msg):
         parsed_msg (dict): 受信したメッセージ
     """
     
-    func_name = parsed_msg['func_name']
+    func_name = parsed_msg[_FUNC_NAME]
     moray.js.__setattr__(func_name, _create_js_func(ws, func_name))
 
 def _call_py_func(module, func_name, args):
@@ -136,10 +152,10 @@ def _create_js_func(ws, func_name):
         id = _uniqueId()
         
         call_msg = {}
-        call_msg['id'] = id
-        call_msg['return'] = False
-        call_msg['func_name'] = func_name
-        call_msg['args'] = args
+        call_msg[_ID] = id
+        call_msg[_RETURN] = False
+        call_msg[_FUNC_NAME] = func_name
+        call_msg[_ARGS] = args
         
         ws.send(json.dumps(call_msg))
         
@@ -156,8 +172,8 @@ def _create_js_func(ws, func_name):
             
             for i in range(10):
                 if id in _call_result:
-                    result = _call_result[id]['result']
-                    if _call_result[id]['is_success']:
+                    result = _call_result[id][_RESULT]
+                    if _call_result[id][_IS_SUCCESS]:
                         return result
                     else:
                         raise RuntimeError(result)
