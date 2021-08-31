@@ -10,19 +10,105 @@ _EXPOSE = 'expose'
 
 _call_result = {}
 
-def _uniqueId(strong = 1000):
+def websocket_react(ws, msg):
     """
-    日付を基にユニークキー生成
-    ロジックはJavaScript版と同じ
+    受信したメッセージによって処理を実行
     
     Attributes:
-        strong (int, optional): 乱数の範囲
+        ws (geventwebsocket.websocket.WebSocket): WebSocket接続オブジェクト
+        msg (str): 受信したメッセージ
     
-    Returns:
-        生成したユニークキー
+    ToDo:
+        デコレータによる例外処理・ログ出力・エラー通知
     """
     
-    return hex(int(datetime.now().timestamp() * 1000))[2:] + hex(int(random.random() * strong))[2:]
+    print(msg)
+    parsed_msg = json.loads(msg)
+    method = parsed_msg['method']
+    
+    if method == _CALL:
+        _called(ws, parsed_msg)
+    elif method == _RETURN:
+        _returned(parsed_msg)
+    elif method == _EXPOSE:
+        _exposed(ws, parsed_msg)
+
+def _called(ws, parsed_msg):
+    """
+    呼び出されたPythonの関数を実行
+    
+    Attributes:
+        ws (geventwebsocket.websocket.WebSocket): WebSocket接続オブジェクト
+        parsed_msg (dict): 受信したメッセージ
+    """
+    
+    id = parsed_msg['id']
+    module = parsed_msg['module']
+    func_name = parsed_msg['func_name']
+    args = parsed_msg['args']
+    
+    result, is_success = _call_py_func(module, func_name, args)
+    
+    return_msg = {}
+    return_msg['id'] = id
+    return_msg['return'] = True
+    return_msg['result'] = result
+    return_msg['is_success'] = is_success
+    
+    ws.send(json.dumps(return_msg))
+
+def _returned(parsed_msg):
+    """
+    呼び出したJavaScriptの結果を格納
+    
+    Attributes:
+        parsed_msg (dict): 受信したメッセージ
+    """
+    
+    id = parsed_msg['id']
+    result = parsed_msg['result']
+    is_success = parsed_msg['is_success']
+
+    _call_result[id] = {}
+    _call_result[id]['is_success'] = is_success
+    _call_result[id]['result'] = result
+
+def _exposed(ws, parsed_msg):
+    """
+    exposeされたJavaScript関数を登録
+    
+    Attributes:
+        ws (geventwebsocket.websocket.WebSocket): WebSocket接続オブジェクト
+        parsed_msg (dict): 受信したメッセージ
+    """
+    
+    func_name = parsed_msg['func_name']
+    moray.js.__setattr__(func_name, _create_js_func(ws, func_name))
+
+def _call_py_func(module, func_name, args):
+    """
+    exposeしたファンクションを呼び出す
+    
+    Attributes:
+        module (str): 呼び出すモジュール名
+        func_name (str): 呼び出すファンクション名
+        args (dict): 引数
+    
+    Returns:
+        ファンクションの実行結果
+        実行成否(True:成功, False:失敗)
+    
+    ToDo:
+        ログ出力
+    """
+    
+    try:
+        result = py.call(module, func_name, args)
+        return result, True
+    except:
+        # ToDo: ログ出力
+        result = 'calling python function is faild.'
+        return result, False
 
 def _create_js_func(ws, func_name):
     """
@@ -70,7 +156,11 @@ def _create_js_func(ws, func_name):
             
             for i in range(10):
                 if id in _call_result:
-                    return _call_result[id]
+                    result = _call_result[id]['result']
+                    if _call_result[id]['is_success']:
+                        return result
+                    else:
+                        raise RuntimeError(result)
                 
                 time.sleep(1)
             
@@ -80,60 +170,16 @@ def _create_js_func(ws, func_name):
     
     return call_js
 
-def websocket_react(ws, msg):
-    
-    print(msg)
-    parsed_msg = json.loads(msg)
-    method = parsed_msg['method']
-    
-    if method == _CALL:
-        print(_CALL)
-        id = parsed_msg['id']
-        module = parsed_msg['module']
-        func_name = parsed_msg['func_name']
-        args = parsed_msg['args']
-        
-        result, is_success = _call_py_func(module, func_name, args)
-        
-        return_msg = {}
-        return_msg['id'] = id
-        return_msg['return'] = True
-        return_msg['result'] = result
-        return_msg['is_success'] = is_success
-        
-        ws.send(json.dumps(return_msg))
-        
-    elif method == _RETURN:
-        print(_RETURN)
-        id = parsed_msg['id']
-        result = parsed_msg['result']
-        is_success = parsed_msg['is_success']
-        _call_result[id] = result
-        
-    elif method == _EXPOSE:
-        print(_EXPOSE)
-        func_name = parsed_msg['func_name']
-        moray.js.__setattr__(func_name, _create_js_func(ws, func_name))
-        print(func_name)
-
-def _call_py_func(module, func_name, args):
+def _uniqueId(strong = 1000):
     """
-    exposeしたファンクションを呼び出す
+    日付を基にユニークキー生成
+    ロジックはJavaScript版と同じ
     
     Attributes:
-        module (str): 呼び出すモジュール名
-        func_name (str): 呼び出すファンクション名
-        args (dict): 引数
+        strong (int, optional): 乱数の範囲
     
     Returns:
-        ファンクションの実行結果
-        実行成否(True:成功, False:失敗)
+        生成したユニークキー
     """
     
-    try:
-        result = py.call(module, func_name, args)
-        return result, True
-    except:
-        # ToDo: ログ出力
-        result = 'calling python function is faild.'
-        return result, False
+    return hex(int(datetime.now().timestamp() * 1000))[2:] + hex(int(random.random() * strong))[2:]
