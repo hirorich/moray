@@ -1,8 +1,5 @@
 """
 morayが提供するAPIのInterface
-
-ToDo:
-    expose, _registerの実装によるPython関数の登録
 """
 
 import re

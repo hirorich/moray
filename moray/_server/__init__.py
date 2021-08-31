@@ -1,9 +1,6 @@
 """
 morayで起動する内部サーバ設定
 http://localhost:port/
-
-ToDo:
-    jsモジュール自動生成pyモジュール作成・呼び出し
 """
 
 import bottle, pkg_resources, socket
