@@ -3,10 +3,10 @@
 
 """
 
-import asyncio, json, random
+import json, random, time
 from datetime import datetime
 
-_call_result = dict()
+_call_result = {}
 
 def uniqueId(strong = 1000):
     return hex(int(datetime.now().timestamp() * 1000))[2:] + hex(int(random.random() * strong))[2:]
@@ -23,19 +23,15 @@ def create_js_func(ws, func_name):
         
         ws.send(json.dumps(call_msg))
         
-        async def get_result():
+        def get_result():
             for i in range(10):
                 if id in _call_result:
                     return _call_result[id]
                 
-                await asyncio.sleep(1)
+                time.sleep(1)
             
             raise RuntimeError('time out')
         
-        def async_get_result():
-            loop = asyncio.get_event_loop()
-            return loop.run_until_complete(get_result())
-        
-        return async_get_result
+        return get_result
     
     return call_js
