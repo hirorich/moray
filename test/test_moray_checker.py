@@ -2,7 +2,7 @@ from pathlib import Path
 import unittest
 
 from moray import _checker
-from moray.exception import MorayRuntimeError
+from moray.exception import ConfigurationError
 
 class Class():
     pass
@@ -35,7 +35,7 @@ class MorayTest_Check(unittest.TestCase):
         try:
             _checker.check_not_None(None, 'aaa')
         except Exception as e:
-            self.assertIs(type(e), MorayRuntimeError)
+            self.assertIs(type(e), ConfigurationError)
             self.assertEqual(e.args[0], error_msg)
             return
         
@@ -55,7 +55,7 @@ class MorayTest_Check(unittest.TestCase):
             try:
                 _checker.check_str(target, 'aaa')
             except Exception as e:
-                self.assertIs(type(e), MorayRuntimeError)
+                self.assertIs(type(e), ConfigurationError)
                 self.assertEqual(e.args[0], error_msg)
                 continue
             
@@ -75,7 +75,7 @@ class MorayTest_Check(unittest.TestCase):
             try:
                 _checker.check_int(target, 'aaa')
             except Exception as e:
-                self.assertIs(type(e), MorayRuntimeError)
+                self.assertIs(type(e), ConfigurationError)
                 self.assertEqual(e.args[0], error_msg)
                 continue
             
@@ -96,7 +96,7 @@ class MorayTest_Check(unittest.TestCase):
             try:
                 _checker.check_list_or_tuple(target, 'aaa')
             except Exception as e:
-                self.assertIs(type(e), MorayRuntimeError)
+                self.assertIs(type(e), ConfigurationError)
                 self.assertEqual(e.args[0], error_msg)
                 continue
             
@@ -117,7 +117,7 @@ class MorayTest_Check(unittest.TestCase):
             try:
                 _checker.check_not_whitespace(target, 'aaa')
             except Exception as e:
-                self.assertIs(type(e), MorayRuntimeError)
+                self.assertIs(type(e), ConfigurationError)
                 self.assertEqual(e.args[0], error_msg)
                 continue
             
@@ -139,7 +139,7 @@ class MorayTest_Check(unittest.TestCase):
             try:
                 _checker.check_exist(target)
             except Exception as e:
-                self.assertIs(type(e), MorayRuntimeError)
+                self.assertIs(type(e), ConfigurationError)
                 self.assertEqual(e.args[0], error_msg)
                 continue
             
@@ -160,7 +160,7 @@ class MorayTest_Check(unittest.TestCase):
             try:
                 _checker.check_2_int_list_or_tuple(target, 'aaa')
             except Exception as e:
-                self.assertIs(type(e), MorayRuntimeError)
+                self.assertIs(type(e), ConfigurationError)
                 self.assertEqual(e.args[0], error_msg)
                 continue
             
@@ -173,7 +173,7 @@ class MorayTest_Check(unittest.TestCase):
             try:
                 _checker.check_2_int_list_or_tuple(target, 'aaa')
             except Exception as e:
-                self.assertIs(type(e), MorayRuntimeError)
+                self.assertIs(type(e), ConfigurationError)
                 self.assertEqual(e.args[0], error_msg)
                 continue
             
@@ -194,7 +194,7 @@ class MorayTest_Check(unittest.TestCase):
             try:
                 _checker.check_host(target, 'host')
             except Exception as e:
-                self.assertIs(type(e), MorayRuntimeError)
+                self.assertIs(type(e), ConfigurationError)
                 self.assertEqual(e.args[0], error_msg)
                 continue
             
@@ -207,7 +207,7 @@ class MorayTest_Check(unittest.TestCase):
             try:
                 _checker.check_host(target, 'host')
             except Exception as e:
-                self.assertIs(type(e), MorayRuntimeError)
+                self.assertIs(type(e), ConfigurationError)
                 self.assertEqual(e.args[0], error_msg)
                 continue
             
@@ -228,7 +228,7 @@ class MorayTest_Check(unittest.TestCase):
             try:
                 _checker.check_port(target, 'port')
             except Exception as e:
-                self.assertIs(type(e), MorayRuntimeError)
+                self.assertIs(type(e), ConfigurationError)
                 self.assertEqual(e.args[0], error_msg)
                 continue
             
