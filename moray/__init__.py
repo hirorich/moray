@@ -122,10 +122,13 @@ def run(
 def expose(func):
     """
     デコレータ
-    JavaScriptから呼び出せるようファンクションを公開
+    JavaScriptから呼び出せるよう関数を公開
     
     Attributes:
-        func (function): 登録するファンクション
+        func (function): 登録する関数
+    
+    Raises:
+        ConfigurationError: 型チェックエラー
     """
     
     if callable(func):

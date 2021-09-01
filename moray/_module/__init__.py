@@ -4,7 +4,6 @@
 
 ToDo:
     例外処理・ログ出力・エラー通知
-    RuntimeError を moray.exception 内の自作例外に置き換え
 """
 
 import json, random, time
@@ -33,6 +32,9 @@ def websocket_react(ws, msg):
     Attributes:
         ws (geventwebsocket.websocket.WebSocket): WebSocket接続オブジェクト
         msg (str): 受信したメッセージ
+    
+    Raises:
+        RuntimeError: 入力値エラー
     
     ToDo:
         デコレータによる例外処理・ログ出力・エラー通知
@@ -106,15 +108,15 @@ def _exposed(ws, parsed_msg):
 
 def _call_py_func(module, func_name, args):
     """
-    exposeしたファンクションを呼び出す
+    exposeした関数を呼び出す
     
     Attributes:
         module (str): 呼び出すモジュール名
-        func_name (str): 呼び出すファンクション名
+        func_name (str): 呼び出す関数名
         args (dict): 引数
     
     Returns:
-        ファンクションの実行結果
+        関数の実行結果
         実行成否(True:成功, False:失敗)
     
     ToDo:
@@ -168,6 +170,10 @@ def _create_js_func(ws, func_name):
             
             Returns:
                 実行結果
+            
+            Raises:
+                RuntimeError: 呼び出したJavaScript側でエラー発生
+                RuntimeError: 実行結果取得タイムアウトエラー
             
             Note:
                 _call_result にはJavaScriptからの返却時の処理で格納される

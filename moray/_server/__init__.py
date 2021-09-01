@@ -69,9 +69,6 @@ def moray_script():
 def bottle_websocket(ws):
     """
     WebSocketの受け取り口
-    
-    Returns:
-        pyモジュールの実行結果
     """
     
     while True:

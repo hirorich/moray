@@ -1,6 +1,5 @@
 """
 このモジュールで使用するユーザ定義例外
-
 """
 
 class SupportError(RuntimeError):

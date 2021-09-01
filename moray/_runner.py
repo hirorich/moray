@@ -1,6 +1,8 @@
 """
 サーバ起動とブラウザ起動を制御
 
+ToDo:
+    例外処理・ログ出力・エラー通知
 """
 
 import requests
@@ -27,6 +29,13 @@ def open_browser():
     """
     requestsによるGETでサーバーが起動しているか確認
     アプリモードでブラウザ表示
+    
+    Raises:
+        RuntimeError: サーバ起動エラー
+        requests.exceptions.xxx: サーバ起動タイムアウトエラー
+    
+    ToDo:
+        デコレータによる例外処理・ログ出力・終了処理
     """
     
     # サーバ起動確認

@@ -1,6 +1,5 @@
 """
 morayの設定情報
-
 """
 
 from moray._browser import chrome

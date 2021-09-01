@@ -1,6 +1,5 @@
 """
 chromeをアプリモードで起動するためのコマンドを生成する
-
 """
 
 import sys, os
@@ -32,6 +31,9 @@ def find_path():
     
     Returns:
         str: chromeの実行ファイルパス
+    
+    Raises:
+        SupportError: 対象外OSの場合
     """
     
     if sys.platform in ('win32', 'win64'):
@@ -51,6 +53,9 @@ def _find_chrome_windows():
     
     Returns:
         str: Windowsのchromeの実行ファイルパス
+    
+    Raises:
+        FileNotFoundError: ブラウザ実行ファイル不明
     """
     
     import winreg

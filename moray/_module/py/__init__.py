@@ -10,10 +10,10 @@ _expose_module = {}
 def register(func):
     """
     デコレータ moray.expose の実装
-    JavaScriptから呼び出すファンクションを登録
+    JavaScriptから呼び出す関数を登録
     
     Attributes:
-        func (function): 登録するファンクション
+        func (function): 登録する関数
     """
 
     module = func.__module__
@@ -24,15 +24,15 @@ def register(func):
 
 def call(module, func_name, args):
     """
-    ファンクションを呼び出す
+    関数を呼び出す
     
     Attributes:
         module (str): 呼び出すモジュール名
-        func_name (str): 呼び出すファンクション名
+        func_name (str): 呼び出す関数名
         args (dict): 引数
     
     Returns:
-        ファンクションの実行結果
+        関数の実行結果
     """
     
     func = _expose_module[module][func_name]

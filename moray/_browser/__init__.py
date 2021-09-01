@@ -1,6 +1,5 @@
 """
 アプリモードで対象ページを開く
-
 """
 
 import subprocess
