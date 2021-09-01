@@ -38,10 +38,12 @@ class MorayTest_Check(unittest.TestCase):
         
         try:
             moray._check_not_None(None, 'aaa')
-            self.fail()
         except Exception as e:
             self.assertIs(type(e), ConfigurationError)
             self.assertEqual(e.args[0], error_msg)
+            return
+        
+        self.fail()
     
     def test_check_str_1(self):
         
@@ -56,10 +58,12 @@ class MorayTest_Check(unittest.TestCase):
         for target in None, _INT, _FLOAT, _BOOL, _LIST, _TUPLE, _DICT, _CLASS, _FUNC:
             try:
                 moray._check_str(target, 'aaa')
-                self.fail()
             except Exception as e:
                 self.assertIs(type(e), ConfigurationError)
                 self.assertEqual(e.args[0], error_msg)
+                continue
+            
+            self.fail()
     
     def test_check_int_1(self):
         
@@ -74,10 +78,12 @@ class MorayTest_Check(unittest.TestCase):
         for target in None, _FLOAT, _STR, _BOOL, _LIST, _TUPLE, _DICT, _CLASS, _FUNC:
             try:
                 moray._check_int(target, 'aaa')
-                self.fail()
             except Exception as e:
                 self.assertIs(type(e), ConfigurationError)
                 self.assertEqual(e.args[0], error_msg)
+                continue
+            
+            self.fail()
     
     def test_check_list_or_tuple_1(self):
         
@@ -93,10 +99,12 @@ class MorayTest_Check(unittest.TestCase):
         for target in None, _INT, _FLOAT, _STR, _BOOL, _DICT, _CLASS, _FUNC:
             try:
                 moray._check_list_or_tuple(target, 'aaa')
-                self.fail()
             except Exception as e:
                 self.assertIs(type(e), ConfigurationError)
                 self.assertEqual(e.args[0], error_msg)
+                continue
+            
+            self.fail()
     
     def test_check_not_whitespace_1(self):
         
@@ -112,10 +120,12 @@ class MorayTest_Check(unittest.TestCase):
         for target in '', ' ', '         ':
             try:
                 moray._check_not_whitespace(target, 'aaa')
-                self.fail()
             except Exception as e:
                 self.assertIs(type(e), ConfigurationError)
                 self.assertEqual(e.args[0], error_msg)
+                continue
+            
+            self.fail()
     
     def test_check_exist_1(self):
         
@@ -132,10 +142,12 @@ class MorayTest_Check(unittest.TestCase):
             error_msg = '"{0}" is not exist.'.format(str(value))
             try:
                 moray._check_exist(target)
-                self.fail()
             except Exception as e:
                 self.assertIs(type(e), ConfigurationError)
                 self.assertEqual(e.args[0], error_msg)
+                continue
+            
+            self.fail()
     
     def test_check_2_int_list_or_tuple_1(self):
         
@@ -151,10 +163,12 @@ class MorayTest_Check(unittest.TestCase):
         for target in [], [6184], [1, 6, 56], (), (69, ), (6, 849, 51):
             try:
                 moray._check_2_int_list_or_tuple(target, 'aaa')
-                self.fail()
             except Exception as e:
                 self.assertIs(type(e), ConfigurationError)
                 self.assertEqual(e.args[0], error_msg)
+                continue
+            
+            self.fail()
     
     def test_check_2_int_list_or_tuple_3(self):
         error_msg = '"aaa" has only 2 "int" type.'
@@ -162,10 +176,12 @@ class MorayTest_Check(unittest.TestCase):
         for target in [1, '6'], ['1', 6], (849, '51'), ('849', 51):
             try:
                 moray._check_2_int_list_or_tuple(target, 'aaa')
-                self.fail()
             except Exception as e:
                 self.assertIs(type(e), ConfigurationError)
                 self.assertEqual(e.args[0], error_msg)
+                continue
+            
+            self.fail()
     
     def test_check_host_1(self):
         
@@ -181,10 +197,12 @@ class MorayTest_Check(unittest.TestCase):
         for target in 'LOCALHOST', 'a.0.0.0', '0.0.0':
             try:
                 moray._check_host(target)
-                self.fail()
             except Exception as e:
                 self.assertIs(type(e), ConfigurationError)
                 self.assertEqual(e.args[0], error_msg)
+                continue
+            
+            self.fail()
     
     def test_check_host_3(self):
         error_msg = '"host" is not "localhost" or "xxx.xxx.xxx.xxx".(0 <= xxx <= 255)'
@@ -192,10 +210,12 @@ class MorayTest_Check(unittest.TestCase):
         for target in '-1.0.0.0', '0.-1.0.0', '0.0.-1.0', '0.0.0.-1', '256.255.255.255', '255.256.255.255', '255.255.256.255', '255.255.255.256':
             try:
                 moray._check_host(target)
-                self.fail()
             except Exception as e:
                 self.assertIs(type(e), ConfigurationError)
                 self.assertEqual(e.args[0], error_msg)
+                continue
+            
+            self.fail()
     
     def test_check_port_1(self):
         
@@ -211,10 +231,12 @@ class MorayTest_Check(unittest.TestCase):
         for target in -1, 1, 1023, 1024, 65536, 65537:
             try:
                 moray._check_port(target)
-                self.fail()
             except Exception as e:
                 self.assertIs(type(e), ConfigurationError)
                 self.assertEqual(e.args[0], error_msg)
+                continue
+            
+            self.fail()
 
 @patch('moray._runner', MagicMock())
 class MorayTest_Run(unittest.TestCase):
@@ -236,9 +258,10 @@ class MorayTest_Run(unittest.TestCase):
         for target in None, _INT, _FLOAT, _BOOL, _LIST, _TUPLE, _DICT, _CLASS, _FUNC, '', '   ', 'tests':
             try:
                 moray.run(target)
-                self.fail()
             except Exception as e:
-                pass
+                continue
+            
+            self.fail()
     
     def test_run_root_2(self):
         
@@ -263,9 +286,10 @@ class MorayTest_Run(unittest.TestCase):
         for target in None, _INT, _FLOAT, _BOOL, _LIST, _TUPLE, _DICT, _CLASS, _FUNC:
             try:
                 moray.run('web', start_page = target)
-                self.fail()
             except Exception as e:
-                pass
+                continue
+            
+            self.fail()
     
     def test_run_start_page_2(self):
         
@@ -290,9 +314,10 @@ class MorayTest_Run(unittest.TestCase):
         for target in None, _INT, _FLOAT, _BOOL, _LIST, _TUPLE, _DICT, _CLASS, _FUNC, '', '   ', 'tests':
             try:
                 moray.run('web', host = target)
-                self.fail()
             except Exception as e:
-                pass
+                continue
+            
+            self.fail()
     
     def test_run_host_2(self):
         
@@ -317,9 +342,10 @@ class MorayTest_Run(unittest.TestCase):
         for target in None, _FLOAT, _STR, _BOOL, _LIST, _TUPLE, _DICT, _CLASS, _FUNC, -1, 1, 1023, 1024, 65536, 65537:
             try:
                 moray.run('web', port = target)
-                self.fail()
             except Exception as e:
-                pass
+                continue
+            
+            self.fail()
     
     def test_run_port_2(self):
         
@@ -347,9 +373,10 @@ class MorayTest_Run(unittest.TestCase):
         for target in None, _INT, _FLOAT, _BOOL, _LIST, _TUPLE, _DICT, _CLASS, _FUNC:
             try:
                 moray.run('web', browser = target)
-                self.fail()
             except Exception as e:
-                pass
+                continue
+            
+            self.fail()
     
     def test_run_browser_2(self):
         
@@ -360,10 +387,12 @@ class MorayTest_Run(unittest.TestCase):
             
             try:
                 moray.run('web', browser = target)
-                self.fail()
             except Exception as e:
                 self.assertIs(type(e), SupportError)
                 self.assertEqual(e.args[0], error_msg)
+                continue
+            
+            self.fail()
     
     def test_run_browser_3(self):
         
@@ -388,9 +417,10 @@ class MorayTest_Run(unittest.TestCase):
         for target in None, _INT, _FLOAT, _STR, _BOOL, _DICT, _CLASS, _FUNC, ('aaa'):
             try:
                 moray.run('web', cmdline_args = target)
-                self.fail()
             except Exception as e:
-                pass
+                continue
+            
+            self.fail()
     
     def test_run_cmdline_args_2(self):
         
@@ -421,9 +451,10 @@ class MorayTest_Run(unittest.TestCase):
         ]:
             try:
                 moray.run('web', position = target)
-                self.fail()
             except Exception as e:
-                pass
+                continue
+            
+            self.fail()
     
     def test_run_position_2(self):
         
@@ -451,9 +482,10 @@ class MorayTest_Run(unittest.TestCase):
         ]:
             try:
                 moray.run('web', size = target)
-                self.fail()
             except Exception as e:
-                pass
+                continue
+            
+            self.fail()
     
     def test_run_size_2(self):
         
@@ -480,10 +512,12 @@ class MorayTest_expose(unittest.TestCase):
         for target in None, _INT, _FLOAT, _STR, _BOOL, _LIST, _TUPLE, _DICT, _CLASS:
             try:
                 moray.expose(target)
-                self.fail()
             except Exception as e:
                 self.assertIs(type(e), ConfigurationError)
                 self.assertEqual(e.args[0], error_msg)
+                continue
+            
+            self.fail()
     
     def test_expose_2(self):
         

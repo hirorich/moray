@@ -58,10 +58,12 @@ class ChromeTest(unittest.TestCase):
             ):
                 try:
                     chrome._find_chrome_windows()
-                    self.fail()
                 except Exception as e:
                     self.assertIs(type(e), FileNotFoundError)
                     self.assertEqual(e.args[0], error_msg)
+                    return
+                
+                self.fail()
     
     @patch('moray._browser.chrome._find_chrome_windows', return_value = "chrome.exe")
     def test_find_path_1(self, mock_obj):
@@ -78,7 +80,9 @@ class ChromeTest(unittest.TestCase):
         
         try:
             chrome.find_path()
-            self.fail()
         except Exception as e:
             self.assertIs(type(e), SupportError)
             self.assertEqual(e.args[0], error_msg)
+            return
+        
+        self.fail()

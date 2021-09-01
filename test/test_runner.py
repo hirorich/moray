@@ -22,10 +22,12 @@ class RunnerTest(unittest.TestCase):
         
         try:
             _runner.open_browser()
-            self.fail()
         except Exception as e:
             self.assertIs(type(e), RuntimeError)
             self.assertEqual(e.args[0], error_msg)
+            return
+        
+        self.fail()
     
     @patch('requests.get', MagicMock(side_effect = Timeout('TimeOut Error')))
     def test_open_browser_3(self):
@@ -33,7 +35,9 @@ class RunnerTest(unittest.TestCase):
         
         try:
             _runner.open_browser()
-            self.fail()
         except Exception as e:
             self.assertIs(type(e), Timeout)
             self.assertEqual(e.args[0], error_msg)
+            return
+        
+        self.fail()
