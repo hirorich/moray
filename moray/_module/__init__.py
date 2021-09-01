@@ -87,9 +87,10 @@ def _returned(parsed_msg):
     is_success = parsed_msg[_IS_SUCCESS]
     result = parsed_msg[_RESULT]
     
-    _call_result.setdefault(id, {})
-    _call_result[id][_IS_SUCCESS] = is_success
-    _call_result[id][_RESULT] = result
+    _call_result[id] = {
+        _IS_SUCCESS: is_success,
+        _RESULT: result
+    }
 
 def _exposed(ws, parsed_msg):
     """

@@ -96,3 +96,186 @@ class ModuleTest(unittest.TestCase):
                 return
             
             self.fail()
+    
+    @patch('moray._module._call_py_func', MagicMock(return_value = ('result', 'is_success')))
+    def test_called_1(self):
+        parsed_msg = {}
+        parsed_msg[_module._ID] = 'id'
+        parsed_msg[_module._MODULE] = 'module'
+        parsed_msg[_module._FUNC_NAME] = 'func_name'
+        parsed_msg[_module._ARGS] = ('arg0', 'arg1')
+        
+        return_msg = {}
+        return_msg[_module._ID] = 'id'
+        return_msg[_module._RETURN] = True
+        return_msg[_module._RESULT] = 'result'
+        return_msg[_module._IS_SUCCESS] = 'is_success'
+        return_msg = json.dumps(return_msg)
+        
+        ws = MagicMock()
+        
+        try:
+            _module._called(ws, parsed_msg)
+            args, kwargs = ws.send.call_args
+            self.assertEqual(args[0], return_msg)
+        except Exception as e:
+            self.fail()
+    
+    @patch('moray._module._call_py_func', MagicMock(return_value = ('result', 'is_success')))
+    def test_called_2(self):
+        parsed_msg = {}
+        #parsed_msg[_module._ID] = 'id'
+        parsed_msg[_module._MODULE] = 'module'
+        parsed_msg[_module._FUNC_NAME] = 'func_name'
+        parsed_msg[_module._ARGS] = ('arg0', 'arg1')
+        
+        ws = MagicMock()
+        
+        try:
+            _module._called(ws, parsed_msg)
+        except Exception as e:
+            return
+        
+        self.fail()
+    
+    @patch('moray._module._call_py_func', MagicMock(return_value = ('result', 'is_success')))
+    def test_called_3(self):
+        parsed_msg = {}
+        parsed_msg[_module._ID] = 'id'
+        #parsed_msg[_module._MODULE] = 'module'
+        parsed_msg[_module._FUNC_NAME] = 'func_name'
+        parsed_msg[_module._ARGS] = ('arg0', 'arg1')
+        
+        ws = MagicMock()
+        
+        try:
+            _module._called(ws, parsed_msg)
+        except Exception as e:
+            return
+        
+        self.fail()
+    
+    @patch('moray._module._call_py_func', MagicMock(return_value = ('result', 'is_success')))
+    def test_called_4(self):
+        parsed_msg = {}
+        parsed_msg[_module._ID] = 'id'
+        parsed_msg[_module._MODULE] = 'module'
+        #parsed_msg[_module._FUNC_NAME] = 'func_name'
+        parsed_msg[_module._ARGS] = ('arg0', 'arg1')
+        
+        ws = MagicMock()
+        
+        try:
+            _module._called(ws, parsed_msg)
+        except Exception as e:
+            return
+        
+        self.fail()
+    
+    @patch('moray._module._call_py_func', MagicMock(return_value = ('result', 'is_success')))
+    def test_called_5(self):
+        parsed_msg = {}
+        parsed_msg[_module._ID] = 'id'
+        parsed_msg[_module._MODULE] = 'module'
+        parsed_msg[_module._FUNC_NAME] = 'func_name'
+        #parsed_msg[_module._ARGS] = ('arg0', 'arg1')
+        
+        ws = MagicMock()
+        
+        try:
+            _module._called(ws, parsed_msg)
+        except Exception as e:
+            return
+        
+        self.fail()
+    
+    def test_returned_1(self):
+        parsed_msg = {}
+        parsed_msg[_module._ID] = 'id'
+        parsed_msg[_module._IS_SUCCESS] = 'is_success'
+        parsed_msg[_module._RESULT] = 'result'
+        
+        try:
+            _module._returned(parsed_msg)
+            result = _module._call_result['id']
+            self.assertEqual(result[_module._IS_SUCCESS], 'is_success')
+            self.assertEqual(result[_module._RESULT], 'result')
+        except Exception as e:
+            self.fail()
+    
+    def test_returned_2(self):
+        parsed_msg = {}
+        #parsed_msg[_module._ID] = 'id'
+        parsed_msg[_module._IS_SUCCESS] = 'is_success'
+        parsed_msg[_module._RESULT] = 'result'
+        
+        try:
+            _module._returned(parsed_msg)
+        except Exception as e:
+            return
+        
+        self.fail()
+    
+    def test_returned_3(self):
+        parsed_msg = {}
+        parsed_msg[_module._ID] = 'id'
+        #parsed_msg[_module._IS_SUCCESS] = 'is_success'
+        parsed_msg[_module._RESULT] = 'result'
+        
+        try:
+            _module._returned(parsed_msg)
+        except Exception as e:
+            return
+        
+        self.fail()
+    
+    def test_returned_4(self):
+        parsed_msg = {}
+        parsed_msg[_module._ID] = 'id'
+        parsed_msg[_module._IS_SUCCESS] = 'is_success'
+        #parsed_msg[_module._RESULT] = 'result'
+        
+        try:
+            _module._returned(parsed_msg)
+        except Exception as e:
+            return
+        
+        self.fail()
+    
+    @patch('moray._module._create_js_func', MagicMock())
+    def test_exposed_1(self):
+        parsed_msg = {}
+        parsed_msg[_module._FUNC_NAME] = 'func_name'
+        
+        with patch('moray._module.moray.js', MagicMock()) as moray_js:
+            try:
+                _module._exposed(None, parsed_msg)
+                if not 'func_name' in moray_js.__dict__:
+                    self.fail()
+            except Exception as e:
+                self.fail()
+    
+    @patch('moray._module._create_js_func', MagicMock())
+    def test_exposed_2(self):
+        parsed_msg = {}
+        #parsed_msg[_module._FUNC_NAME] = 'func_name'
+        
+        with patch('moray._module.moray.js', MagicMock()) as moray_js:
+            try:
+                _module._exposed(None, parsed_msg)
+            except Exception as e:
+                return
+        
+        self.fail()
+    
+    @patch('moray._module.py.call', MagicMock(return_value = 'return_value'))
+    def test_call_py_func_1(self):
+        result, is_success = _module._call_py_func(None, None, None)
+        self.assertEqual(result, 'return_value')
+        self.assertEqual(is_success, True)
+    
+    @patch('moray._module.py.call', MagicMock(side_effect = RuntimeError('return_value')))
+    def test_call_py_func_2(self):
+        result, is_success = _module._call_py_func(None, None, None)
+        self.assertEqual(result, 'calling python function is faild.')
+        self.assertEqual(is_success, False)
