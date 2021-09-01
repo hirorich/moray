@@ -3,6 +3,7 @@ from datetime import datetime
 from unittest.mock import patch, MagicMock
 
 from moray import _module
+from moray.exception import SystemTimeoutError
 
 class ModuleTest(unittest.TestCase):
     
@@ -340,7 +341,7 @@ class ModuleTest(unittest.TestCase):
         ws = MagicMock()
         func_name = 'func_name'
         
-        error_msg = 'time out'
+        error_msg = 'Could not receive execution results from JavaScript.'
         
         if 'uniqueId' in _module._call_result:
             del _module._call_result['uniqueId']
@@ -350,7 +351,7 @@ class ModuleTest(unittest.TestCase):
             get_result = call_js('abc', 123)
             result = get_result()
         except Exception as e:
-            self.assertIs(type(e), RuntimeError)
+            self.assertIs(type(e), SystemTimeoutError)
             self.assertEqual(e.args[0], error_msg)
             return
         

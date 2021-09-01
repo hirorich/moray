@@ -16,3 +16,9 @@ class ConfigurationError(RuntimeError):
     
     pass
 
+class SystemTimeoutError(RuntimeError):
+    """
+    タイムアウトに関する例外
+    """
+    
+    pass

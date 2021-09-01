@@ -3,6 +3,7 @@
 呼び出す・呼び出される関数を制御
 
 ToDo:
+    受信データの型チェック(str, 一部tuple)
     例外処理・ログ出力・エラー通知
 """
 
@@ -11,6 +12,7 @@ from datetime import datetime
 
 import moray
 from moray._module import py
+from moray.exception import SystemTimeoutError
 
 _ID = 'id'
 _RETURN = 'return'
@@ -173,7 +175,7 @@ def _create_js_func(ws, func_name):
             
             Raises:
                 RuntimeError: 呼び出したJavaScript側でエラー発生
-                RuntimeError: 実行結果取得タイムアウトエラー
+                SystemTimeoutError: 実行結果取得タイムアウトエラー
             
             Note:
                 _call_result にはJavaScriptからの返却時の処理で格納される
@@ -189,7 +191,7 @@ def _create_js_func(ws, func_name):
                 
                 time.sleep(1)
             
-            raise RuntimeError('time out')
+            raise SystemTimeoutError('Could not receive execution results from JavaScript.')
         
         return get_result
     
