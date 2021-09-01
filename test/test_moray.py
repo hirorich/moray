@@ -4,7 +4,7 @@ from unittest.mock import patch, MagicMock
 import moray
 from moray import _config
 from moray._browser import chrome
-from moray.exception import ConfigurationError, SupportError
+from moray.exception import MorayRuntimeError, SupportError
 
 class Class():
     pass
@@ -296,7 +296,7 @@ class MorayTest_expose(unittest.TestCase):
             try:
                 moray.expose(target)
             except Exception as e:
-                self.assertIs(type(e), ConfigurationError)
+                self.assertIs(type(e), MorayRuntimeError)
                 self.assertEqual(e.args[0], error_msg)
                 continue
             

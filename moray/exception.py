@@ -10,9 +10,9 @@ class SupportError(RuntimeError):
     
     pass
 
-class ConfigurationError(RuntimeError):
+class MorayRuntimeError(RuntimeError):
     """
-    設定に関する例外
+    moray内の例外
     """
     
     pass

@@ -5,7 +5,7 @@ morayが提供するAPIのInterface
 from moray import _browser, _checker, _config, _runner, _server
 from moray._browser import chrome
 from moray._module import py
-from moray.exception import ConfigurationError, SupportError
+from moray.exception import MorayRuntimeError, SupportError
 
 _ROOT = 'root'
 _START_PAGE = 'start_page'
@@ -131,6 +131,6 @@ def expose(func):
     if callable(func):
         py.register(func)
     else:
-        raise ConfigurationError('"moray.expose" can only be used for "function".')
+        raise MorayRuntimeError('"moray.expose" can only be used for "function".')
     
     return func
