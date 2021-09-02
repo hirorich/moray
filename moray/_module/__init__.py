@@ -11,6 +11,7 @@ import json, random, time
 from datetime import datetime
 
 import moray
+from moray import _checker
 from moray._module import py
 from moray.exception import MorayRuntimeError, MorayTimeoutError
 
@@ -45,6 +46,7 @@ def websocket_react(ws, msg):
     print(msg)
     parsed_msg = json.loads(msg)
     method = parsed_msg[_METHOD]
+    _checker.check_str(method, _METHOD)
     
     if method == _CALL:
         _called(ws, parsed_msg)
@@ -53,7 +55,7 @@ def websocket_react(ws, msg):
     elif method == _EXPOSE:
         _exposed(ws, parsed_msg)
     else:
-        raise MorayRuntimeError('"{0}" is not correct "{1}".'.format(method, _METHOD))
+        raise MorayRuntimeError('not correct "{0}".'.format(_METHOD))
 
 def _called(ws, parsed_msg):
     """
@@ -65,9 +67,13 @@ def _called(ws, parsed_msg):
     """
     
     id = parsed_msg[_ID]
+    _checker.check_str(id, _ID)
     module = parsed_msg[_MODULE]
+    _checker.check_str(module, _MODULE)
     func_name = parsed_msg[_FUNC_NAME]
+    _checker.check_str(func_name, _FUNC_NAME)
     args = parsed_msg[_ARGS]
+    _checker.check_list_or_tuple(args, _ARGS)
     
     result, is_success = _call_py_func(module, func_name, args)
     
@@ -88,8 +94,11 @@ def _returned(parsed_msg):
     """
     
     id = parsed_msg[_ID]
+    _checker.check_str(id, _ID)
     is_success = parsed_msg[_IS_SUCCESS]
+    _checker.check_bool(is_success, _IS_SUCCESS)
     result = parsed_msg[_RESULT]
+    _checker.check_str(result, _RESULT)
     
     _call_result[id] = {
         _IS_SUCCESS: is_success,
@@ -106,6 +115,7 @@ def _exposed(ws, parsed_msg):
     """
     
     func_name = parsed_msg[_FUNC_NAME]
+    _checker.check_str(func_name, _FUNC_NAME)
     moray.js.__setattr__(func_name, _create_js_func(ws, func_name))
 
 def _call_py_func(module, func_name, args):

@@ -81,6 +81,26 @@ class MorayTest_Check(unittest.TestCase):
             
             self.fail()
     
+    def test_check_bool_1(self):
+        
+        try:
+            _checker.check_bool(_BOOL, 'aaa')
+        except Exception as e:
+            self.fail()
+    
+    def test_check_bool_2(self):
+        error_msg = '"aaa" is not "bool" type.'
+        
+        for target in None, _INT, _FLOAT, _STR, _LIST, _TUPLE, _DICT, _CLASS, _FUNC:
+            try:
+                _checker.check_bool(target, 'aaa')
+            except Exception as e:
+                self.assertIs(type(e), MorayRuntimeError)
+                self.assertEqual(e.args[0], error_msg)
+                continue
+            
+            self.fail()
+    
     def test_check_list_or_tuple_1(self):
         
         for target in _LIST, _TUPLE:

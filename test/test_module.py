@@ -79,7 +79,7 @@ class ModuleTest(unittest.TestCase):
             _module.websocket_react(None, msg)
     
     def test_websocket_react_6(self):
-        error_msg = '"test" is not correct "method".'
+        error_msg = 'not correct "method".'
         
         msg = {}
         msg[_module._METHOD] = 'test'
@@ -99,7 +99,7 @@ class ModuleTest(unittest.TestCase):
             
             self.fail()
     
-    @patch('moray._module._call_py_func', MagicMock(return_value = ('result', 'is_success')))
+    @patch('moray._module._call_py_func', MagicMock(return_value = ('result', True)))
     def test_called_1(self):
         parsed_msg = {}
         parsed_msg[_module._ID] = 'id'
@@ -111,7 +111,7 @@ class ModuleTest(unittest.TestCase):
         return_msg[_module._ID] = 'id'
         return_msg[_module._RETURN] = True
         return_msg[_module._RESULT] = 'result'
-        return_msg[_module._IS_SUCCESS] = 'is_success'
+        return_msg[_module._IS_SUCCESS] = True
         return_msg = json.dumps(return_msg)
         
         ws = MagicMock()
@@ -128,7 +128,7 @@ class ModuleTest(unittest.TestCase):
         except Exception as e:
             self.fail()
     
-    @patch('moray._module._call_py_func', MagicMock(return_value = ('result', 'is_success')))
+    @patch('moray._module._call_py_func', MagicMock(return_value = ('result', True)))
     def test_called_2(self):
         parsed_msg = {}
         #parsed_msg[_module._ID] = 'id'
@@ -145,7 +145,7 @@ class ModuleTest(unittest.TestCase):
         
         self.fail()
     
-    @patch('moray._module._call_py_func', MagicMock(return_value = ('result', 'is_success')))
+    @patch('moray._module._call_py_func', MagicMock(return_value = ('result', True)))
     def test_called_3(self):
         parsed_msg = {}
         parsed_msg[_module._ID] = 'id'
@@ -162,7 +162,7 @@ class ModuleTest(unittest.TestCase):
         
         self.fail()
     
-    @patch('moray._module._call_py_func', MagicMock(return_value = ('result', 'is_success')))
+    @patch('moray._module._call_py_func', MagicMock(return_value = ('result', True)))
     def test_called_4(self):
         parsed_msg = {}
         parsed_msg[_module._ID] = 'id'
@@ -179,7 +179,7 @@ class ModuleTest(unittest.TestCase):
         
         self.fail()
     
-    @patch('moray._module._call_py_func', MagicMock(return_value = ('result', 'is_success')))
+    @patch('moray._module._call_py_func', MagicMock(return_value = ('result', True)))
     def test_called_5(self):
         parsed_msg = {}
         parsed_msg[_module._ID] = 'id'
@@ -199,13 +199,13 @@ class ModuleTest(unittest.TestCase):
     def test_returned_1(self):
         parsed_msg = {}
         parsed_msg[_module._ID] = 'id'
-        parsed_msg[_module._IS_SUCCESS] = 'is_success'
+        parsed_msg[_module._IS_SUCCESS] = True
         parsed_msg[_module._RESULT] = 'result'
         
         try:
             _module._returned(parsed_msg)
             result = _module._call_result['id']
-            self.assertEqual(result[_module._IS_SUCCESS], 'is_success')
+            self.assertEqual(result[_module._IS_SUCCESS], True)
             self.assertEqual(result[_module._RESULT], 'result')
         except Exception as e:
             self.fail()
@@ -213,7 +213,7 @@ class ModuleTest(unittest.TestCase):
     def test_returned_2(self):
         parsed_msg = {}
         #parsed_msg[_module._ID] = 'id'
-        parsed_msg[_module._IS_SUCCESS] = 'is_success'
+        parsed_msg[_module._IS_SUCCESS] = True
         parsed_msg[_module._RESULT] = 'result'
         
         try:
@@ -226,7 +226,7 @@ class ModuleTest(unittest.TestCase):
     def test_returned_3(self):
         parsed_msg = {}
         parsed_msg[_module._ID] = 'id'
-        #parsed_msg[_module._IS_SUCCESS] = 'is_success'
+        #parsed_msg[_module._IS_SUCCESS] = True
         parsed_msg[_module._RESULT] = 'result'
         
         try:
@@ -239,7 +239,7 @@ class ModuleTest(unittest.TestCase):
     def test_returned_4(self):
         parsed_msg = {}
         parsed_msg[_module._ID] = 'id'
-        parsed_msg[_module._IS_SUCCESS] = 'is_success'
+        parsed_msg[_module._IS_SUCCESS] = True
         #parsed_msg[_module._RESULT] = 'result'
         
         try:

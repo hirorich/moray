@@ -55,6 +55,22 @@ def check_int(value, name):
         msg = '"{0}" is not "int" type.'.format(name)
         raise MorayRuntimeError(msg)
 
+def check_bool(value, name):
+    """
+    boolチェック
+    
+    Attributes:
+        value: チェック対象変数
+        name (str): チェック対象項目名
+    
+    Raises:
+        MorayRuntimeError: チェックエラー
+    """
+    
+    if type(value) is not bool:
+        msg = '"{0}" is not "bool" type.'.format(name)
+        raise MorayRuntimeError(msg)
+
 def check_list_or_tuple(value, name):
     """
     list of tupleチェック
