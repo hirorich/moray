@@ -9,6 +9,7 @@ import requests
 from threading import Thread
 
 from moray import _browser, _config, _server
+from moray.exception import MorayRuntimeError
 
 def run():
     """
@@ -31,7 +32,7 @@ def open_browser():
     アプリモードでブラウザ表示
     
     Raises:
-        RuntimeError: サーバ起動エラー
+        MorayRuntimeError: サーバ起動エラー
         requests.exceptions.xxx: サーバ起動タイムアウトエラー
     
     ToDo:
@@ -47,7 +48,7 @@ def open_browser():
             timeout = (connect_timeout, read_timeout)
         )
         if not res.ok:
-            raise RuntimeError('Could not confirm server run.')
+            raise MorayRuntimeError('Could not confirm server run.')
     except Exception as e:
         # requests.exceptions.Timeout など
         raise

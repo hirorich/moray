@@ -3,7 +3,7 @@ from datetime import datetime
 from unittest.mock import patch, MagicMock
 
 from moray import _module
-from moray.exception import SystemTimeoutError
+from moray.exception import MorayRuntimeError, MorayTimeoutError
 
 class ModuleTest(unittest.TestCase):
     
@@ -93,7 +93,7 @@ class ModuleTest(unittest.TestCase):
             try:
                 _module.websocket_react(None, msg)
             except Exception as e:
-                self.assertIs(type(e), RuntimeError)
+                self.assertIs(type(e), MorayRuntimeError)
                 self.assertEqual(e.args[0], error_msg)
                 return
             
@@ -329,7 +329,7 @@ class ModuleTest(unittest.TestCase):
             get_result = call_js('abc', 123)
             result = get_result()
         except Exception as e:
-            self.assertIs(type(e), RuntimeError)
+            self.assertIs(type(e), MorayRuntimeError)
             self.assertEqual(e.args[0], error_msg)
             return
         
@@ -351,7 +351,7 @@ class ModuleTest(unittest.TestCase):
             get_result = call_js('abc', 123)
             result = get_result()
         except Exception as e:
-            self.assertIs(type(e), SystemTimeoutError)
+            self.assertIs(type(e), MorayTimeoutError)
             self.assertEqual(e.args[0], error_msg)
             return
         

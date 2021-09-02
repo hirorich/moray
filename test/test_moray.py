@@ -42,6 +42,8 @@ class MorayTest_Run(unittest.TestCase):
             try:
                 moray.run(target)
             except Exception as e:
+                self.assertIs(type(e), ConfigurationError)
+                self.assertEqual(e.args[0], e.__cause__.args[0])
                 continue
             
             self.fail()
@@ -70,6 +72,8 @@ class MorayTest_Run(unittest.TestCase):
             try:
                 moray.run('web', start_page = target)
             except Exception as e:
+                self.assertIs(type(e), ConfigurationError)
+                self.assertEqual(e.args[0], e.__cause__.args[0])
                 continue
             
             self.fail()
@@ -98,6 +102,8 @@ class MorayTest_Run(unittest.TestCase):
             try:
                 moray.run('web', host = target)
             except Exception as e:
+                self.assertIs(type(e), ConfigurationError)
+                self.assertEqual(e.args[0], e.__cause__.args[0])
                 continue
             
             self.fail()
@@ -126,6 +132,8 @@ class MorayTest_Run(unittest.TestCase):
             try:
                 moray.run('web', port = target)
             except Exception as e:
+                self.assertIs(type(e), ConfigurationError)
+                self.assertEqual(e.args[0], e.__cause__.args[0])
                 continue
             
             self.fail()
@@ -157,6 +165,8 @@ class MorayTest_Run(unittest.TestCase):
             try:
                 moray.run('web', browser = target)
             except Exception as e:
+                self.assertIs(type(e), ConfigurationError)
+                self.assertEqual(e.args[0], e.__cause__.args[0])
                 continue
             
             self.fail()
@@ -166,13 +176,12 @@ class MorayTest_Run(unittest.TestCase):
         self.init_config()
         
         for target in 'edge', 'safari':
-            error_msg = '"{0}" is not a supported browser.'.format(target)
             
             try:
                 moray.run('web', browser = target)
             except Exception as e:
-                self.assertIs(type(e), SupportError)
-                self.assertEqual(e.args[0], error_msg)
+                self.assertIs(type(e), ConfigurationError)
+                self.assertEqual(e.args[0], e.__cause__.args[0])
                 continue
             
             self.fail()
@@ -201,6 +210,8 @@ class MorayTest_Run(unittest.TestCase):
             try:
                 moray.run('web', cmdline_args = target)
             except Exception as e:
+                self.assertIs(type(e), ConfigurationError)
+                self.assertEqual(e.args[0], e.__cause__.args[0])
                 continue
             
             self.fail()
@@ -235,6 +246,8 @@ class MorayTest_Run(unittest.TestCase):
             try:
                 moray.run('web', position = target)
             except Exception as e:
+                self.assertIs(type(e), ConfigurationError)
+                self.assertEqual(e.args[0], e.__cause__.args[0])
                 continue
             
             self.fail()
@@ -266,6 +279,8 @@ class MorayTest_Run(unittest.TestCase):
             try:
                 moray.run('web', size = target)
             except Exception as e:
+                self.assertIs(type(e), ConfigurationError)
+                self.assertEqual(e.args[0], e.__cause__.args[0])
                 continue
             
             self.fail()

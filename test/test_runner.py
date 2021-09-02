@@ -3,6 +3,7 @@ from unittest.mock import patch, MagicMock
 from requests.exceptions import Timeout
 
 from moray import _runner
+from moray.exception import MorayRuntimeError
 
 @patch('moray._runner._browser', MagicMock())
 @patch('moray._runner._server', MagicMock())
@@ -23,7 +24,7 @@ class RunnerTest(unittest.TestCase):
         try:
             _runner.open_browser()
         except Exception as e:
-            self.assertIs(type(e), RuntimeError)
+            self.assertIs(type(e), MorayRuntimeError)
             self.assertEqual(e.args[0], error_msg)
             return
         

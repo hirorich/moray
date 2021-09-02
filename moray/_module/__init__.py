@@ -12,7 +12,7 @@ from datetime import datetime
 
 import moray
 from moray._module import py
-from moray.exception import SystemTimeoutError
+from moray.exception import MorayRuntimeError, MorayTimeoutError
 
 _ID = 'id'
 _RETURN = 'return'
@@ -36,7 +36,7 @@ def websocket_react(ws, msg):
         msg (str): 受信したメッセージ
     
     Raises:
-        RuntimeError: 入力値エラー
+        MorayRuntimeError: 入力値エラー
     
     ToDo:
         デコレータによる例外処理・ログ出力・エラー通知
@@ -53,7 +53,7 @@ def websocket_react(ws, msg):
     elif method == _EXPOSE:
         _exposed(ws, parsed_msg)
     else:
-        raise RuntimeError('"{0}" is not correct "{1}".'.format(method, _METHOD))
+        raise MorayRuntimeError('"{0}" is not correct "{1}".'.format(method, _METHOD))
 
 def _called(ws, parsed_msg):
     """
@@ -174,8 +174,8 @@ def _create_js_func(ws, func_name):
                 実行結果
             
             Raises:
-                RuntimeError: 呼び出したJavaScript側でエラー発生
-                SystemTimeoutError: 実行結果取得タイムアウトエラー
+                MorayRuntimeError: 呼び出したJavaScript側でエラー発生
+                MorayTimeoutError: 実行結果取得タイムアウトエラー
             
             Note:
                 _call_result にはJavaScriptからの返却時の処理で格納される
@@ -187,11 +187,11 @@ def _create_js_func(ws, func_name):
                     if _call_result[id][_IS_SUCCESS]:
                         return result
                     else:
-                        raise RuntimeError(result)
+                        raise MorayRuntimeError(result)
                 
                 time.sleep(1)
             
-            raise SystemTimeoutError('Could not receive execution results from JavaScript.')
+            raise MorayTimeoutError('Could not receive execution results from JavaScript.')
         
         return get_result
     

@@ -5,7 +5,7 @@ moray内で使用する型チェックロジック
 import re
 from pathlib import Path
 
-from moray.exception import ConfigurationError
+from moray.exception import MorayRuntimeError
 
 def check_not_None(value, name):
     """
@@ -16,12 +16,12 @@ def check_not_None(value, name):
         name (str): チェック対象項目名
     
     Raises:
-        ConfigurationError: チェックエラー
+        MorayRuntimeError: チェックエラー
     """
     
     if value is None:
         msg = '"{0}" is None.'.format(name)
-        raise ConfigurationError(msg)
+        raise MorayRuntimeError(msg)
 
 def check_str(value, name):
     """
@@ -32,12 +32,12 @@ def check_str(value, name):
         name (str): チェック対象項目名
     
     Raises:
-        ConfigurationError: チェックエラー
+        MorayRuntimeError: チェックエラー
     """
     
     if type(value) is not str:
         msg = '"{0}" is not "str" type.'.format(name)
-        raise ConfigurationError(msg)
+        raise MorayRuntimeError(msg)
 
 def check_int(value, name):
     """
@@ -48,12 +48,12 @@ def check_int(value, name):
         name (str): チェック対象項目名
     
     Raises:
-        ConfigurationError: チェックエラー
+        MorayRuntimeError: チェックエラー
     """
     
     if type(value) is not int:
         msg = '"{0}" is not "int" type.'.format(name)
-        raise ConfigurationError(msg)
+        raise MorayRuntimeError(msg)
 
 def check_list_or_tuple(value, name):
     """
@@ -64,12 +64,12 @@ def check_list_or_tuple(value, name):
         name (str): チェック対象項目名
     
     Raises:
-        ConfigurationError: チェックエラー
+        MorayRuntimeError: チェックエラー
     """
     
     if type(value) is not list and type(value) is not tuple:
         msg = '"{0}" is not "list" or "tuple" type.'.format(name)
-        raise ConfigurationError(msg)
+        raise MorayRuntimeError(msg)
 
 def check_not_whitespace(value, name):
     """
@@ -80,13 +80,13 @@ def check_not_whitespace(value, name):
         name (str): チェック対象項目名
     
     Raises:
-        ConfigurationError: チェックエラー
+        MorayRuntimeError: チェックエラー
     """
     
     value = value.strip(' ')
     if value == '':
         msg = '"{0}" is whitespace.'.format(name)
-        raise ConfigurationError(msg)
+        raise MorayRuntimeError(msg)
 
 def check_exist(value):
     """
@@ -96,13 +96,13 @@ def check_exist(value):
         value (str): チェック対象変数
     
     Raises:
-        ConfigurationError: チェックエラー
+        MorayRuntimeError: チェックエラー
     """
     
     value = Path(value.strip(' '))
     if not value.exists():
         msg = '"{0}" is not exist.'.format(str(value))
-        raise ConfigurationError(msg)
+        raise MorayRuntimeError(msg)
 
 def check_2_int_list_or_tuple(value, name):
     """
@@ -113,18 +113,18 @@ def check_2_int_list_or_tuple(value, name):
         name (str): チェック対象項目名
     
     Raises:
-        ConfigurationError: チェックエラー
+        MorayRuntimeError: チェックエラー
     """
     
     # 要素数チェック
     msg = '"{0}" has only 2 "int" type.'.format(name)
     if len(value) != 2:
-        raise ConfigurationError(msg)
+        raise MorayRuntimeError(msg)
     
     # 要素内の型チェック
     for item in value:
         if type(item) is not int:
-            raise ConfigurationError(msg)
+            raise MorayRuntimeError(msg)
 
 def check_host(value, name):
     """
@@ -137,18 +137,18 @@ def check_host(value, name):
         name (str): チェック対象項目名
     
     Raises:
-        ConfigurationError: チェックエラー
+        MorayRuntimeError: チェックエラー
     """
     
     msg = '"{0}" is not "localhost" or "xxx.xxx.xxx.xxx".(0 <= xxx <= 255)'.format(name)
     if value == 'localhost':
         return
     elif re.match(r'\d+\.\d+\.\d+\.\d+', value) is None:
-        raise ConfigurationError(msg)
+        raise MorayRuntimeError(msg)
     else:
         for num in value.split('.'):
             if int(num) < 0 or 255 < int(num):
-                raise ConfigurationError(msg)
+                raise MorayRuntimeError(msg)
 
 def check_port(value, name):
     """
@@ -160,11 +160,11 @@ def check_port(value, name):
         name (str): チェック対象項目名
     
     Raises:
-        ConfigurationError: チェックエラー
+        MorayRuntimeError: チェックエラー
     """
     
     if value == 0:
         pass
     elif value < 1025 or 65535 < value:
         msg = '"{0}" is less than 1025 or greater than 65535.'.format(name)
-        raise ConfigurationError(msg)
+        raise MorayRuntimeError(msg)
