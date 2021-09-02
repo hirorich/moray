@@ -44,6 +44,9 @@ class PyTest(unittest.TestCase):
             self.assertEqual(py.call(module1, func_name1, (8, 5)), sample1(8, 5))
             self.assertEqual(py.call(module2, func_name2, (8, 5)), sample2(8, 5))
             
+            self.assertEqual(py.call(module1, func_name1, [8, 5]), sample1(8, 5))
+            self.assertEqual(py.call(module2, func_name2, [8, 5]), sample2(8, 5))
+            
             self.assertNotEqual(py.call(module1, func_name1, (5, 8)), sample1(9, 6))
             self.assertNotEqual(py.call(module2, func_name2, (5, 8)), sample2(9, 6))
         except Exception as e:

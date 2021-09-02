@@ -120,6 +120,11 @@ class ModuleTest(unittest.TestCase):
             _module._called(ws, parsed_msg)
             args, kwargs = ws.send.call_args
             self.assertEqual(args[0], return_msg)
+            
+            parsed_msg[_module._ARGS] = ['arg0', 'arg1']
+            _module._called(ws, parsed_msg)
+            args, kwargs = ws.send.call_args
+            self.assertEqual(args[0], return_msg)
         except Exception as e:
             self.fail()
     
