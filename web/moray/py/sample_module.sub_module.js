@@ -18,3 +18,27 @@ export let sum_list = function() {
         resolve(64);
     });
 }
+
+export let log_msg = function() {
+    return new Promise((resolve, reject) => {
+        resolve('Python: exposed');
+    });
+}
+
+export let return_two = function() {
+    return new Promise((resolve, reject) => {
+        resolve([6, 4]);
+    });
+}
+
+export let return_list = function() {
+    return new Promise((resolve, reject) => {
+        resolve([1, 2, 3]);
+    });
+}
+
+export let return_tuple = function() {
+    return new Promise((resolve, reject) => {
+        resolve([9, 8, 7]);
+    });
+}
