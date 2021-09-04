@@ -13,7 +13,7 @@ def get_module_name():
         モジュール名
     """
     
-    return 'sample_module.sub_module'
+    return __name__
 
 @moray.expose
 def sum(a, b):
@@ -47,6 +47,13 @@ def sum_list(items):
         result += item
     
     return result
+
+@moray.expose
+def log_msg():
+    print('start: log_msg')
+    result = moray.js.log_msg('Python: exposed')()
+    print(result)
+    print('end: log_msg')
 
 def not_expose():
     """
