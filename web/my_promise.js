@@ -3,18 +3,26 @@ import {get_module_name, sum, sum_list, log_msg, return_two, return_list, return
 export default {
     data() {
         return {
-            data: 'my_promise'
+            data: '返却値'
         }
     },
     template: `
+<div>正常系</div>
 <div>{{data}}</div>
-<button type="button" class="btn btn-primary" @click="get_module_name">get_module_name</button>
+<div>引数：なし、返却値：1</div>
+<button type="button" class="btn btn-success" @click="get_module_name">get_module_name</button>
+<div>引数：2、返却値：1</div>
 <button type="button" class="btn btn-success" @click="sum">sum</button>
-<button type="button" class="btn btn-info" @click="sum_list">sum_list</button>
-<button type="button" class="btn btn-primary" @click="log_msg">log_msg</button>
+<div>引数：リスト、返却値：1</div>
+<button type="button" class="btn btn-success" @click="sum_list">sum_list</button>
+<div>引数：なし、返却値：なし</div>
+<button type="button" class="btn btn-success" @click="log_msg">log_msg</button>
+<div>引数：2、返却値：2</div>
 <button type="button" class="btn btn-success" @click="return_two">return_two</button>
-<button type="button" class="btn btn-info" @click="return_list">return_list</button>
-<button type="button" class="btn btn-primary" @click="return_tuple">return_tuple</button>
+<div>引数：なし、返却値：リスト</div>
+<button type="button" class="btn btn-success" @click="return_list">return_list</button>
+<div>引数：なし、返却値：タプル</div>
+<button type="button" class="btn btn-success" @click="return_tuple">return_tuple</button>
     `,
     methods: {
         get_module_name() {
