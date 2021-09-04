@@ -5,6 +5,12 @@ from unittest.mock import patch, MagicMock
 from moray import _module
 from moray.exception import MorayRuntimeError, MorayTimeoutError
 
+class Class():
+    pass
+
+def _FUNC():
+    pass
+
 _INT = 5
 _FLOAT = 3.14
 _STR = 'None'
@@ -12,6 +18,7 @@ _BOOL = True
 _LIST = [1,2,3]
 _TUPLE = (4,5,6)
 _DICT = {'ABC': 'abc', 'XYZ': 789}
+_CLASS = Class()
 
 class ModuleTest(unittest.TestCase):
     
@@ -313,6 +320,40 @@ class ModuleTest(unittest.TestCase):
                 continue
             
             self.fail()
+    
+    def test_called_10(self):
+        parsed_msg = {}
+        parsed_msg[_module._ID] = 'id'
+        parsed_msg[_module._MODULE] = 'module'
+        parsed_msg[_module._FUNC_NAME] = 'func_name'
+        parsed_msg[_module._ARGS] = ('arg0', 'arg1')
+        
+        ws = MagicMock()
+        
+        for target in None, _INT, _FLOAT, _STR, _BOOL, _LIST, _TUPLE, _DICT:
+            with patch('moray._module._call_py_func', MagicMock(return_value = (target, True))) as cpf:
+                try:
+                    _module._called(ws, parsed_msg)
+                except Exception as e:
+                    self.fail()
+    
+    def test_called_11(self):
+        parsed_msg = {}
+        parsed_msg[_module._ID] = 'id'
+        parsed_msg[_module._MODULE] = 'module'
+        parsed_msg[_module._FUNC_NAME] = 'func_name'
+        parsed_msg[_module._ARGS] = ('arg0', 'arg1')
+        
+        ws = MagicMock()
+        
+        for target in _FUNC, _CLASS:
+            with patch('moray._module._call_py_func', MagicMock(return_value = (target, True))) as cpf:
+                try:
+                    _module._called(ws, parsed_msg)
+                except Exception as e:
+                    continue
+                
+                self.fail()
     
     def test_returned_1(self):
         parsed_msg = {}
