@@ -5,6 +5,14 @@ from unittest.mock import patch, MagicMock
 from moray import _module
 from moray.exception import MorayRuntimeError, MorayTimeoutError
 
+_INT = 5
+_FLOAT = 3.14
+_STR = 'None'
+_BOOL = True
+_LIST = [1,2,3]
+_TUPLE = (4,5,6)
+_DICT = {'ABC': 'abc', 'XYZ': 789}
+
 class ModuleTest(unittest.TestCase):
     
     def test_websocket_react_1(self):
@@ -40,6 +48,28 @@ class ModuleTest(unittest.TestCase):
             self.fail()
     
     def test_websocket_react_3(self):
+        error_msg = '"{0}" is not "str" type.'.format(_module._METHOD)
+        
+        with(
+            patch('moray._module._called', MagicMock()) as cld,
+            patch('moray._module._returned', MagicMock()) as rtd,
+            patch('moray._module._exposed', MagicMock()) as epd,
+        ):
+            for target in None, _INT, _FLOAT, _BOOL, _LIST, _TUPLE, _DICT:
+                msg = {}
+                msg[_module._METHOD] = target
+                msg = json.dumps(msg)
+                
+                try:
+                    _module.websocket_react(None, msg)
+                except Exception as e:
+                    self.assertIs(type(e), MorayRuntimeError)
+                    self.assertEqual(e.args[0], error_msg)
+                    continue
+                
+                self.fail()
+    
+    def test_websocket_react_4(self):
         
         msg = {}
         msg[_module._METHOD] = _module._CALL
@@ -52,7 +82,7 @@ class ModuleTest(unittest.TestCase):
         ):
             _module.websocket_react(None, msg)
     
-    def test_websocket_react_4(self):
+    def test_websocket_react_5(self):
         
         msg = {}
         msg[_module._METHOD] = _module._RETURN
@@ -65,7 +95,7 @@ class ModuleTest(unittest.TestCase):
         ):
             _module.websocket_react(None, msg)
     
-    def test_websocket_react_5(self):
+    def test_websocket_react_6(self):
         
         msg = {}
         msg[_module._METHOD] = _module._EXPOSE
@@ -78,7 +108,7 @@ class ModuleTest(unittest.TestCase):
         ):
             _module.websocket_react(None, msg)
     
-    def test_websocket_react_6(self):
+    def test_websocket_react_7(self):
         error_msg = 'not correct "method".'
         
         msg = {}
@@ -147,6 +177,28 @@ class ModuleTest(unittest.TestCase):
     
     @patch('moray._module._call_py_func', MagicMock(return_value = ('result', True)))
     def test_called_3(self):
+        error_msg = '"{0}" is not "str" type.'.format(_module._ID)
+        
+        ws = MagicMock()
+        
+        for target in None, _INT, _FLOAT, _BOOL, _LIST, _TUPLE, _DICT:
+            parsed_msg = {}
+            parsed_msg[_module._ID] = target
+            parsed_msg[_module._MODULE] = 'module'
+            parsed_msg[_module._FUNC_NAME] = 'func_name'
+            parsed_msg[_module._ARGS] = ('arg0', 'arg1')
+            
+            try:
+                _module._called(ws, parsed_msg)
+            except Exception as e:
+                self.assertIs(type(e), MorayRuntimeError)
+                self.assertEqual(e.args[0], error_msg)
+                continue
+            
+            self.fail()
+    
+    @patch('moray._module._call_py_func', MagicMock(return_value = ('result', True)))
+    def test_called_4(self):
         parsed_msg = {}
         parsed_msg[_module._ID] = 'id'
         #parsed_msg[_module._MODULE] = 'module'
@@ -163,7 +215,29 @@ class ModuleTest(unittest.TestCase):
         self.fail()
     
     @patch('moray._module._call_py_func', MagicMock(return_value = ('result', True)))
-    def test_called_4(self):
+    def test_called_5(self):
+        error_msg = '"{0}" is not "str" type.'.format(_module._MODULE)
+        
+        ws = MagicMock()
+        
+        for target in None, _INT, _FLOAT, _BOOL, _LIST, _TUPLE, _DICT:
+            parsed_msg = {}
+            parsed_msg[_module._ID] = 'id'
+            parsed_msg[_module._MODULE] = target
+            parsed_msg[_module._FUNC_NAME] = 'func_name'
+            parsed_msg[_module._ARGS] = ('arg0', 'arg1')
+            
+            try:
+                _module._called(ws, parsed_msg)
+            except Exception as e:
+                self.assertIs(type(e), MorayRuntimeError)
+                self.assertEqual(e.args[0], error_msg)
+                continue
+            
+            self.fail()
+    
+    @patch('moray._module._call_py_func', MagicMock(return_value = ('result', True)))
+    def test_called_6(self):
         parsed_msg = {}
         parsed_msg[_module._ID] = 'id'
         parsed_msg[_module._MODULE] = 'module'
@@ -180,7 +254,29 @@ class ModuleTest(unittest.TestCase):
         self.fail()
     
     @patch('moray._module._call_py_func', MagicMock(return_value = ('result', True)))
-    def test_called_5(self):
+    def test_called_7(self):
+        error_msg = '"{0}" is not "str" type.'.format(_module._FUNC_NAME)
+        
+        ws = MagicMock()
+        
+        for target in None, _INT, _FLOAT, _BOOL, _LIST, _TUPLE, _DICT:
+            parsed_msg = {}
+            parsed_msg[_module._ID] = 'id'
+            parsed_msg[_module._MODULE] = 'module'
+            parsed_msg[_module._FUNC_NAME] = target
+            parsed_msg[_module._ARGS] = ('arg0', 'arg1')
+            
+            try:
+                _module._called(ws, parsed_msg)
+            except Exception as e:
+                self.assertIs(type(e), MorayRuntimeError)
+                self.assertEqual(e.args[0], error_msg)
+                continue
+            
+            self.fail()
+    
+    @patch('moray._module._call_py_func', MagicMock(return_value = ('result', True)))
+    def test_called_8(self):
         parsed_msg = {}
         parsed_msg[_module._ID] = 'id'
         parsed_msg[_module._MODULE] = 'module'
@@ -195,6 +291,28 @@ class ModuleTest(unittest.TestCase):
             return
         
         self.fail()
+    
+    @patch('moray._module._call_py_func', MagicMock(return_value = ('result', True)))
+    def test_called_9(self):
+        error_msg = '"{0}" is not "list" or "tuple" type.'.format(_module._ARGS)
+        
+        ws = MagicMock()
+        
+        for target in None, _INT, _FLOAT, _STR, _BOOL, _DICT:
+            parsed_msg = {}
+            parsed_msg[_module._ID] = 'id'
+            parsed_msg[_module._MODULE] = 'module'
+            parsed_msg[_module._FUNC_NAME] = 'func_name'
+            parsed_msg[_module._ARGS] = target
+            
+            try:
+                _module._called(ws, parsed_msg)
+            except Exception as e:
+                self.assertIs(type(e), MorayRuntimeError)
+                self.assertEqual(e.args[0], error_msg)
+                continue
+            
+            self.fail()
     
     def test_returned_1(self):
         parsed_msg = {}
@@ -224,6 +342,24 @@ class ModuleTest(unittest.TestCase):
         self.fail()
     
     def test_returned_3(self):
+        error_msg = '"{0}" is not "str" type.'.format(_module._ID)
+        
+        for target in None, _INT, _FLOAT, _BOOL, _LIST, _TUPLE, _DICT:
+            parsed_msg = {}
+            parsed_msg[_module._ID] = target
+            parsed_msg[_module._IS_SUCCESS] = True
+            parsed_msg[_module._RESULT] = 'result'
+            
+            try:
+                _module._returned(parsed_msg)
+            except Exception as e:
+                self.assertIs(type(e), MorayRuntimeError)
+                self.assertEqual(e.args[0], error_msg)
+                continue
+            
+            self.fail()
+    
+    def test_returned_4(self):
         parsed_msg = {}
         parsed_msg[_module._ID] = 'id'
         #parsed_msg[_module._IS_SUCCESS] = True
@@ -236,7 +372,25 @@ class ModuleTest(unittest.TestCase):
         
         self.fail()
     
-    def test_returned_4(self):
+    def test_returned_5(self):
+        error_msg = '"{0}" is not "bool" type.'.format(_module._IS_SUCCESS)
+        
+        for target in None, _INT, _FLOAT, _STR, _LIST, _TUPLE, _DICT:
+            parsed_msg = {}
+            parsed_msg[_module._ID] = 'id'
+            parsed_msg[_module._IS_SUCCESS] = target
+            parsed_msg[_module._RESULT] = 'result'
+            
+            try:
+                _module._returned(parsed_msg)
+            except Exception as e:
+                self.assertIs(type(e), MorayRuntimeError)
+                self.assertEqual(e.args[0], error_msg)
+                continue
+            
+            self.fail()
+    
+    def test_returned_6(self):
         parsed_msg = {}
         parsed_msg[_module._ID] = 'id'
         parsed_msg[_module._IS_SUCCESS] = True
@@ -248,6 +402,24 @@ class ModuleTest(unittest.TestCase):
             return
         
         self.fail()
+    
+    def test_returned_7(self):
+        error_msg = '"{0}" is not "str" type.'.format(_module._RESULT)
+        
+        for target in None, _INT, _FLOAT, _BOOL, _LIST, _TUPLE, _DICT:
+            parsed_msg = {}
+            parsed_msg[_module._ID] = 'id'
+            parsed_msg[_module._IS_SUCCESS] = True
+            parsed_msg[_module._RESULT] = target
+            
+            try:
+                _module._returned(parsed_msg)
+            except Exception as e:
+                self.assertIs(type(e), MorayRuntimeError)
+                self.assertEqual(e.args[0], error_msg)
+                continue
+            
+            self.fail()
     
     @patch('moray._module._create_js_func', MagicMock())
     def test_exposed_1(self):
@@ -274,6 +446,24 @@ class ModuleTest(unittest.TestCase):
                 return
         
         self.fail()
+    
+    @patch('moray._module._create_js_func', MagicMock())
+    def test_exposed_3(self):
+        error_msg = '"{0}" is not "str" type.'.format(_module._FUNC_NAME)
+        
+        for target in None, _INT, _FLOAT, _BOOL, _LIST, _TUPLE, _DICT:
+            parsed_msg = {}
+            parsed_msg[_module._FUNC_NAME] = target
+            
+            with patch('moray._module.moray.js', MagicMock()) as moray_js:
+                try:
+                    _module._exposed(None, parsed_msg)
+                except Exception as e:
+                    self.assertIs(type(e), MorayRuntimeError)
+                    self.assertEqual(e.args[0], error_msg)
+                    continue
+            
+            self.fail()
     
     @patch('moray._module.py.call', MagicMock(return_value = 'return_value'))
     def test_call_py_func_1(self):
