@@ -55,6 +55,44 @@ def log_msg():
     print(result)
     print('end: log_msg')
 
+@moray.expose
+def return_two(a, b):
+    """
+    複数返却
+    
+    Attributes:
+        a (int): 入力値1
+        b (int): 入力値2
+    
+    Return:
+        a (int): 入力値1
+        b (int): 入力値2
+    """
+    
+    return a, b
+
+@moray.expose
+def return_list():
+    """
+    リスト返却
+    
+    Return:
+        list: リスト返却値
+    """
+    
+    return [1, 2, 3]
+
+@moray.expose
+def return_tuple():
+    """
+    タプル返却
+    
+    Return:
+        list: タプル返却値
+    """
+    
+    return (4, 5, 6)
+
 def not_expose():
     """
     expose対象外関数
