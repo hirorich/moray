@@ -18,6 +18,7 @@ const component = {
         </div>
     </div>
 </div>
+<a href="/error/index.html">異常データ送信系</a>
 `
 };
 
