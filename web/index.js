@@ -18,8 +18,8 @@ const component = {
         </div>
     </div>
 </div>
-<div><a href="/error/index.html">異常データ送信系</a></div>
-<div><a href="/unexposed_module/index.html">公開されていないモジュール</a></div>
+<div><a href="/error/">異常データ送信系</a></div>
+<div><a href="/unexposed_module/">公開されていないモジュール</a></div>
 `
 };
 

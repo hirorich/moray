@@ -91,6 +91,8 @@ def page(path = 'index.html'):
     Returns:
         root配下のページ
     """
+    if path[-1] == '/':
+        path += 'index.html'
     
     return bottle.static_file(path, root=_config.root)
 
