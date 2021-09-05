@@ -1,15 +1,23 @@
-import my_table from '/my_table.js'
-import my_promise from '/my_promise.js'
+import nomal from '/nomal.js'
+import nomal_exception from '/nomal_exception.js'
 import {expose} from '/moray.js'
 
 const component = {
     components: {
-        'my-table': my_table,
-        'my-promise': my_promise
+        'nomal': nomal,
+        'nomal_exception': nomal_exception,
     },
     template: `
-<my-table></my-table>
-<my-promise></my-promise>
+<div class="container">
+    <div class="row">
+        <div class="col-6">
+            <nomal></nomal>
+        </div>
+        <div class="col-6">
+            <nomal_exception></nomal_exception>
+        </div>
+    </div>
+</div>
 `
 };
 

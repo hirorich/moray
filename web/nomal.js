@@ -1,4 +1,4 @@
-import {get_module_name, sum, sum_list, log_msg, return_two, return_list, return_tuple, raise_py_exception, raise_js_exception} from '/moray/py/sample_module.sub_module.js'
+import {get_module_name, sum, sum_list, log_msg, return_two, return_list, return_tuple} from '/moray/py/sample_module.sub_module.js'
 
 export default {
     data() {
@@ -7,8 +7,8 @@ export default {
         }
     },
     template: `
-<div>{{data}}</div>
 <div>正常系</div>
+<div>{{data}}</div>
 <div>引数：なし、返却値：1</div>
 <button type="button" class="btn btn-success" @click="get_module_name">get_module_name</button>
 <div>引数：2、返却値：1</div>
@@ -23,11 +23,6 @@ export default {
 <button type="button" class="btn btn-success" @click="return_list">return_list</button>
 <div>引数：なし、返却値：タプル</div>
 <button type="button" class="btn btn-success" @click="return_tuple">return_tuple</button>
-<div>異常系</div>
-<div>Python側でエラー</div>
-<button type="button" class="btn btn-danger" @click="raise_py_exception">raise_py_exception</button>
-<div>JavaScript側でエラー</div>
-<button type="button" class="btn btn-danger" @click="raise_js_exception">raise_js_exception</button>
     `,
     methods: {
         get_module_name() {
@@ -79,20 +74,6 @@ export default {
                     });
                     this.data = result;
                 }
-            );
-        },
-        raise_py_exception() {
-            raise_py_exception().then(
-                v => {this.data = "Success: " + v}
-            ).catch(
-                v => {this.data = "Error: " + v}
-            );
-        },
-        raise_js_exception() {
-            raise_js_exception().then(
-                v => {this.data = "Success: " + v}
-            ).catch(
-                v => {this.data = "Error: " + v}
             );
         },
     },
