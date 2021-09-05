@@ -93,6 +93,18 @@ def return_tuple():
     
     return (4, 5, 6)
 
+@moray.expose
+def raise_py_exception():
+    raise RuntimeError('Python Error')
+
+@moray.expose
+def raise_js_exception():
+    try:
+        moray.js.raise_js_exception()()
+    except Exception as e:
+        print(e.args[0])
+        raise
+
 def not_expose():
     """
     expose対象外関数

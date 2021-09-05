@@ -42,3 +42,15 @@ export let return_tuple = function() {
         resolve([9, 8, 7]);
     });
 }
+
+export let raise_js_exception = function() {
+    return new Promise((resolve, reject) => {
+        reject('error msg');
+    });
+}
+
+export let raise_py_exception = function() {
+    return new Promise((resolve, reject) => {
+        reject('error msg');
+    });
+}

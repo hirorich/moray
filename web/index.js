@@ -22,3 +22,8 @@ let log_msg = function(msg) {
     return 'JavaScript: ' + msg
 };
 expose(log_msg);
+
+let raise_js_exception = function() {
+    throw "JavaScript Error"
+};
+expose(raise_js_exception)
