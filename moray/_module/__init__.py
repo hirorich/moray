@@ -194,7 +194,9 @@ def _create_js_func(ws, func_name):
             for i in range(10):
                 if id in _call_result:
                     result = _call_result[id][_RESULT]
-                    if _call_result[id][_IS_SUCCESS]:
+                    is_success = _call_result[id][_IS_SUCCESS]
+                    del _call_result[id]
+                    if is_success:
                         return result
                     else:
                         raise MorayRuntimeError(result)

@@ -537,9 +537,11 @@ class ModuleTest(unittest.TestCase):
         }
         
         try:
+            self.assertEqual('uniqueId' in _module._call_result, True)
             call_js = _module._create_js_func(ws, func_name)
             get_result = call_js('abc', 123)
             result = get_result()
+            self.assertEqual('uniqueId' in _module._call_result, False)
         except Exception as e:
             self.fail()
         
