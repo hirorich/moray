@@ -15,7 +15,8 @@ let _init = function() {
     let host = window.location.host;
     ws = new WebSocket('ws://' + host + '/moray/ws');
     ws.onopen = function(evt) {
-        for(let i = 0; i < unsended_data.length; i++){
+        let data_length = unsended_data.length;
+        for(let i = 0; i < data_length; i++){
             ws.send(unsended_data.pop());
         }
     }
