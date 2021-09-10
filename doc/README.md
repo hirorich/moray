@@ -16,6 +16,9 @@
 ### [unittest](Python/unittest.md)
 - JUnitに触発されたPythonのユニットテストフレームワーク
 
+### [jinja2](Python/jinja2.md)
+- 高速で表現力豊かな拡張可能なテンプレート・エンジン
+
 ***
 ## JavaScript
 ### [Promise](JavaScript/promise.md)
