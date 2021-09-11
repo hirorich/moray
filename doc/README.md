@@ -3,6 +3,12 @@
 - 技術的な仕組みよりも使い方がメイン
 
 ***
+## 目次
+- [Python](#python)
+- [JavaScript](#javascript)
+- [moray](#moray)
+
+***
 ## Python
 ### [Docstring](Python/docstring_google.md)
 - Pythonにおけるクラスやメソッド(関数)についての説明を記載したコメント文
@@ -27,3 +33,8 @@
 ## JavaScript
 ### [Promise](JavaScript/promise.md)
 - 非同期処理の最終的な完了もしくは失敗を表すオブジェクト
+
+***
+## moray
+### [送受信jsonデータ定義](moray/json_format.md)
+- WebSocketで送受信するjsonデータの定義
