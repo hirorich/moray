@@ -77,7 +77,7 @@ def bottle_websocket(ws):
             break
         
         # スレッドを分けて処理
-        deamon_t = Thread(target=_module.websocket_react, args=(ws, msg))
+        deamon_t = _module.WebsocketReact(ws, msg)
         deamon_t.setDaemon(True)
         deamon_t.start()
 

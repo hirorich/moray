@@ -20,121 +20,122 @@ _TUPLE = (4,5,6)
 _DICT = {'ABC': 'abc', 'XYZ': 789}
 _CLASS = Class()
 
+@patch('moray._module.threading.Thread', MagicMock())
 class ModuleTest(unittest.TestCase):
     
-    def test_websocket_react_1(self):
+    def test_run_1(self):
         msg = 'aa:123'
         
-        with(
-            patch('moray._module._called', MagicMock()) as cld,
-            patch('moray._module._returned', MagicMock()) as rtd,
-            patch('moray._module._exposed', MagicMock()) as epd,
-        ):
-            try:
-                _module.websocket_react(None, msg)
-            except Exception as e:
-                return
-            
-            self.fail()
+        obj = _module.WebsocketReact(None, msg)
+        obj._WebsocketReact__called = MagicMock()
+        obj._WebsocketReact__returned = MagicMock()
+        obj._WebsocketReact__exposed = MagicMock()
+        
+        try:
+            obj.run()
+        except Exception as e:
+            return
+        
+        self.fail()
     
-    def test_websocket_react_2(self):
+    def test_run_2(self):
         msg = {}
         msg['sample'] = 'test'
         msg = json.dumps(msg)
         
-        with(
-            patch('moray._module._called', MagicMock()) as cld,
-            patch('moray._module._returned', MagicMock()) as rtd,
-            patch('moray._module._exposed', MagicMock()) as epd,
-        ):
+        obj = _module.WebsocketReact(None, msg)
+        obj._WebsocketReact__called = MagicMock()
+        obj._WebsocketReact__returned = MagicMock()
+        obj._WebsocketReact__exposed = MagicMock()
+        
+        try:
+            obj.run()
+        except Exception as e:
+            return
+        
+        self.fail()
+    
+    def test_run_3(self):
+        error_msg = '"{0}" is not "str" type.'.format(_module._METHOD)
+        
+        for target in None, _INT, _FLOAT, _BOOL, _LIST, _TUPLE, _DICT:
+            msg = {}
+            msg[_module._METHOD] = target
+            msg = json.dumps(msg)
+            
+            obj = _module.WebsocketReact(None, msg)
+            obj._WebsocketReact__called = MagicMock()
+            obj._WebsocketReact__returned = MagicMock()
+            obj._WebsocketReact__exposed = MagicMock()
+            
             try:
-                _module.websocket_react(None, msg)
+                obj.run()
             except Exception as e:
-                return
+                self.assertIs(type(e), MorayRuntimeError)
+                self.assertEqual(e.args[0], error_msg)
+                continue
             
             self.fail()
     
-    def test_websocket_react_3(self):
-        error_msg = '"{0}" is not "str" type.'.format(_module._METHOD)
-        
-        with(
-            patch('moray._module._called', MagicMock()) as cld,
-            patch('moray._module._returned', MagicMock()) as rtd,
-            patch('moray._module._exposed', MagicMock()) as epd,
-        ):
-            for target in None, _INT, _FLOAT, _BOOL, _LIST, _TUPLE, _DICT:
-                msg = {}
-                msg[_module._METHOD] = target
-                msg = json.dumps(msg)
-                
-                try:
-                    _module.websocket_react(None, msg)
-                except Exception as e:
-                    self.assertIs(type(e), MorayRuntimeError)
-                    self.assertEqual(e.args[0], error_msg)
-                    continue
-                
-                self.fail()
-    
-    def test_websocket_react_4(self):
+    def test_run_4(self):
         
         msg = {}
         msg[_module._METHOD] = _module._CALL
         msg = json.dumps(msg)
         
-        with(
-            patch('moray._module._called', MagicMock()) as cld,
-            patch('moray._module._returned', side_effect = RuntimeError('_returned')) as rtd,
-            patch('moray._module._exposed', side_effect = RuntimeError('_exposed')) as epd,
-        ):
-            _module.websocket_react(None, msg)
+        obj = _module.WebsocketReact(None, msg)
+        obj._WebsocketReact__called = MagicMock()
+        obj._WebsocketReact__returned = MagicMock()
+        obj._WebsocketReact__exposed = MagicMock()
+        
+        obj.run()
     
-    def test_websocket_react_5(self):
+    def test_run_5(self):
         
         msg = {}
         msg[_module._METHOD] = _module._RETURN
         msg = json.dumps(msg)
         
-        with(
-            patch('moray._module._called', side_effect = RuntimeError('_called')) as cld,
-            patch('moray._module._returned', MagicMock()) as rtd,
-            patch('moray._module._exposed', side_effect = RuntimeError('_exposed')) as epd,
-        ):
-            _module.websocket_react(None, msg)
+        obj = _module.WebsocketReact(None, msg)
+        obj._WebsocketReact__called = MagicMock()
+        obj._WebsocketReact__returned = MagicMock()
+        obj._WebsocketReact__exposed = MagicMock()
+        
+        obj.run()
     
-    def test_websocket_react_6(self):
+    def test_run_6(self):
         
         msg = {}
         msg[_module._METHOD] = _module._EXPOSE
         msg = json.dumps(msg)
         
-        with(
-            patch('moray._module._called', side_effect = RuntimeError('_called')) as cld,
-            patch('moray._module._returned', side_effect = RuntimeError('_returned')) as rtd,
-            patch('moray._module._exposed', MagicMock()) as epd,
-        ):
-            _module.websocket_react(None, msg)
+        obj = _module.WebsocketReact(None, msg)
+        obj._WebsocketReact__called = MagicMock()
+        obj._WebsocketReact__returned = MagicMock()
+        obj._WebsocketReact__exposed = MagicMock()
+        
+        obj.run()
     
-    def test_websocket_react_7(self):
+    def test_run_7(self):
         error_msg = 'not correct "method".'
         
         msg = {}
         msg[_module._METHOD] = 'test'
         msg = json.dumps(msg)
         
-        with(
-            patch('moray._module._called', MagicMock()) as cld,
-            patch('moray._module._returned', MagicMock()) as rtd,
-            patch('moray._module._exposed', MagicMock()) as epd,
-        ):
-            try:
-                _module.websocket_react(None, msg)
-            except Exception as e:
-                self.assertIs(type(e), MorayRuntimeError)
-                self.assertEqual(e.args[0], error_msg)
-                return
-            
-            self.fail()
+        obj = _module.WebsocketReact(None, msg)
+        obj._WebsocketReact__called = MagicMock()
+        obj._WebsocketReact__returned = MagicMock()
+        obj._WebsocketReact__exposed = MagicMock()
+        
+        try:
+            obj.run()
+        except Exception as e:
+            self.assertIs(type(e), MorayRuntimeError)
+            self.assertEqual(e.args[0], error_msg)
+            return
+        
+        self.fail()
     
     @patch('moray._module._call_py_func', MagicMock(return_value = ('result', True)))
     def test_called_1(self):
@@ -152,14 +153,18 @@ class ModuleTest(unittest.TestCase):
         return_msg = json.dumps(return_msg)
         
         ws = MagicMock()
+        obj = _module.WebsocketReact(ws, None)
         
         try:
-            _module._called(ws, parsed_msg)
+            obj.parsed_msg = parsed_msg
+            obj._WebsocketReact__called()
             args, kwargs = ws.send.call_args
             self.assertEqual(args[0], return_msg)
             
             parsed_msg[_module._ARGS] = ['arg0', 'arg1']
-            _module._called(ws, parsed_msg)
+            
+            obj.parsed_msg = parsed_msg
+            obj._WebsocketReact__called()
             args, kwargs = ws.send.call_args
             self.assertEqual(args[0], return_msg)
         except Exception as e:
@@ -174,9 +179,11 @@ class ModuleTest(unittest.TestCase):
         parsed_msg[_module._ARGS] = ('arg0', 'arg1')
         
         ws = MagicMock()
+        obj = _module.WebsocketReact(ws, None)
+        obj.parsed_msg = parsed_msg
         
         try:
-            _module._called(ws, parsed_msg)
+            obj._WebsocketReact__called()
         except Exception as e:
             return
         
@@ -187,6 +194,7 @@ class ModuleTest(unittest.TestCase):
         error_msg = '"{0}" is not "str" type.'.format(_module._ID)
         
         ws = MagicMock()
+        obj = _module.WebsocketReact(ws, None)
         
         for target in None, _INT, _FLOAT, _BOOL, _LIST, _TUPLE, _DICT:
             parsed_msg = {}
@@ -195,8 +203,10 @@ class ModuleTest(unittest.TestCase):
             parsed_msg[_module._FUNC_NAME] = 'func_name'
             parsed_msg[_module._ARGS] = ('arg0', 'arg1')
             
+            obj.parsed_msg = parsed_msg
+            
             try:
-                _module._called(ws, parsed_msg)
+                obj._WebsocketReact__called()
             except Exception as e:
                 self.assertIs(type(e), MorayRuntimeError)
                 self.assertEqual(e.args[0], error_msg)
@@ -213,9 +223,11 @@ class ModuleTest(unittest.TestCase):
         parsed_msg[_module._ARGS] = ('arg0', 'arg1')
         
         ws = MagicMock()
+        obj = _module.WebsocketReact(ws, None)
+        obj.parsed_msg = parsed_msg
         
         try:
-            _module._called(ws, parsed_msg)
+            obj._WebsocketReact__called()
         except Exception as e:
             return
         
@@ -226,6 +238,7 @@ class ModuleTest(unittest.TestCase):
         error_msg = '"{0}" is not "str" type.'.format(_module._MODULE)
         
         ws = MagicMock()
+        obj = _module.WebsocketReact(ws, None)
         
         for target in None, _INT, _FLOAT, _BOOL, _LIST, _TUPLE, _DICT:
             parsed_msg = {}
@@ -234,8 +247,10 @@ class ModuleTest(unittest.TestCase):
             parsed_msg[_module._FUNC_NAME] = 'func_name'
             parsed_msg[_module._ARGS] = ('arg0', 'arg1')
             
+            obj.parsed_msg = parsed_msg
+            
             try:
-                _module._called(ws, parsed_msg)
+                obj._WebsocketReact__called()
             except Exception as e:
                 self.assertIs(type(e), MorayRuntimeError)
                 self.assertEqual(e.args[0], error_msg)
@@ -252,9 +267,11 @@ class ModuleTest(unittest.TestCase):
         parsed_msg[_module._ARGS] = ('arg0', 'arg1')
         
         ws = MagicMock()
+        obj = _module.WebsocketReact(ws, None)
+        obj.parsed_msg = parsed_msg
         
         try:
-            _module._called(ws, parsed_msg)
+            obj._WebsocketReact__called()
         except Exception as e:
             return
         
@@ -265,6 +282,7 @@ class ModuleTest(unittest.TestCase):
         error_msg = '"{0}" is not "str" type.'.format(_module._FUNC_NAME)
         
         ws = MagicMock()
+        obj = _module.WebsocketReact(ws, None)
         
         for target in None, _INT, _FLOAT, _BOOL, _LIST, _TUPLE, _DICT:
             parsed_msg = {}
@@ -273,8 +291,10 @@ class ModuleTest(unittest.TestCase):
             parsed_msg[_module._FUNC_NAME] = target
             parsed_msg[_module._ARGS] = ('arg0', 'arg1')
             
+            obj.parsed_msg = parsed_msg
+            
             try:
-                _module._called(ws, parsed_msg)
+                obj._WebsocketReact__called()
             except Exception as e:
                 self.assertIs(type(e), MorayRuntimeError)
                 self.assertEqual(e.args[0], error_msg)
@@ -291,9 +311,11 @@ class ModuleTest(unittest.TestCase):
         #parsed_msg[_module._ARGS] = ('arg0', 'arg1')
         
         ws = MagicMock()
+        obj = _module.WebsocketReact(ws, None)
+        obj.parsed_msg = parsed_msg
         
         try:
-            _module._called(ws, parsed_msg)
+            obj._WebsocketReact__called()
         except Exception as e:
             return
         
@@ -304,6 +326,7 @@ class ModuleTest(unittest.TestCase):
         error_msg = '"{0}" is not "list" or "tuple" type.'.format(_module._ARGS)
         
         ws = MagicMock()
+        obj = _module.WebsocketReact(ws, None)
         
         for target in None, _INT, _FLOAT, _STR, _BOOL, _DICT:
             parsed_msg = {}
@@ -312,8 +335,10 @@ class ModuleTest(unittest.TestCase):
             parsed_msg[_module._FUNC_NAME] = 'func_name'
             parsed_msg[_module._ARGS] = target
             
+            obj.parsed_msg = parsed_msg
+            
             try:
-                _module._called(ws, parsed_msg)
+                obj._WebsocketReact__called()
             except Exception as e:
                 self.assertIs(type(e), MorayRuntimeError)
                 self.assertEqual(e.args[0], error_msg)
@@ -329,11 +354,13 @@ class ModuleTest(unittest.TestCase):
         parsed_msg[_module._ARGS] = ('arg0', 'arg1')
         
         ws = MagicMock()
+        obj = _module.WebsocketReact(ws, None)
+        obj.parsed_msg = parsed_msg
         
         for target in None, _INT, _FLOAT, _STR, _BOOL, _LIST, _TUPLE, _DICT:
             with patch('moray._module._call_py_func', MagicMock(return_value = (target, True))) as cpf:
                 try:
-                    _module._called(ws, parsed_msg)
+                    obj._WebsocketReact__called()
                 except Exception as e:
                     self.fail()
     
@@ -345,11 +372,13 @@ class ModuleTest(unittest.TestCase):
         parsed_msg[_module._ARGS] = ('arg0', 'arg1')
         
         ws = MagicMock()
+        obj = _module.WebsocketReact(ws, None)
+        obj.parsed_msg = parsed_msg
         
         for target in _FUNC, _CLASS:
             with patch('moray._module._call_py_func', MagicMock(return_value = (target, True))) as cpf:
                 try:
-                    _module._called(ws, parsed_msg)
+                    obj._WebsocketReact__called()
                 except Exception as e:
                     continue
                 
@@ -361,8 +390,12 @@ class ModuleTest(unittest.TestCase):
         parsed_msg[_module._IS_SUCCESS] = True
         parsed_msg[_module._RESULT] = 'result'
         
+        ws = MagicMock()
+        obj = _module.WebsocketReact(ws, None)
+        obj.parsed_msg = parsed_msg
+        
         try:
-            _module._returned(parsed_msg)
+            obj._WebsocketReact__returned()
             result = _module._call_result['id']
             self.assertEqual(result[_module._IS_SUCCESS], True)
             self.assertEqual(result[_module._RESULT], 'result')
@@ -375,8 +408,12 @@ class ModuleTest(unittest.TestCase):
         parsed_msg[_module._IS_SUCCESS] = True
         parsed_msg[_module._RESULT] = 'result'
         
+        ws = MagicMock()
+        obj = _module.WebsocketReact(ws, None)
+        obj.parsed_msg = parsed_msg
+        
         try:
-            _module._returned(parsed_msg)
+            obj._WebsocketReact__returned()
         except Exception as e:
             return
         
@@ -385,14 +422,19 @@ class ModuleTest(unittest.TestCase):
     def test_returned_3(self):
         error_msg = '"{0}" is not "str" type.'.format(_module._ID)
         
+        ws = MagicMock()
+        obj = _module.WebsocketReact(ws, None)
+        
         for target in None, _INT, _FLOAT, _BOOL, _LIST, _TUPLE, _DICT:
             parsed_msg = {}
             parsed_msg[_module._ID] = target
             parsed_msg[_module._IS_SUCCESS] = True
             parsed_msg[_module._RESULT] = 'result'
             
+            obj.parsed_msg = parsed_msg
+            
             try:
-                _module._returned(parsed_msg)
+                obj._WebsocketReact__returned()
             except Exception as e:
                 self.assertIs(type(e), MorayRuntimeError)
                 self.assertEqual(e.args[0], error_msg)
@@ -406,8 +448,12 @@ class ModuleTest(unittest.TestCase):
         #parsed_msg[_module._IS_SUCCESS] = True
         parsed_msg[_module._RESULT] = 'result'
         
+        ws = MagicMock()
+        obj = _module.WebsocketReact(ws, None)
+        obj.parsed_msg = parsed_msg
+        
         try:
-            _module._returned(parsed_msg)
+            obj._WebsocketReact__returned()
         except Exception as e:
             return
         
@@ -416,14 +462,19 @@ class ModuleTest(unittest.TestCase):
     def test_returned_5(self):
         error_msg = '"{0}" is not "bool" type.'.format(_module._IS_SUCCESS)
         
+        ws = MagicMock()
+        obj = _module.WebsocketReact(ws, None)
+        
         for target in None, _INT, _FLOAT, _STR, _LIST, _TUPLE, _DICT:
             parsed_msg = {}
             parsed_msg[_module._ID] = 'id'
             parsed_msg[_module._IS_SUCCESS] = target
             parsed_msg[_module._RESULT] = 'result'
             
+            obj.parsed_msg = parsed_msg
+            
             try:
-                _module._returned(parsed_msg)
+                obj._WebsocketReact__returned()
             except Exception as e:
                 self.assertIs(type(e), MorayRuntimeError)
                 self.assertEqual(e.args[0], error_msg)
@@ -437,8 +488,12 @@ class ModuleTest(unittest.TestCase):
         parsed_msg[_module._IS_SUCCESS] = True
         #parsed_msg[_module._RESULT] = 'result'
         
+        ws = MagicMock()
+        obj = _module.WebsocketReact(ws, None)
+        obj.parsed_msg = parsed_msg
+        
         try:
-            _module._returned(parsed_msg)
+            obj._WebsocketReact__returned()
         except Exception as e:
             return
         
@@ -447,14 +502,19 @@ class ModuleTest(unittest.TestCase):
     def test_returned_7(self):
         error_msg = '"{0}" is not "str" type.'.format(_module._RESULT)
         
+        ws = MagicMock()
+        obj = _module.WebsocketReact(ws, None)
+        
         for target in None, _INT, _FLOAT, _BOOL, _LIST, _TUPLE, _DICT:
             parsed_msg = {}
             parsed_msg[_module._ID] = 'id'
             parsed_msg[_module._IS_SUCCESS] = True
             parsed_msg[_module._RESULT] = target
             
+            obj.parsed_msg = parsed_msg
+            
             try:
-                _module._returned(parsed_msg)
+                obj._WebsocketReact__returned()
             except Exception as e:
                 self.assertIs(type(e), MorayRuntimeError)
                 self.assertEqual(e.args[0], error_msg)
@@ -467,9 +527,13 @@ class ModuleTest(unittest.TestCase):
         parsed_msg = {}
         parsed_msg[_module._FUNC_NAME] = 'func_name'
         
+        ws = MagicMock()
+        obj = _module.WebsocketReact(ws, None)
+        obj.parsed_msg = parsed_msg
+        
         with patch('moray._module.moray.js', MagicMock()) as moray_js:
             try:
-                _module._exposed(None, parsed_msg)
+                obj._WebsocketReact__exposed()
                 if not 'func_name' in moray_js.__dict__:
                     self.fail()
             except Exception as e:
@@ -480,9 +544,13 @@ class ModuleTest(unittest.TestCase):
         parsed_msg = {}
         #parsed_msg[_module._FUNC_NAME] = 'func_name'
         
+        ws = MagicMock()
+        obj = _module.WebsocketReact(ws, None)
+        obj.parsed_msg = parsed_msg
+        
         with patch('moray._module.moray.js', MagicMock()) as moray_js:
             try:
-                _module._exposed(None, parsed_msg)
+                obj._WebsocketReact__exposed()
             except Exception as e:
                 return
         
@@ -492,13 +560,18 @@ class ModuleTest(unittest.TestCase):
     def test_exposed_3(self):
         error_msg = '"{0}" is not "str" type.'.format(_module._FUNC_NAME)
         
+        ws = MagicMock()
+        obj = _module.WebsocketReact(ws, None)
+        
         for target in None, _INT, _FLOAT, _BOOL, _LIST, _TUPLE, _DICT:
             parsed_msg = {}
             parsed_msg[_module._FUNC_NAME] = target
+
+            obj.parsed_msg = parsed_msg
             
             with patch('moray._module.moray.js', MagicMock()) as moray_js:
                 try:
-                    _module._exposed(None, parsed_msg)
+                    obj._WebsocketReact__exposed()
                 except Exception as e:
                     self.assertIs(type(e), MorayRuntimeError)
                     self.assertEqual(e.args[0], error_msg)
