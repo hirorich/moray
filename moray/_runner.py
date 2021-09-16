@@ -58,3 +58,6 @@ def open_browser():
     
     # 初期ページ表示
     _browser.open(_config.browser, url, _config.cmdline_args)
+    
+    # 接続がない場合は終了
+    _server.check_exist_websocket()

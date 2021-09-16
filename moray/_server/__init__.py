@@ -167,6 +167,14 @@ def _onclose_websocket(ws):
     _websockets.remove(ws)
     
     # 接続がない場合は終了
+    check_exist_websocket()
+
+def check_exist_websocket():
+    """
+    websocketの接続有無をチェック
+    接続がない場合は終了
+    """
+    
     if len(_websockets) == 0:
         time.sleep(3)
         if len(_websockets) == 0:
