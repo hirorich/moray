@@ -3,7 +3,7 @@ morayで起動する内部サーバ設定
 http://localhost:port/
 """
 
-import bottle, pkg_resources, socket
+import bottle, pkg_resources, os, socket, time
 from bottle import HTTPResponse
 from bottle.ext.websocket import GeventWebSocketServer, websocket
 from threading import Thread
@@ -14,6 +14,7 @@ from moray._module import py
 root_module_js = pkg_resources.resource_filename('moray', r'_module\js')
 
 app = bottle.Bottle()
+_websockets=[]
 
 @app.route('/moray/confirm_running')
 def run_check():
@@ -69,18 +70,26 @@ def moray_script():
 def bottle_websocket(ws):
     """
     WebSocketの受け取り口
+    
+    Attributes:
+        ws (geventwebsocket.websocket.WebSocket): WebSocket接続オブジェクト
     """
     
+    _websockets.append(ws)
     while True:
         msg = ws.receive()
         if msg is None:
-            _module.unexpose(ws)
             break
         
         # スレッドを分けて処理
         deamon_t = _module.WebsocketReact(ws, msg)
         deamon_t.setDaemon(True)
         deamon_t.start()
+    
+    # websocketが閉じられた際の処理
+    deamon_t = Thread(target=_onclose_websocket, args=(ws,))
+    deamon_t.setDaemon(True)
+    deamon_t.start()
 
 @app.route('/')
 @app.route('/<path:path>')
@@ -144,3 +153,22 @@ def generate_confirm_running_url():
     """
     
     return 'http://localhost:{0}/moray/confirm_running'.format(_config.port)
+
+def _onclose_websocket(ws):
+    """
+    WebSocketが閉じられた際の処理
+    
+    Attributes:
+        ws (geventwebsocket.websocket.WebSocket): WebSocket接続オブジェクト
+    """
+    
+    # websocketに紐づくメモリを解放
+    _module.unexpose(ws)
+    _websockets.remove(ws)
+    
+    # 接続がない場合は終了
+    if len(_websockets) == 0:
+        time.sleep(3)
+        if len(_websockets) == 0:
+            print('exit.')
+            os._exit(0)
