@@ -726,6 +726,109 @@ class ModuleTest(unittest.TestCase):
         
         self.fail()
     
+    def test_unexpose_1(self):
+        js_funcs = {
+            'ws1': ['func1', 'func2', 'func3'],
+            'ws2': ['func2', 'func3', 'func4'],
+            'ws3': ['func3', 'func4', 'func5'],
+        }
+        
+        func_names = ['func1', 'func2', 'func3', 'func4', 'func5']
+        
+        js = MagicMock()
+        for func_name in func_names:
+            js.__setattr__(func_name, MagicMock())
+        
+        with(
+            patch('moray._module._js_funcs', js_funcs) as p_jf,
+            patch('moray._module.moray.js', js) as p_js
+        ):
+            try:
+                _module.unexpose('ws1')
+                self.assertFalse('ws1' in p_jf)
+                self.assertTrue('ws2' in p_jf)
+                self.assertTrue('ws3' in p_jf)
+                self.assertFalse('func1' in dir(p_js))
+                self.assertTrue('func2' in dir(p_js))
+                self.assertTrue('func3' in dir(p_js))
+                self.assertTrue('func4' in dir(p_js))
+                self.assertTrue('func5' in dir(p_js))
+            except Exception as e:
+                self.fail()
+    
+    def test_unexpose_2(self):
+        js_funcs = {
+            'ws1': ['func1', 'func2', 'func3'],
+            'ws2': ['func2', 'func3', 'func4'],
+            'ws3': ['func3', 'func4', 'func5'],
+        }
+        
+        func_names = ['func1', 'func2', 'func3', 'func4', 'func5']
+        
+        js = MagicMock()
+        for func_name in func_names:
+            js.__setattr__(func_name, MagicMock())
+        
+        with(
+            patch('moray._module._js_funcs', js_funcs) as p_jf,
+            patch('moray._module.moray.js', js) as p_js
+        ):
+            try:
+                _module.unexpose('ws2')
+                self.assertTrue('ws1' in p_jf)
+                self.assertFalse('ws2' in p_jf)
+                self.assertTrue('ws3' in p_jf)
+                self.assertTrue('func1' in dir(p_js))
+                self.assertTrue('func2' in dir(p_js))
+                self.assertTrue('func3' in dir(p_js))
+                self.assertTrue('func4' in dir(p_js))
+                self.assertTrue('func5' in dir(p_js))
+            except Exception as e:
+                self.fail()
+    
+    def test_unexpose_3(self):
+        js_funcs = {
+            'ws1': ['func1', 'func2', 'func3'],
+            'ws2': ['func2', 'func3', 'func4'],
+            'ws3': ['func3', 'func4', 'func5'],
+        }
+        
+        func_names = ['func1', 'func2', 'func3', 'func4', 'func5']
+        
+        js = MagicMock()
+        for func_name in func_names:
+            js.__setattr__(func_name, MagicMock())
+        
+        with(
+            patch('moray._module._js_funcs', js_funcs) as p_jf,
+            patch('moray._module.moray.js', js) as p_js
+        ):
+            try:
+                _module.unexpose('ws4')
+            except Exception as e:
+                return
+            
+            self.fail()
+    
+    def test_unexpose_4(self):
+        js_funcs = {
+            'ws1': ['func1', 'func2', 'func3'],
+            'ws2': ['func2', 'func3', 'func4'],
+            'ws3': ['func3', 'func4', 'func5'],
+        }
+        
+        func_names = ['func6', 'func7']
+        
+        js = MagicMock()
+        for func_name in func_names:
+            js.__setattr__(func_name, MagicMock())
+        
+        with(
+            patch('moray._module._js_funcs', js_funcs) as p_jf,
+            patch('moray._module.moray.js', js) as p_js
+        ):
+            _module.unexpose('ws1')
+    
     def test_uniqueId_1(self):
         test_datetime = datetime(2021, 2, 3, 4, 5, 6, 789)
         test_random = 0.123

@@ -254,7 +254,6 @@ def unexpose(ws):
                 js_funcs.remove(func_name)
     
     for func_name in js_funcs:
-        print('del: {0}'.format(func_name))
         moray.js.__delattr__(func_name)
 
 def _uniqueId(strong = 1000):
