@@ -26,6 +26,7 @@ _ARGS = 'args'
 _RESULT = 'result'
 _IS_SUCCESS = 'is_success'
 
+_js_funcs ={}
 _call_result = {}
 
 class WebsocketReact(threading.Thread):
@@ -36,12 +37,23 @@ class WebsocketReact(threading.Thread):
         ws (geventwebsocket.websocket.WebSocket): WebSocket接続オブジェクト
         msg (str): 受信したメッセージ
     """
-
+    
     def __init__(self, ws, msg):
         super().__init__()
         self.__ws = ws
         self.__msg = msg
         self.__parsed_msg = None
+    
+    @property
+    def ws(self):
+        """
+        読み取り専用WebSocket接続オブジェクト
+        
+        Returns:
+            WebSocket接続オブジェクト
+        """
+        
+        return self.__ws
     
     def run(self):
         """
@@ -155,16 +167,31 @@ def _create_js_func(ws, func_name):
         生成したPythonからJavaScriptを呼ぶ関数
     """
     
+    _js_funcs.setdefault(ws, [])
+    if not func_name in _js_funcs[ws]:
+        _js_funcs[ws].append(func_name)
+    
     def call_js(*args):
         """
         PythonからJavaScriptを呼ぶ関数
         
         Attributes:
             args: 引数
+            
+        Raises:
+            MorayRuntimeError: 呼び出したJavaScript側でエラー発生
         
         Returns:
             実行結果取得関数
         """
+        
+        ws = threading.current_thread().ws
+        
+        if ws not in _js_funcs:
+            raise MorayRuntimeError('websocket is not connected.')
+        
+        if func_name not in _js_funcs[ws]:
+            raise MorayRuntimeError('"{0}" is not exposed.'.format(func_name))
         
         id = _uniqueId()
         

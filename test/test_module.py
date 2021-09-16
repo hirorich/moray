@@ -612,7 +612,11 @@ class ModuleTest(unittest.TestCase):
         try:
             self.assertEqual('uniqueId' in _module._call_result, True)
             call_js = _module._create_js_func(ws, func_name)
-            get_result = call_js('abc', 123)
+            
+            ct = MagicMock()
+            ct.ws = ws
+            with patch('moray._module.threading.current_thread', MagicMock(return_value=ct)) as th_ct:
+                get_result = call_js('abc', 123)
             result = get_result()
             self.assertEqual('uniqueId' in _module._call_result, False)
         except Exception as e:
@@ -628,17 +632,15 @@ class ModuleTest(unittest.TestCase):
         ws = MagicMock()
         func_name = 'func_name'
         
-        error_msg = 'result'
-        
-        _module._call_result['uniqueId'] = {
-            _module._IS_SUCCESS: False,
-            _module._RESULT: 'result'
-        }
+        error_msg = 'websocket is not connected.'
         
         try:
             call_js = _module._create_js_func(ws, func_name)
-            get_result = call_js('abc', 123)
-            result = get_result()
+            
+            ct = MagicMock()
+            ct.ws = 'ws'
+            with patch('moray._module.threading.current_thread', MagicMock(return_value=ct)) as th_ct:
+                get_result = call_js('abc', 123)
         except Exception as e:
             self.assertIs(type(e), MorayRuntimeError)
             self.assertEqual(e.args[0], error_msg)
@@ -652,6 +654,58 @@ class ModuleTest(unittest.TestCase):
         ws = MagicMock()
         func_name = 'func_name'
         
+        error_msg = '"{0}" is not exposed.'.format(func_name)
+        
+        try:
+            call_js = _module._create_js_func(ws, func_name)
+            _module._js_funcs[ws].remove(func_name)
+            
+            ct = MagicMock()
+            ct.ws = ws
+            with patch('moray._module.threading.current_thread', MagicMock(return_value=ct)) as th_ct:
+                get_result = call_js('abc', 123)
+        except Exception as e:
+            self.assertIs(type(e), MorayRuntimeError)
+            self.assertEqual(e.args[0], error_msg)
+            return
+        
+        self.fail()
+    
+    @patch('moray._module._uniqueId', MagicMock(return_value = 'uniqueId'))
+    @patch('moray._module.time.sleep', MagicMock())
+    def test_create_js_func_4(self):
+        ws = MagicMock()
+        func_name = 'func_name'
+        
+        error_msg = 'result'
+        
+        _module._call_result['uniqueId'] = {
+            _module._IS_SUCCESS: False,
+            _module._RESULT: 'result'
+        }
+        
+        try:
+            call_js = _module._create_js_func(ws, func_name)
+            
+            ct = MagicMock()
+            ct.ws = ws
+            with patch('moray._module.threading.current_thread', MagicMock(return_value=ct)) as th_ct:
+                get_result = call_js('abc', 123)
+            result = get_result()
+        except Exception as e:
+            self.assertIs(type(e), MorayRuntimeError)
+            self.assertEqual(e.args[0], error_msg)
+            return
+        
+        self.fail()
+    
+    @patch('moray._module._uniqueId', MagicMock(return_value = 'uniqueId'))
+    @patch('moray._module.time.sleep', MagicMock())
+    @patch('moray._module.time.time', MagicMock(side_effect = [0, 5, 10]))
+    def test_create_js_func_5(self):
+        ws = MagicMock()
+        func_name = 'func_name'
+        
         error_msg = 'Could not receive execution results from JavaScript.'
         
         if 'uniqueId' in _module._call_result:
@@ -659,7 +713,11 @@ class ModuleTest(unittest.TestCase):
         
         try:
             call_js = _module._create_js_func(ws, func_name)
-            get_result = call_js('abc', 123)
+            
+            ct = MagicMock()
+            ct.ws = ws
+            with patch('moray._module.threading.current_thread', MagicMock(return_value=ct)) as th_ct:
+                get_result = call_js('abc', 123)
             result = get_result()
         except Exception as e:
             self.assertIs(type(e), MorayTimeoutError)
