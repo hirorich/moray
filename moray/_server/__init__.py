@@ -74,6 +74,7 @@ def bottle_websocket(ws):
     while True:
         msg = ws.receive()
         if msg is None:
+            _module.unexpose(ws)
             break
         
         # スレッドを分けて処理

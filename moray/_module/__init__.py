@@ -237,6 +237,26 @@ def _create_js_func(ws, func_name):
     
     return call_js
 
+def unexpose(ws):
+    """
+    exposeされたJavaScript関数を登録解除
+    
+    Attributes:
+        ws (geventwebsocket.websocket.WebSocket): WebSocket接続オブジェクト
+    """
+    
+    js_funcs =_js_funcs[ws]
+    del _js_funcs[ws]
+    
+    for _, v in _js_funcs.items():
+        for func_name in tuple(js_funcs):
+            if func_name in v:
+                js_funcs.remove(func_name)
+    
+    for func_name in js_funcs:
+        print('del: {0}'.format(func_name))
+        moray.js.__delattr__(func_name)
+
 def _uniqueId(strong = 1000):
     """
     日付を基にユニークキー生成
