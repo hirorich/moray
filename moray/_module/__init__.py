@@ -39,9 +39,9 @@ class WebsocketReact(threading.Thread):
 
     def __init__(self, ws, msg):
         super().__init__()
-        self.ws = ws
-        self.msg = msg
-        self.parsed_msg = None
+        self.__ws = ws
+        self.__msg = msg
+        self.__parsed_msg = None
     
     def run(self):
         """
@@ -54,9 +54,9 @@ class WebsocketReact(threading.Thread):
             デコレータによる例外処理・ログ出力・エラー通知
         """
         
-        print(self.msg)
-        self.parsed_msg = json.loads(self.msg)
-        method = self.parsed_msg[_METHOD]
+        print(self.__msg)
+        self.__parsed_msg = json.loads(self.__msg)
+        method = self.__parsed_msg[_METHOD]
         _checker.check_str(method, _METHOD)
         
         if method == _CALL:
@@ -73,13 +73,13 @@ class WebsocketReact(threading.Thread):
         呼び出されたPythonの関数を実行
         """
         
-        id = self.parsed_msg[_ID]
+        id = self.__parsed_msg[_ID]
         _checker.check_str(id, _ID)
-        module = self.parsed_msg[_MODULE]
+        module = self.__parsed_msg[_MODULE]
         _checker.check_str(module, _MODULE)
-        func_name = self.parsed_msg[_FUNC_NAME]
+        func_name = self.__parsed_msg[_FUNC_NAME]
         _checker.check_str(func_name, _FUNC_NAME)
-        args = self.parsed_msg[_ARGS]
+        args = self.__parsed_msg[_ARGS]
         _checker.check_list_or_tuple(args, _ARGS)
         
         result, is_success = _call_py_func(module, func_name, args)
@@ -90,18 +90,18 @@ class WebsocketReact(threading.Thread):
         return_msg[_RESULT] = result
         return_msg[_IS_SUCCESS] = is_success
         
-        self.ws.send(json.dumps(return_msg))
+        self.__ws.send(json.dumps(return_msg))
     
     def __returned(self):
         """
         呼び出したJavaScriptの結果を格納
         """
         
-        id = self.parsed_msg[_ID]
+        id = self.__parsed_msg[_ID]
         _checker.check_str(id, _ID)
-        is_success = self.parsed_msg[_IS_SUCCESS]
+        is_success = self.__parsed_msg[_IS_SUCCESS]
         _checker.check_bool(is_success, _IS_SUCCESS)
-        result = self.parsed_msg[_RESULT]
+        result = self.__parsed_msg[_RESULT]
         _checker.check_str(result, _RESULT)
         
         _call_result[id] = {
@@ -114,9 +114,9 @@ class WebsocketReact(threading.Thread):
         exposeされたJavaScript関数を登録
         """
         
-        func_name = self.parsed_msg[_FUNC_NAME]
+        func_name = self.__parsed_msg[_FUNC_NAME]
         _checker.check_str(func_name, _FUNC_NAME)
-        moray.js.__setattr__(func_name, _create_js_func(self.ws, func_name))
+        moray.js.__setattr__(func_name, _create_js_func(self.__ws, func_name))
 
 def _call_py_func(module, func_name, args):
     """

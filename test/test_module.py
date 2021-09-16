@@ -156,14 +156,14 @@ class ModuleTest(unittest.TestCase):
         obj = _module.WebsocketReact(ws, None)
         
         try:
-            obj.parsed_msg = parsed_msg
+            obj._WebsocketReact__parsed_msg = parsed_msg
             obj._WebsocketReact__called()
             args, kwargs = ws.send.call_args
             self.assertEqual(args[0], return_msg)
             
             parsed_msg[_module._ARGS] = ['arg0', 'arg1']
             
-            obj.parsed_msg = parsed_msg
+            obj._WebsocketReact__parsed_msg = parsed_msg
             obj._WebsocketReact__called()
             args, kwargs = ws.send.call_args
             self.assertEqual(args[0], return_msg)
@@ -180,7 +180,7 @@ class ModuleTest(unittest.TestCase):
         
         ws = MagicMock()
         obj = _module.WebsocketReact(ws, None)
-        obj.parsed_msg = parsed_msg
+        obj._WebsocketReact__parsed_msg = parsed_msg
         
         try:
             obj._WebsocketReact__called()
@@ -203,7 +203,7 @@ class ModuleTest(unittest.TestCase):
             parsed_msg[_module._FUNC_NAME] = 'func_name'
             parsed_msg[_module._ARGS] = ('arg0', 'arg1')
             
-            obj.parsed_msg = parsed_msg
+            obj._WebsocketReact__parsed_msg = parsed_msg
             
             try:
                 obj._WebsocketReact__called()
@@ -224,7 +224,7 @@ class ModuleTest(unittest.TestCase):
         
         ws = MagicMock()
         obj = _module.WebsocketReact(ws, None)
-        obj.parsed_msg = parsed_msg
+        obj._WebsocketReact__parsed_msg = parsed_msg
         
         try:
             obj._WebsocketReact__called()
@@ -247,7 +247,7 @@ class ModuleTest(unittest.TestCase):
             parsed_msg[_module._FUNC_NAME] = 'func_name'
             parsed_msg[_module._ARGS] = ('arg0', 'arg1')
             
-            obj.parsed_msg = parsed_msg
+            obj._WebsocketReact__parsed_msg = parsed_msg
             
             try:
                 obj._WebsocketReact__called()
@@ -268,7 +268,7 @@ class ModuleTest(unittest.TestCase):
         
         ws = MagicMock()
         obj = _module.WebsocketReact(ws, None)
-        obj.parsed_msg = parsed_msg
+        obj._WebsocketReact__parsed_msg = parsed_msg
         
         try:
             obj._WebsocketReact__called()
@@ -291,7 +291,7 @@ class ModuleTest(unittest.TestCase):
             parsed_msg[_module._FUNC_NAME] = target
             parsed_msg[_module._ARGS] = ('arg0', 'arg1')
             
-            obj.parsed_msg = parsed_msg
+            obj._WebsocketReact__parsed_msg = parsed_msg
             
             try:
                 obj._WebsocketReact__called()
@@ -312,7 +312,7 @@ class ModuleTest(unittest.TestCase):
         
         ws = MagicMock()
         obj = _module.WebsocketReact(ws, None)
-        obj.parsed_msg = parsed_msg
+        obj._WebsocketReact__parsed_msg = parsed_msg
         
         try:
             obj._WebsocketReact__called()
@@ -335,7 +335,7 @@ class ModuleTest(unittest.TestCase):
             parsed_msg[_module._FUNC_NAME] = 'func_name'
             parsed_msg[_module._ARGS] = target
             
-            obj.parsed_msg = parsed_msg
+            obj._WebsocketReact__parsed_msg = parsed_msg
             
             try:
                 obj._WebsocketReact__called()
@@ -355,7 +355,7 @@ class ModuleTest(unittest.TestCase):
         
         ws = MagicMock()
         obj = _module.WebsocketReact(ws, None)
-        obj.parsed_msg = parsed_msg
+        obj._WebsocketReact__parsed_msg = parsed_msg
         
         for target in None, _INT, _FLOAT, _STR, _BOOL, _LIST, _TUPLE, _DICT:
             with patch('moray._module._call_py_func', MagicMock(return_value = (target, True))) as cpf:
@@ -373,7 +373,7 @@ class ModuleTest(unittest.TestCase):
         
         ws = MagicMock()
         obj = _module.WebsocketReact(ws, None)
-        obj.parsed_msg = parsed_msg
+        obj._WebsocketReact__parsed_msg = parsed_msg
         
         for target in _FUNC, _CLASS:
             with patch('moray._module._call_py_func', MagicMock(return_value = (target, True))) as cpf:
@@ -392,7 +392,7 @@ class ModuleTest(unittest.TestCase):
         
         ws = MagicMock()
         obj = _module.WebsocketReact(ws, None)
-        obj.parsed_msg = parsed_msg
+        obj._WebsocketReact__parsed_msg = parsed_msg
         
         try:
             obj._WebsocketReact__returned()
@@ -410,7 +410,7 @@ class ModuleTest(unittest.TestCase):
         
         ws = MagicMock()
         obj = _module.WebsocketReact(ws, None)
-        obj.parsed_msg = parsed_msg
+        obj._WebsocketReact__parsed_msg = parsed_msg
         
         try:
             obj._WebsocketReact__returned()
@@ -431,7 +431,7 @@ class ModuleTest(unittest.TestCase):
             parsed_msg[_module._IS_SUCCESS] = True
             parsed_msg[_module._RESULT] = 'result'
             
-            obj.parsed_msg = parsed_msg
+            obj._WebsocketReact__parsed_msg = parsed_msg
             
             try:
                 obj._WebsocketReact__returned()
@@ -450,7 +450,7 @@ class ModuleTest(unittest.TestCase):
         
         ws = MagicMock()
         obj = _module.WebsocketReact(ws, None)
-        obj.parsed_msg = parsed_msg
+        obj._WebsocketReact__parsed_msg = parsed_msg
         
         try:
             obj._WebsocketReact__returned()
@@ -471,7 +471,7 @@ class ModuleTest(unittest.TestCase):
             parsed_msg[_module._IS_SUCCESS] = target
             parsed_msg[_module._RESULT] = 'result'
             
-            obj.parsed_msg = parsed_msg
+            obj._WebsocketReact__parsed_msg = parsed_msg
             
             try:
                 obj._WebsocketReact__returned()
@@ -490,7 +490,7 @@ class ModuleTest(unittest.TestCase):
         
         ws = MagicMock()
         obj = _module.WebsocketReact(ws, None)
-        obj.parsed_msg = parsed_msg
+        obj._WebsocketReact__parsed_msg = parsed_msg
         
         try:
             obj._WebsocketReact__returned()
@@ -511,7 +511,7 @@ class ModuleTest(unittest.TestCase):
             parsed_msg[_module._IS_SUCCESS] = True
             parsed_msg[_module._RESULT] = target
             
-            obj.parsed_msg = parsed_msg
+            obj._WebsocketReact__parsed_msg = parsed_msg
             
             try:
                 obj._WebsocketReact__returned()
@@ -529,7 +529,7 @@ class ModuleTest(unittest.TestCase):
         
         ws = MagicMock()
         obj = _module.WebsocketReact(ws, None)
-        obj.parsed_msg = parsed_msg
+        obj._WebsocketReact__parsed_msg = parsed_msg
         
         with patch('moray._module.moray.js', MagicMock()) as moray_js:
             try:
@@ -546,7 +546,7 @@ class ModuleTest(unittest.TestCase):
         
         ws = MagicMock()
         obj = _module.WebsocketReact(ws, None)
-        obj.parsed_msg = parsed_msg
+        obj._WebsocketReact__parsed_msg = parsed_msg
         
         with patch('moray._module.moray.js', MagicMock()) as moray_js:
             try:
@@ -567,7 +567,7 @@ class ModuleTest(unittest.TestCase):
             parsed_msg = {}
             parsed_msg[_module._FUNC_NAME] = target
 
-            obj.parsed_msg = parsed_msg
+            obj._WebsocketReact__parsed_msg = parsed_msg
             
             with patch('moray._module.moray.js', MagicMock()) as moray_js:
                 try:
