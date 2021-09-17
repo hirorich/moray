@@ -21,6 +21,7 @@ _DICT = {'ABC': 'abc', 'XYZ': 789}
 _CLASS = Class()
 
 @patch('moray._module.threading.Thread', MagicMock())
+@patch('moray._module._logger', MagicMock())
 class ModuleTest(unittest.TestCase):
     
     def test_run_1(self):
@@ -588,7 +589,7 @@ class ModuleTest(unittest.TestCase):
     @patch('moray._module.py.call', MagicMock(side_effect = RuntimeError('return_value')))
     def test_call_py_func_2(self):
         result, is_success = _module._call_py_func(None, None, None)
-        self.assertEqual(result, 'calling python function is faild.')
+        self.assertEqual(result, 'called python function is faild.')
         self.assertEqual(is_success, False)
     
     @patch('moray._module._uniqueId', MagicMock(return_value = 'uniqueId'))

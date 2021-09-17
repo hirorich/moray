@@ -3,11 +3,10 @@
 呼び出す・呼び出される関数を制御
 
 ToDo:
-    受信データの型チェック(str, 一部tuple)
-    例外処理・ログ出力・エラー通知
+    デコレータによる例外時のログ出力
 """
 
-import json, random, threading, time
+import json, logging, random, threading, time
 from datetime import datetime
 
 import moray
@@ -28,6 +27,8 @@ _IS_SUCCESS = 'is_success'
 
 _js_funcs ={}
 _call_result = {}
+
+_logger = logging.getLogger(__name__)
 
 class WebsocketReact(threading.Thread):
     """
@@ -63,10 +64,11 @@ class WebsocketReact(threading.Thread):
             MorayRuntimeError: 入力値エラー
         
         ToDo:
-            デコレータによる例外処理・ログ出力・エラー通知
+            デコレータによる例外時のログ出力
         """
         
-        print(self.__msg)
+        _logger.debug('received data: {0}'.format(self.__msg))
+        
         self.__parsed_msg = json.loads(self.__msg)
         method = self.__parsed_msg[_METHOD]
         _checker.check_str(method, _METHOD)
@@ -101,8 +103,10 @@ class WebsocketReact(threading.Thread):
         return_msg[_RETURN] = True
         return_msg[_RESULT] = result
         return_msg[_IS_SUCCESS] = is_success
+        msg = json.dumps(return_msg)
         
-        self.__ws.send(json.dumps(return_msg))
+        _logger.debug('send data: {0}'.format(msg))
+        self.__ws.send(msg)
     
     def __returned(self):
         """
@@ -129,6 +133,7 @@ class WebsocketReact(threading.Thread):
         func_name = self.__parsed_msg[_FUNC_NAME]
         _checker.check_str(func_name, _FUNC_NAME)
         moray.js.__setattr__(func_name, _create_js_func(self.__ws, func_name))
+        _logger.debug('exposed Javascript function: {0}'.format(func_name))
 
 def _call_py_func(module, func_name, args):
     """
@@ -142,17 +147,15 @@ def _call_py_func(module, func_name, args):
     Returns:
         関数の実行結果
         実行成否(True:成功, False:失敗)
-    
-    ToDo:
-        ログ出力
     """
     
     try:
         result = py.call(module, func_name, args)
         return result, True
-    except:
-        # ToDo: ログ出力
-        result = 'calling python function is faild.'
+    except Exception as e:
+        _logger.exception(e.args[0])
+        
+        result = 'called python function is faild.'
         return result, False
 
 def _create_js_func(ws, func_name):
@@ -200,8 +203,10 @@ def _create_js_func(ws, func_name):
         call_msg[_RETURN] = False
         call_msg[_FUNC_NAME] = func_name
         call_msg[_ARGS] = args
+        msg = json.dumps(call_msg)
         
-        ws.send(json.dumps(call_msg))
+        _logger.debug('send data: {0}'.format(msg))
+        ws.send(msg)
         
         def get_result():
             """
@@ -255,6 +260,7 @@ def unexpose(ws):
     
     for func_name in js_funcs:
         moray.js.__delattr__(func_name)
+        _logger.debug('unexposed Javascript function: {0}'.format(func_name))
 
 def _uniqueId(strong = 1000):
     """

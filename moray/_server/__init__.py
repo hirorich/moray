@@ -1,9 +1,13 @@
 """
 morayで起動する内部サーバ設定
 http://localhost:port/
+
+ToDo:
+    デコレータによる例外時のログ出力・終了処理
+    サーバ起動後のログ出力
 """
 
-import bottle, pkg_resources, os, socket, time
+import bottle, logging, pkg_resources, os, socket, time
 from bottle import HTTPResponse
 from bottle.ext.websocket import GeventWebSocketServer, websocket
 from threading import Thread
@@ -15,6 +19,8 @@ root_module_js = pkg_resources.resource_filename('moray', r'_module\js')
 
 app = bottle.Bottle()
 _websockets=[]
+
+_logger = logging.getLogger(__name__)
 
 @app.route('/moray/confirm_running')
 def run_check():
@@ -75,6 +81,8 @@ def bottle_websocket(ws):
         ws (geventwebsocket.websocket.WebSocket): WebSocket接続オブジェクト
     """
     
+    _logger.debug('WebSocket is opened.')
+    
     _websockets.append(ws)
     while True:
         msg = ws.receive()
@@ -109,8 +117,12 @@ def page(path = 'index.html'):
 def run():
     """
     サーバ起動
+    
+    ToDo:
+        サーバ起動後のログ出力
     """
     
+    _logger.debug('running moray on "{0}:{1}".'.format(_config.host, _config.port))
     app.run(
         host = _config.host,
         port = _config.port,
@@ -160,11 +172,17 @@ def _onclose_websocket(ws):
     
     Attributes:
         ws (geventwebsocket.websocket.WebSocket): WebSocket接続オブジェクト
+    
+    ToDo:
+        デコレータによる例外時のログ出力・終了処理
     """
+    
+    _logger.debug('closing WebSocket.')
     
     # websocketに紐づくメモリを解放
     _module.unexpose(ws)
     _websockets.remove(ws)
+    _logger.debug('WebSocket is closed.')
     
     # 接続がない場合は終了
     check_exist_websocket()
@@ -178,5 +196,5 @@ def check_exist_websocket():
     if len(_websockets) == 0:
         time.sleep(3)
         if len(_websockets) == 0:
-            print('exit.')
+            _logger.debug('exiting moray application.')
             os._exit(0)

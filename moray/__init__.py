@@ -1,6 +1,13 @@
 """
 morayが提供するAPIのInterface
+
+ToDo:
+    例外時のログ出力・終了処理のデコレータ
+        loggerと終了可否は引数で受け取る
+    デフォルトログハンドラ: logging.getLogger('moray')
 """
+
+import json, logging
 
 from moray import _browser, _checker, _config, _runner, _server
 from moray._browser import chrome
@@ -19,6 +26,8 @@ _PORT = 'port'
 class _CLASS():
     pass
 js = _CLASS()
+
+_logger = logging.getLogger(__name__)
 
 def run(
         root,
@@ -42,6 +51,9 @@ def run(
         cmdline_args (list<str>, optional): ブラウザの起動引数
         position (tuple<int, int>, optional): ブラウザを開いた際の位置
         size (tuple<int, int>, optional): ブラウザを開いた際のサイズ
+    
+    Raises:
+        ConfigurationError: チェックエラー
     
     Examples:
         >>> import moray
@@ -116,7 +128,19 @@ def run(
         _config.cmdline_args = cmdline_args
         _config.position = position
         _config.size = size
+        
+        _logger.debug('moray running configuration: {0}'.format(json.dumps({
+            _ROOT: _config.root,
+            _START_PAGE: _config.start_page,
+            _HOST: _config.host,
+            _PORT: _config.port,
+            _BROWSER: _config.browser,
+            _CMDLINE_ARGS: _config.cmdline_args,
+            _POSITION:  _config.position,
+            _SIZE: _config.size
+        })))
     except Exception as e:
+        _logger.exception(e.args[0])
         raise ConfigurationError(e.args[0]) from e
     
     # サーバ起動・ブラウザ起動
@@ -136,6 +160,7 @@ def expose(func):
     
     if callable(func):
         py.register(func)
+        _logger.debug('exposed Python function: {0}.{1}'.format(func.__module__, func.__name__))
     else:
         raise ConfigurationError('"moray.expose" can only be used for "function".')
     
