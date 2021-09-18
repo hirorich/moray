@@ -1,7 +1,8 @@
 import unittest
 from unittest.mock import patch, MagicMock
 
-from moray import _config, _main
+import moray
+from moray import _config
 from moray._browser import chrome
 from moray.exception import ConfigurationError
 
@@ -20,7 +21,7 @@ _TUPLE = (4,5,6)
 _DICT = {'ABC': 'abc', 'XYZ': 789}
 _CLASS = Class()
 
-@patch('moray._main._runner', MagicMock())
+@patch('moray._runner', MagicMock())
 class MorayTest_Run(unittest.TestCase):
     
     def init_config(self):
@@ -39,7 +40,7 @@ class MorayTest_Run(unittest.TestCase):
         
         for target in None, _INT, _FLOAT, _BOOL, _LIST, _TUPLE, _DICT, _CLASS, _FUNC, '', '   ', 'tests':
             try:
-                _main.run(target)
+                moray.run(target)
             except Exception as e:
                 self.assertIs(type(e), ConfigurationError)
                 self.assertEqual(e.args[0], e.__cause__.args[0])
@@ -58,7 +59,7 @@ class MorayTest_Run(unittest.TestCase):
             self.init_config()
             
             try:
-                _main.run(target)
+                moray.run(target)
                 self.assertEqual(_config.root, correct)
             except Exception as e:
                 self.fail()
@@ -69,7 +70,7 @@ class MorayTest_Run(unittest.TestCase):
         
         for target in None, _INT, _FLOAT, _BOOL, _LIST, _TUPLE, _DICT, _CLASS, _FUNC:
             try:
-                _main.run('web', start_page = target)
+                moray.run('web', start_page = target)
             except Exception as e:
                 self.assertIs(type(e), ConfigurationError)
                 self.assertEqual(e.args[0], e.__cause__.args[0])
@@ -88,7 +89,7 @@ class MorayTest_Run(unittest.TestCase):
             ('  start_page.html  ', 'start_page.html')
         ]:
             try:
-                _main.run('web', start_page = target)
+                moray.run('web', start_page = target)
                 self.assertEqual(_config.start_page, correct)
             except Exception as e:
                 self.fail()
@@ -99,7 +100,7 @@ class MorayTest_Run(unittest.TestCase):
         
         for target in None, _INT, _FLOAT, _BOOL, _LIST, _TUPLE, _DICT, _CLASS, _FUNC, '', '   ', 'tests':
             try:
-                _main.run('web', host = target)
+                moray.run('web', host = target)
             except Exception as e:
                 self.assertIs(type(e), ConfigurationError)
                 self.assertEqual(e.args[0], e.__cause__.args[0])
@@ -118,7 +119,7 @@ class MorayTest_Run(unittest.TestCase):
             self.init_config()
             
             try:
-                _main.run('web', host = target)
+                moray.run('web', host = target)
                 self.assertEqual(_config.host, correct)
             except Exception as e:
                 self.fail()
@@ -129,7 +130,7 @@ class MorayTest_Run(unittest.TestCase):
         
         for target in None, _FLOAT, _STR, _BOOL, _LIST, _TUPLE, _DICT, _CLASS, _FUNC, -1, 1, 1023, 1024, 65536, 65537:
             try:
-                _main.run('web', port = target)
+                moray.run('web', port = target)
             except Exception as e:
                 self.assertIs(type(e), ConfigurationError)
                 self.assertEqual(e.args[0], e.__cause__.args[0])
@@ -143,7 +144,7 @@ class MorayTest_Run(unittest.TestCase):
             self.init_config()
             
             try:
-                _main.run('web', port = target)
+                moray.run('web', port = target)
                 self.assertEqual(_config.port, target)
             except Exception as e:
                 self.fail()
@@ -151,7 +152,7 @@ class MorayTest_Run(unittest.TestCase):
         self.init_config()
         
         try:
-            _main.run('web', port = 0)
+            moray.run('web', port = 0)
             self.assertNotEqual(_config.port, 0)
         except Exception as e:
             self.fail()
@@ -162,7 +163,7 @@ class MorayTest_Run(unittest.TestCase):
         
         for target in None, _INT, _FLOAT, _BOOL, _LIST, _TUPLE, _DICT, _CLASS, _FUNC:
             try:
-                _main.run('web', browser = target)
+                moray.run('web', browser = target)
             except Exception as e:
                 self.assertIs(type(e), ConfigurationError)
                 self.assertEqual(e.args[0], e.__cause__.args[0])
@@ -177,7 +178,7 @@ class MorayTest_Run(unittest.TestCase):
         for target in 'edge', 'safari':
             
             try:
-                _main.run('web', browser = target)
+                moray.run('web', browser = target)
             except Exception as e:
                 self.assertIs(type(e), ConfigurationError)
                 self.assertEqual(e.args[0], e.__cause__.args[0])
@@ -196,7 +197,7 @@ class MorayTest_Run(unittest.TestCase):
             self.init_config()
             
             try:
-                _main.run('web', browser = target)
+                moray.run('web', browser = target)
                 self.assertEqual(_config.browser, correct)
             except Exception as e:
                 self.fail()
@@ -207,7 +208,7 @@ class MorayTest_Run(unittest.TestCase):
         
         for target in None, _INT, _FLOAT, _STR, _BOOL, _DICT, _CLASS, _FUNC, ('aaa'):
             try:
-                _main.run('web', cmdline_args = target)
+                moray.run('web', cmdline_args = target)
             except Exception as e:
                 self.assertIs(type(e), ConfigurationError)
                 self.assertEqual(e.args[0], e.__cause__.args[0])
@@ -228,7 +229,7 @@ class MorayTest_Run(unittest.TestCase):
             self.init_config()
             
             try:
-                _main.run('web', cmdline_args = target)
+                moray.run('web', cmdline_args = target)
                 self.assertEqual(_config.cmdline_args, correct)
             except Exception as e:
                 self.fail()
@@ -243,7 +244,7 @@ class MorayTest_Run(unittest.TestCase):
             [32, '165'], ['32', 165], (65, '258'), ('65', 258)
         ]:
             try:
-                _main.run('web', position = target)
+                moray.run('web', position = target)
             except Exception as e:
                 self.assertIs(type(e), ConfigurationError)
                 self.assertEqual(e.args[0], e.__cause__.args[0])
@@ -261,7 +262,7 @@ class MorayTest_Run(unittest.TestCase):
             self.init_config()
             
             try:
-                _main.run('web', position = target)
+                moray.run('web', position = target)
                 self.assertEqual(_config.position, correct)
             except Exception as e:
                 self.fail()
@@ -276,7 +277,7 @@ class MorayTest_Run(unittest.TestCase):
             [32, '165'], ['32', 165], (65, '258'), ('65', 258)
         ]:
             try:
-                _main.run('web', size = target)
+                moray.run('web', size = target)
             except Exception as e:
                 self.assertIs(type(e), ConfigurationError)
                 self.assertEqual(e.args[0], e.__cause__.args[0])
@@ -294,12 +295,12 @@ class MorayTest_Run(unittest.TestCase):
             self.init_config()
             
             try:
-                _main.run('web', size = target)
+                moray.run('web', size = target)
                 self.assertEqual(_config.size, correct)
             except Exception as e:
                 self.fail()
 
-@patch('moray._main.py.register', MagicMock())
+@patch('moray.py.register', MagicMock())
 class MorayTest_expose(unittest.TestCase):
     
     def test_expose_1(self):
@@ -308,7 +309,7 @@ class MorayTest_expose(unittest.TestCase):
         
         for target in None, _INT, _FLOAT, _STR, _BOOL, _LIST, _TUPLE, _DICT, _CLASS:
             try:
-                _main.expose(target)
+                moray.expose(target)
             except Exception as e:
                 self.assertIs(type(e), ConfigurationError)
                 self.assertEqual(e.args[0], error_msg)
@@ -319,6 +320,6 @@ class MorayTest_expose(unittest.TestCase):
     def test_expose_2(self):
         
         try:
-            _main.expose(_FUNC)
+            moray.expose(_FUNC)
         except Exception as e:
             self.fail()
