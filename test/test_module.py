@@ -532,7 +532,7 @@ class ModuleTest(unittest.TestCase):
         obj = _module.WebsocketReact(ws, None)
         obj._WebsocketReact__parsed_msg = parsed_msg
         
-        with patch('moray._module._main.js', MagicMock()) as moray_js:
+        with patch('moray._module.moray.js', MagicMock()) as moray_js:
             try:
                 obj._WebsocketReact__exposed()
                 if not 'func_name' in moray_js.__dict__:
@@ -549,7 +549,7 @@ class ModuleTest(unittest.TestCase):
         obj = _module.WebsocketReact(ws, None)
         obj._WebsocketReact__parsed_msg = parsed_msg
         
-        with patch('moray._module._main.js', MagicMock()) as moray_js:
+        with patch('moray._module.moray.js', MagicMock()) as moray_js:
             try:
                 obj._WebsocketReact__exposed()
             except Exception as e:
@@ -567,10 +567,10 @@ class ModuleTest(unittest.TestCase):
         for target in None, _INT, _FLOAT, _BOOL, _LIST, _TUPLE, _DICT:
             parsed_msg = {}
             parsed_msg[_module._FUNC_NAME] = target
-
+            
             obj._WebsocketReact__parsed_msg = parsed_msg
             
-            with patch('moray._module._main.js', MagicMock()) as moray_js:
+            with patch('moray._module.moray.js', MagicMock()) as moray_js:
                 try:
                     obj._WebsocketReact__exposed()
                 except Exception as e:
@@ -742,7 +742,7 @@ class ModuleTest(unittest.TestCase):
         
         with(
             patch('moray._module._js_funcs', js_funcs) as p_jf,
-            patch('moray._module._main.js', js) as p_js
+            patch('moray._module.moray.js', js) as p_js
         ):
             try:
                 _module.unexpose('ws1')
@@ -772,7 +772,7 @@ class ModuleTest(unittest.TestCase):
         
         with(
             patch('moray._module._js_funcs', js_funcs) as p_jf,
-            patch('moray._module._main.js', js) as p_js
+            patch('moray._module.moray.js', js) as p_js
         ):
             try:
                 _module.unexpose('ws2')
@@ -802,7 +802,7 @@ class ModuleTest(unittest.TestCase):
         
         with(
             patch('moray._module._js_funcs', js_funcs) as p_jf,
-            patch('moray._module._main.js', js) as p_js
+            patch('moray._module.moray.js', js) as p_js
         ):
             try:
                 _module.unexpose('ws4')
@@ -826,7 +826,7 @@ class ModuleTest(unittest.TestCase):
         
         with(
             patch('moray._module._js_funcs', js_funcs) as p_jf,
-            patch('moray._module._main.js', js) as p_js
+            patch('moray._module.moray.js', js) as p_js
         ):
             _module.unexpose('ws1')
     

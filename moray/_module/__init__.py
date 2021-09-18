@@ -9,7 +9,8 @@ ToDo:
 import json, logging, random, threading, time
 from datetime import datetime
 
-from moray import _checker, _main
+import moray
+from moray import _checker
 from moray._module import py
 from moray.exception import MorayRuntimeError, MorayTimeoutError
 
@@ -131,7 +132,7 @@ class WebsocketReact(threading.Thread):
         
         func_name = self.__parsed_msg[_FUNC_NAME]
         _checker.check_str(func_name, _FUNC_NAME)
-        _main.js.__setattr__(func_name, _create_js_func(self.__ws, func_name))
+        moray.js.__setattr__(func_name, _create_js_func(self.__ws, func_name))
         _logger.debug('exposed Javascript function: {0}'.format(func_name))
 
 def _call_py_func(module, func_name, args):
@@ -258,7 +259,7 @@ def unexpose(ws):
                 js_funcs.remove(func_name)
     
     for func_name in js_funcs:
-        _main.js.__delattr__(func_name)
+        moray.js.__delattr__(func_name)
         _logger.debug('unexposed Javascript function: {0}'.format(func_name))
 
 def _uniqueId(strong = 1000):

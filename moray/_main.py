@@ -18,10 +18,6 @@ _SIZE = 'size'
 _HOST = 'host'
 _PORT = 'port'
 
-class _CLASS():
-    pass
-js = _CLASS()
-
 _logger = logging.getLogger(__name__)
 
 def run(
