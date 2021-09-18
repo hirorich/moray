@@ -1,13 +1,11 @@
 """
 サーバ起動とブラウザ起動を制御
-
-ToDo:
-    デコレータによる例外時のログ出力・終了処理
 """
 
 import logging, requests
 from threading import Thread
 
+import moray
 from moray import _browser, _config, _server
 from moray.exception import MorayRuntimeError
 
@@ -28,6 +26,7 @@ def run():
     # サーバ起動
     _server.run()
 
+@moray._error_handle(_logger, True)
 def open_browser():
     """
     requestsによるGETでサーバーが起動しているか確認
@@ -36,9 +35,6 @@ def open_browser():
     Raises:
         MorayRuntimeError: サーバ起動エラー
         requests.exceptions.xxx: サーバ起動タイムアウトエラー
-    
-    ToDo:
-        デコレータによる例外時のログ出力・終了処理
     """
     
     # サーバ起動確認

@@ -149,10 +149,10 @@ def expose(func):
         ConfigurationError: 型チェックエラー
     """
     
-    if callable(func):
-        py.register(func)
-        _logger.debug('exposed Python function: {0}.{1}'.format(func.__module__, func.__name__))
-    else:
+    if not callable(func):
         raise ConfigurationError('"moray.expose" can only be used for "function".')
+    
+    py.register(func)
+    _logger.debug('exposed Python function: {0}.{1}'.format(func.__module__, func.__name__))
     
     return func

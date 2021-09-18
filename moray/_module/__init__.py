@@ -1,9 +1,6 @@
 """
 呼び出す関数を管理
 呼び出す・呼び出される関数を制御
-
-ToDo:
-    デコレータによる例外時のログ出力
 """
 
 import json, logging, random, threading, time
@@ -56,15 +53,13 @@ class WebsocketReact(threading.Thread):
         
         return self.__ws
     
+    @moray._error_handle(_logger)
     def run(self):
         """
         受信したメッセージによって処理を実行
         
         Raises:
             MorayRuntimeError: 入力値エラー
-        
-        ToDo:
-            デコレータによる例外時のログ出力
         """
         
         _logger.debug('received data: {0}'.format(self.__msg))

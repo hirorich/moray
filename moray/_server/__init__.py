@@ -3,7 +3,6 @@ morayで起動する内部サーバ設定
 http://localhost:port/
 
 ToDo:
-    デコレータによる例外時のログ出力・終了処理
     サーバ起動後のログ出力
 """
 
@@ -12,6 +11,7 @@ from bottle import HTTPResponse
 from bottle.ext.websocket import GeventWebSocketServer, websocket
 from threading import Thread
 
+import moray
 from moray import _config, _module
 from moray._module import py
 
@@ -166,15 +166,13 @@ def generate_confirm_running_url():
     
     return 'http://localhost:{0}/moray/confirm_running'.format(_config.port)
 
+@moray._error_handle(_logger, True)
 def _onclose_websocket(ws):
     """
     WebSocketが閉じられた際の処理
     
     Attributes:
         ws (geventwebsocket.websocket.WebSocket): WebSocket接続オブジェクト
-    
-    ToDo:
-        デコレータによる例外時のログ出力・終了処理
     """
     
     _logger.debug('closing WebSocket.')

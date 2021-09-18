@@ -3,10 +3,13 @@ moray初期化処理
 morayが提供するAPIのInterface
 
 ToDo:
-    例外時のログ出力・終了処理のデコレータ
-        loggerと終了可否は引数で受け取る
+    エラー処理デコレータ作成・テスト
     デフォルトログハンドラ: logging.getLogger('moray')
 """
+
+import logging
+
+from moray.exception import ConfigurationError
 
 # ==================================================
 # moray初期化処理
@@ -15,6 +18,39 @@ ToDo:
 class _CLASS():
     pass
 js = _CLASS()
+
+def _error_handle(logger, can_exit = False):
+    """
+    デコレータ
+    エラー時にログを出力
+    
+    Attributes:
+        logger (logging.Logger): ロガー
+        can_exit (bool, optional): エラー時にアプリ終了
+    
+    Raises:
+        ConfigurationError: チェックエラー
+    
+    ToDo:
+        エラー時のアプリ終了
+        テスト時のモック化
+    """
+    
+    if not type(logger) is logging.Logger:
+        raise ConfigurationError('"logger" is not "logging.Logger" type.')
+    
+    def impl(func):
+        if not callable(func):
+            raise ConfigurationError('"moray._error_handle" can only be used for "function".')
+        
+        def wrapper(*args, **dict):
+            try:
+                return func(*args, **dict)
+            except Exception as e:
+                logger.exception(e.args[0])
+                raise
+        return wrapper
+    return impl
 
 # ==================================================
 # morayが提供するAPIのInterface
