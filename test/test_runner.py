@@ -5,6 +5,10 @@ from requests.exceptions import Timeout
 from moray import _runner
 from moray.exception import MorayRuntimeError
 
+def raise_mock(arg):
+    raise
+
+@patch('moray._runner._logger.exception', raise_mock)
 @patch('moray._runner._browser', MagicMock())
 @patch('moray._runner._server', MagicMock())
 class RunnerTest(unittest.TestCase):

@@ -48,7 +48,6 @@ def _error_handle(logger, can_exit = False):
                 return func(*args, **dict)
             except Exception as e:
                 logger.exception(e.args[0])
-                raise
         return wrapper
     return impl
 

@@ -20,10 +20,14 @@ _TUPLE = (4,5,6)
 _DICT = {'ABC': 'abc', 'XYZ': 789}
 _CLASS = Class()
 
+def raise_mock(arg):
+    raise
+
 @patch('moray._module.threading.Thread', MagicMock())
 @patch('moray._module._logger', MagicMock())
 class ModuleTest(unittest.TestCase):
     
+    @patch('moray._module._logger.exception', raise_mock)
     def test_run_1(self):
         msg = 'aa:123'
         
@@ -39,6 +43,7 @@ class ModuleTest(unittest.TestCase):
         
         self.fail()
     
+    @patch('moray._module._logger.exception', raise_mock)
     def test_run_2(self):
         msg = {}
         msg['sample'] = 'test'
@@ -56,6 +61,7 @@ class ModuleTest(unittest.TestCase):
         
         self.fail()
     
+    @patch('moray._module._logger.exception', raise_mock)
     def test_run_3(self):
         error_msg = '"{0}" is not "str" type.'.format(_module._METHOD)
         
@@ -78,6 +84,7 @@ class ModuleTest(unittest.TestCase):
             
             self.fail()
     
+    @patch('moray._module._logger.exception', raise_mock)
     def test_run_4(self):
         
         msg = {}
@@ -91,6 +98,7 @@ class ModuleTest(unittest.TestCase):
         
         obj.run()
     
+    @patch('moray._module._logger.exception', raise_mock)
     def test_run_5(self):
         
         msg = {}
@@ -104,6 +112,7 @@ class ModuleTest(unittest.TestCase):
         
         obj.run()
     
+    @patch('moray._module._logger.exception', raise_mock)
     def test_run_6(self):
         
         msg = {}
@@ -117,6 +126,7 @@ class ModuleTest(unittest.TestCase):
         
         obj.run()
     
+    @patch('moray._module._logger.exception', raise_mock)
     def test_run_7(self):
         error_msg = 'not correct "method".'
         
