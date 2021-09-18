@@ -250,6 +250,11 @@ def unexpose(ws):
         ws (geventwebsocket.websocket.WebSocket): WebSocket接続オブジェクト
     """
     
+    # exposeされたJavaScript関数がない場合は終了
+    if not ws in _js_funcs:
+        return
+    
+    # exposeされたJavaScript関数を登録解除
     js_funcs =_js_funcs[ws]
     del _js_funcs[ws]
     

@@ -807,9 +807,7 @@ class ModuleTest(unittest.TestCase):
             try:
                 _module.unexpose('ws4')
             except Exception as e:
-                return
-            
-            self.fail()
+                self.fail()
     
     def test_unexpose_4(self):
         js_funcs = {
