@@ -3,12 +3,13 @@ moray初期化処理
 morayが提供するAPIのInterface
 
 ToDo:
-    エラー処理デコレータ作成・テスト
     デフォルトログハンドラ: logging.getLogger('moray')
 """
 
-import logging
+import logging, os
+from functools import wraps
 
+from moray import _checker
 from moray.exception import ConfigurationError
 
 # ==================================================
@@ -30,24 +31,24 @@ def _error_handle(logger, can_exit = False):
     
     Raises:
         ConfigurationError: チェックエラー
-    
-    ToDo:
-        エラー時のアプリ終了
-        テスト時のモック化
     """
     
     if not type(logger) is logging.Logger:
         raise ConfigurationError('"logger" is not "logging.Logger" type.')
+    _checker.check_bool(can_exit, 'can_exit')
     
     def impl(func):
         if not callable(func):
             raise ConfigurationError('"moray._error_handle" can only be used for "function".')
         
+        @wraps(func)
         def wrapper(*args, **dict):
             try:
                 return func(*args, **dict)
             except Exception as e:
                 logger.exception(e.args[0])
+                if can_exit:
+                    os._exit(0)
         return wrapper
     return impl
 
