@@ -1,16 +1,19 @@
-import unittest
+import logging, unittest
 from unittest.mock import patch, MagicMock
 
 import moray
 from moray import _config
 from moray._browser import chrome
-from moray.exception import ConfigurationError
+from moray.exception import ConfigurationError, MorayRuntimeError
 
 class Class():
     pass
 
 def _FUNC():
     pass
+
+def _FUNC_RAISE():
+    raise Exception('test error')
 
 _INT = 5
 _FLOAT = 3.14
@@ -323,3 +326,71 @@ class MorayTest_expose(unittest.TestCase):
             moray.expose(_FUNC)
         except Exception as e:
             self.fail()
+
+@patch('moray.os._exit', MagicMock())
+class MorayTest_error_handle(unittest.TestCase):
+    
+    def test_error_handle_1(self):
+        
+        error_msg = '"logger" is not "logging.Logger" type.'
+        
+        for target in None, _INT, _FLOAT, _STR, _BOOL, _LIST, _TUPLE, _DICT, _CLASS, _FUNC:
+            try:
+                moray._error_handle(target)
+            except Exception as e:
+                self.assertIs(type(e), ConfigurationError)
+                self.assertEqual(e.args[0], error_msg)
+                continue
+            
+            self.fail()
+    
+    def test_error_handle_2(self):
+        
+        error_msg = '"can_exit" is not "bool" type.'
+        logger = logging.getLogger(__name__)
+        
+        for target in None, _INT, _FLOAT, _STR, _LIST, _TUPLE, _DICT, _CLASS, _FUNC:
+            try:
+                moray._error_handle(logger, target)
+            except Exception as e:
+                self.assertIs(type(e), MorayRuntimeError)
+                self.assertEqual(e.args[0], error_msg)
+                continue
+            
+            self.fail()
+    
+    def test_error_handle_3(self):
+        
+        error_msg = '"moray._error_handle" can only be used for "function".'
+        logger = logging.getLogger(__name__)
+        
+        for target in None, _INT, _FLOAT, _STR, _BOOL, _LIST, _TUPLE, _DICT, _CLASS:
+            try:
+                moray._error_handle(logger)(target)
+            except Exception as e:
+                self.assertIs(type(e), ConfigurationError)
+                self.assertEqual(e.args[0], error_msg)
+                continue
+            
+            self.fail()
+    
+    def test_error_handle_4(self):
+        
+        logger = logging.getLogger(__name__)
+        
+        for func in _FUNC, _FUNC_RAISE:
+            for target in True, False:
+                try:
+                    moray._error_handle(logger, target)(func)()
+                except Exception as e:
+                    self.fail()
+    
+    def test_error_handle_5(self):
+        
+        logger = logging.getLogger(__name__)
+        
+        for func in _FUNC, _FUNC_RAISE:
+            try:
+                moray._error_handle(logger)(func)()
+            except Exception as e:
+                self.fail()
