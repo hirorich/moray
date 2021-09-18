@@ -5,7 +5,6 @@
 import subprocess
 
 from moray._browser import chrome
-from moray.exception import SupportError
 
 CHROME = chrome.name
 
