@@ -1,5 +1,4 @@
 from sample_module import sub_module
-
 import moray
 
 # main

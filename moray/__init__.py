@@ -52,6 +52,19 @@ def _error_handle(logger, can_exit = False):
         return wrapper
     return impl
 
+# ロガーにハンドラーが設定されていない場合StreamHandlerを設定
+_logger = logging.getLogger(__name__)
+if not _logger.hasHandlers():
+    _format = '[%(asctime)s][%(levelname)s] %(message)s (at %(name)s:%(lineno)s)'
+    _formatter = logging.Formatter(_format)
+    
+    _handler = logging.StreamHandler()
+    _handler.setLevel(logging.DEBUG)
+    _handler.setFormatter(_formatter)
+    
+    _logger.addHandler(_handler)
+    _logger.setLevel(logging.DEBUG)
+
 # ==================================================
 # morayが提供するAPIのInterface
 # ==================================================
