@@ -1,3 +1,8 @@
+import positioning_window from '/moray/core/window_position'
+
+// 画面サイズ・位置変更
+positioning_window();
+
 // WebSocketオブジェクト
 let ws;
 

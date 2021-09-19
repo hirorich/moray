@@ -14,7 +14,7 @@ import moray
 from moray import _config, _module
 from moray._module import py
 
-_root_module_static = pkg_resources.resource_filename('moray', r'_module\static')
+_root_static_module = pkg_resources.resource_filename('moray', r'_module\static')
 
 app = bottle.Bottle()
 _websockets=[]
@@ -32,6 +32,17 @@ def run_check():
     
     return 'Success'
 
+@app.route('/moray/core/window_position')
+def window_position_script():
+    """
+    画面サイズ・位置を変更するJavaScriptを生成
+    
+    Returns:
+        画面サイズ・位置を変更するJavaScript
+    """
+    
+    return py.render_window_position()
+
 @app.route('/moray/py/<py_module>.js')
 def py_module_script(py_module):
     """
@@ -43,8 +54,8 @@ def py_module_script(py_module):
     
     return py.render_js_module(py_module)
 
-@app.route('/moray/static/<core_module>')
-def core_module_script(core_module):
+@app.route('/moray/static/<static_module>')
+def static_module_script(static_module):
     """
     静的jsモジュールを生成
     
@@ -52,7 +63,7 @@ def core_module_script(core_module):
         静的jsモジュール
     """
     
-    return bottle.static_file('{0}.js'.format(core_module), root=_root_module_static)
+    return bottle.static_file('{0}.js'.format(static_module), root=_root_static_module)
 
 @app.route('/moray.js')
 def moray_script():
@@ -63,7 +74,7 @@ def moray_script():
         JavaScript関数を公開するためのjsモジュール
     """
     
-    return bottle.static_file('moray.js', root=_root_module_static)
+    return bottle.static_file('moray.js', root=_root_static_module)
 
 @app.route('/moray/ws', apply=[websocket])
 def bottle_websocket(ws):
