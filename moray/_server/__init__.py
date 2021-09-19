@@ -7,7 +7,6 @@ ToDo:
 """
 
 import bottle, logging, pkg_resources, os, socket, time
-from bottle import HTTPResponse
 from bottle.ext.websocket import GeventWebSocketServer, websocket
 from threading import Thread
 
@@ -42,10 +41,7 @@ def py_module_script(py_module):
         JavaScriptからPythonを呼び出すためのjsモジュール
     """
     
-    body = py.render(py_module)
-    res = HTTPResponse(status=200, body=body)
-    res.set_header('Content-type', 'text/javascript')
-    return res
+    return py.render_js_module(py_module)
 
 @app.route('/moray/static/<core_module>')
 def core_module_script(core_module):

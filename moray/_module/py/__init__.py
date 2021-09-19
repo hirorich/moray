@@ -3,9 +3,15 @@
 呼び出し用ESモジュール(JavaScript)の生成
 """
 
+from bottle import HTTPResponse
+from functools import wraps
 from jinja2 import PackageLoader, Environment
 
 _expose_module = {}
+
+_loader = PackageLoader(package_name='moray._module.py', package_path='template')
+_env = Environment(loader=_loader)
+_template_js_module = _env.get_template(name='js_module.js')
 
 def register(func):
     """
@@ -38,7 +44,28 @@ def call(module, func_name, args):
     func = _expose_module[module][func_name]
     return func(*args)
 
-def render(module):
+def _js_renderer(func):
+    """
+    デコレータ
+    JavaScriptのヘッダー情報を付与
+    
+    Attributes:
+        func (func): JavaScriptレンダリング関数
+    
+    Returns:
+        HTTPResponse: ヘッダー情報が付与されたJavaScript
+    """
+    
+    @wraps(func)
+    def wrapper(*args, **dict):
+        body = func(*args, **dict)
+        res = HTTPResponse(status=200, body=body)
+        res.set_header('Content-type', 'text/javascript')
+        return res
+    return wrapper
+
+@_js_renderer
+def render_js_module(module):
     """
     テンプレートからJavaScriptを生成
     
@@ -49,8 +76,6 @@ def render(module):
         str: 生成されたJavaScript
     """
     
+    # 公開したPython関数名からモジュール作成
     list_func_name = list(_expose_module[module].keys())
-    
-    loader = PackageLoader(package_name='moray._module.py', package_path='template')
-    template = Environment(loader=loader).get_template(name='js_module.js')
-    return template.render(module=module, list_func_name=list_func_name)
+    return _template_js_module.render(module=module, list_func_name=list_func_name)
