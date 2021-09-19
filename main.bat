@@ -6,5 +6,6 @@ cd %~dp0
 rem é¿çs
 call .venv\Scripts\activate.bat
 python main.py
+echo %errorlevel%
 
 pause
