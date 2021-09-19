@@ -15,7 +15,7 @@ import moray
 from moray import _config, _module
 from moray._module import py
 
-root_module_js = pkg_resources.resource_filename('moray', r'_module\js')
+_root_module_static = pkg_resources.resource_filename('moray', r'_module\static')
 
 app = bottle.Bottle()
 _websockets=[]
@@ -37,7 +37,6 @@ def run_check():
 def py_module_script(py_module):
     """
     JavaScriptからPythonを呼び出すためのjsモジュールを生成
-    生成したモジュールを返却
     
     Returns:
         JavaScriptからPythonを呼び出すためのjsモジュール
@@ -48,29 +47,27 @@ def py_module_script(py_module):
     res.set_header('Content-type', 'text/javascript')
     return res
 
-@app.route('/moray/js/<core_module>')
+@app.route('/moray/static/<core_module>')
 def core_module_script(core_module):
     """
-    生成したjsモジュール内で呼び出されるjsモジュールを生成
-    生成したモジュールを返却
+    静的jsモジュールを生成
     
     Returns:
-        生成したjsモジュール内で呼び出されるjsモジュール
+        静的jsモジュール
     """
     
-    return bottle.static_file('{0}.js'.format(core_module), root=root_module_js)
+    return bottle.static_file('{0}.js'.format(core_module), root=_root_module_static)
 
 @app.route('/moray.js')
 def moray_script():
     """
-    生成したjsモジュール内で呼び出されるjsモジュールを生成
-    生成したモジュールを返却
+    JavaScript関数を公開するためのjsモジュールを生成
     
     Returns:
-        生成したjsモジュール内で呼び出されるjsモジュール
+        JavaScript関数を公開するためのjsモジュール
     """
     
-    return bottle.static_file('moray.js', root=root_module_js)
+    return bottle.static_file('moray.js', root=_root_module_static)
 
 @app.route('/moray/ws', apply=[websocket])
 def bottle_websocket(ws):
