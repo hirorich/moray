@@ -48,7 +48,7 @@ def _error_handle(logger, can_exit = False):
             except Exception as e:
                 logger.exception(e.args[0])
                 if can_exit:
-                    os._exit(0)
+                    os._exit(1)
         return wrapper
     return impl
 
@@ -94,8 +94,8 @@ def run(
         port (int, optional): サーバのポート番号
         browser (str, optional): 使用するブラウザ
         cmdline_args (list<str>, optional): ブラウザの起動引数
-        position (tuple<int, int>, optional): ブラウザを開いた際の位置
-        size (tuple<int, int>, optional): ブラウザを開いた際のサイズ
+        position (tuple<int, int>, optional): ブラウザを開いた際の位置(x, y)
+        size (tuple<int, int>, optional): ブラウザを開いた際のサイズ(x, y)
     
     Raises:
         ConfigurationError: チェックエラー
