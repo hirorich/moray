@@ -8,18 +8,23 @@ const component = {
         'nomal_exception': nomal_exception,
     },
     template: `
-<div class="container">
-    <div class="row">
-        <div class="col-6">
-            <nomal></nomal>
-        </div>
-        <div class="col-6">
-            <nomal_exception></nomal_exception>
-        </div>
+<div class="row">
+    <div class="col-6">
+        <nomal></nomal>
+    </div>
+    <div class="col-6">
+        <nomal_exception></nomal_exception>
     </div>
 </div>
-<div><a href="/error/">異常データ送信系</a></div>
-<div><a href="/unexposed_module/">公開されていないモジュール</a></div>
+<div class="row">
+    <div class="col-6">
+    <div><a href="/table/">No WebSocket Page</a></div>
+    </div>
+    <div class="col-6">
+        <div><a href="/error/">異常データ送信系</a></div>
+        <div><a href="/unexposed_module/">公開されていないモジュール</a></div>
+    </div>
+</div>
 `
 };
 
