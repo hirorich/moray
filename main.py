@@ -1,5 +1,6 @@
-import moray
 from sample_module import sub_module
+
+import moray
 
 # main
 if __name__ == "__main__":
