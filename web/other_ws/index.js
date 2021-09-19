@@ -16,16 +16,6 @@ const component = {
         <nomal_exception></nomal_exception>
     </div>
 </div>
-<div class="row">
-    <div class="col-6">
-    <div><a href="/other_ws/">Other WebSocket Page</a></div>
-    <div><a href="/table/">No WebSocket Page</a></div>
-    </div>
-    <div class="col-6">
-        <div><a href="/error/">異常データ送信系</a></div>
-        <div><a href="/unexposed_module/">公開されていないモジュール</a></div>
-    </div>
-</div>
 `
 };
 
@@ -39,7 +29,7 @@ let log_msg = function(msg) {
 };
 expose(log_msg);
 
-let raise_js_exception = function() {
+let raise_js_exception2 = function() {
     throw "JavaScript Error"
 };
-expose(raise_js_exception)
+expose(raise_js_exception2)
