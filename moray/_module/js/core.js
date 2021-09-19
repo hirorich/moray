@@ -1,74 +1,90 @@
+// WebSocketオブジェクト
 let ws;
-let call_promise = {};
-let unsended_data = [];
+
+// 公開したJavaScript関数
 let exposed_js = {};
 
-let _init = function() {
-    if (!window.WebSocket) {
-        if (window.MozWebSocket) {
-            window.WebSocket = window.MozWebSocket;
+// 呼び出し中データ
+let calling_promise = {};
+
+// 未送信データ
+let unsended_data = [];
+
+// ブラウザがWebSocketに対応しているかチェック
+if (!window.WebSocket) {
+    if (window.MozWebSocket) {
+        window.WebSocket = window.MozWebSocket;
+    } else {
+        console.log("Your browser doesn't support WebSockets.");
+    }
+}
+
+// WebSocket接続
+let host = window.location.host;
+ws = new WebSocket('ws://' + host + '/moray/ws');
+ws.onopen = function(evt) {
+
+    // 未送信データを送信
+    let data_length = unsended_data.length;
+    for(let i = 0; i < data_length; i++){
+        ws.send(unsended_data.pop());
+    }
+}
+ws.onmessage = function(evt) {
+    let data = JSON.parse(evt.data);
+
+    // 呼び出したPythonからの返却値の場合
+    if (data.return) {
+
+        // IDを確認
+        if (!(data.id in calling_promise)) {
+            return;
+        }
+
+        // 成否結果をPromise結果に登録
+        if (data.is_success) {
+            calling_promise[data.id].resolve(data.result);
         } else {
-            console.log("Your browser doesn't support WebSockets.");
+            calling_promise[data.id].reject(data.result);
         }
-    }
+        delete calling_promise[data.id];
 
-    let host = window.location.host;
-    ws = new WebSocket('ws://' + host + '/moray/ws');
-    ws.onopen = function(evt) {
-        let data_length = unsended_data.length;
-        for(let i = 0; i < data_length; i++){
-            ws.send(unsended_data.pop());
+    // PythonからのJavScript関数呼び出しの場合
+    } else {
+        let result;
+        let is_success = true;
+
+        // JavScript関数呼び出し
+        try {
+            result = exposed_js[data.func_name].apply(null, data.args);
+            if (typeof result === "undefined") {
+                result = null;
+            }
+        } catch (e) {
+            is_success = false;
+            result = 'calling javascript function is faild.';
+            console.log(e);
         }
+
+        // JavScript関数の実行結果を返却
+        let return_data = JSON.stringify({
+            id: data.id,
+            method: 'return',
+            result: result,
+            is_success: is_success
+        });
+        ws.send(return_data);
     }
-    ws.onmessage = function(evt) {
-        let data = JSON.parse(evt.data);
-
-        if (data.return) {
-            if (!(data.id in call_promise)) {
-                return;
-            }
-
-            if (data.is_success) {
-                call_promise[data.id].resolve(data.result);
-            } else {
-                call_promise[data.id].reject(data.result);
-            }
-            delete call_promise[data.id];
-
-        } else {
-            let result;
-            let is_success = true;
-            try {
-                result = exposed_js[data.func_name].apply(null, data.args);
-                if (typeof result === "undefined") {
-                    result = null;
-                }
-            } catch (e) {
-                is_success = false;
-                result = 'calling javascript function is faild.';
-                console.log(e);
-            }
-
-            let return_data = JSON.stringify({
-                id: data.id,
-                method: 'return',
-                result: result,
-                is_success: is_success
-            });
-            ws.send(return_data);
-        }
-    }
-    ws.onclose = function(evt) {
-        console.log('ws.onclose');
-    }
-};
-_init();
+}
+ws.onclose = function(evt) {
+    console.log('ws.onclose');
+}
 
 // 一意なIDを作成
 let uniqueId = function(digits) {
     var strong = typeof digits !== 'undefined' ? digits : 1000;
     return Date.now().toString(16) + Math.floor(strong * Math.random()).toString(16);
-};
+}
 
 // メッセージ送信
 let send_msg = function(data) {
@@ -77,17 +93,21 @@ let send_msg = function(data) {
     } else {
         unsended_data.push(data);
     }
-};
+}
 
 // pythonを呼び出す
 let call_python = function(module, func_name, args) {
+
+    // 一意なIDを作成
     let id = uniqueId();
 
+    // 引数をリスト化
     let arg_array = [];
     for(let i = 0; i < args.length; i++){
         arg_array.push(args[i]);
     }
 
+    // 送信文字列作成
     let data = JSON.stringify({
         id: id,
         method: 'call',
@@ -95,18 +115,22 @@ let call_python = function(module, func_name, args) {
         func_name: func_name,
         args: arg_array
     });
-    
+
+    // Python側にデータ送信
     return new Promise((reso, reje) => {
         send_msg(data);
-        call_promise[id] = {resolve: reso, reject: reje};
+        calling_promise[id] = {resolve: reso, reject: reje};
     });
-};
+}
 
-// javascriptの関数を公開
+// JavaScriptの関数を公開
 let expose = function(func) {
+
+    // 公開するJavaScriptの関数を登録
     let func_name = func.name;
     exposed_js[func_name] = func;
 
+    // JavaScriptの関数をPython側に公開
     let data = JSON.stringify({
         method: 'expose',
         func_name: func_name
