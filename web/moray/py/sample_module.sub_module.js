@@ -3,19 +3,19 @@
 
 export let get_module_name = function() {
     return new Promise((resolve, reject) => {
-        resolve('stub: get_module_name');
+        resolve('sample_module.sub_module');
     });
 }
 
 export let sum = function() {
     return new Promise((resolve, reject) => {
-        resolve(9);
+        resolve(13);
     });
 }
 
 export let sum_list = function() {
     return new Promise((resolve, reject) => {
-        resolve(64);
+        resolve(20);
     });
 }
 
@@ -27,7 +27,7 @@ export let log_msg = function() {
 
 export let return_two = function() {
     return new Promise((resolve, reject) => {
-        resolve([6, 4]);
+        resolve([8, 5]);
     });
 }
 
@@ -39,7 +39,7 @@ export let return_list = function() {
 
 export let return_tuple = function() {
     return new Promise((resolve, reject) => {
-        resolve([9, 8, 7]);
+        resolve([4, 5, 6]);
     });
 }
 

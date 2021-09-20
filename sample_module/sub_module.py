@@ -65,11 +65,11 @@ def return_two(a, b):
         b (int): 入力値2
     
     Return:
-        a (int): 入力値1
         b (int): 入力値2
+        a (int): 入力値1
     """
     
-    return a, b
+    return b, a
 
 @moray.expose
 def return_list():
