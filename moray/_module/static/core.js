@@ -71,7 +71,7 @@ ws.onmessage = function(evt) {
             }
         } catch (e) {
             is_success = false;
-            result = 'calling javascript function is faild.';
+            result = 'called javascript function is faild.';
             console.log(e);
         }
 
@@ -86,7 +86,6 @@ ws.onmessage = function(evt) {
     }
 }
 ws.onclose = function(evt) {
-    console.log('ws.onclose');
     moray.onclose(null);
 }
 
