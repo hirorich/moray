@@ -29,7 +29,7 @@ def log_to_logger(func):
         # リクエスト情報ログ出力
         request = bottle.request
         request_str = '{0} {1} {2}'.format(request.remote_addr, request.method, request.urlparts.path)
-        _logger.debug('Request: {0}'.format(request_str))
+        _logger.info('Request: {0}'.format(request_str))
         
         try:
             # app.routeを設定した関数を呼び出す
@@ -44,16 +44,16 @@ def log_to_logger(func):
                 
                 # ログレベルを分けてログ出力
                 if status_code < 400:
-                    _logger.debug(response_str)
+                    _logger.info(response_str)
                 else:
                     if request.urlparts.path == r'/favicon.ico':
                         _logger.warn(response_str)
                     else:
-                        _logger.critical(response_str)
+                        _logger.error(response_str)
                 
                 # 返り値がない場合のログ出力
             elif result is None:
-                _logger.debug('No Response: {0}'.format(request_str))
+                _logger.info('No Response: {0}'.format(request_str))
                 
                 # 返り値の型が正常でない場合のログ出力
             else:
@@ -136,7 +136,7 @@ def bottle_websocket(ws):
         ws (geventwebsocket.websocket.WebSocket): WebSocket接続オブジェクト
     """
     
-    _logger.debug('WebSocket is opened.')
+    _logger.info('WebSocket is opened.')
     
     _websockets.append(ws)
     while True:
@@ -230,12 +230,12 @@ def _onclose_websocket(ws):
         ws (geventwebsocket.websocket.WebSocket): WebSocket接続オブジェクト
     """
     
-    _logger.debug('closing WebSocket.')
+    _logger.info('closing WebSocket.')
     
     # websocketに紐づくメモリを解放
     _module.unexpose(ws)
     _websockets.remove(ws)
-    _logger.debug('WebSocket is closed.')
+    _logger.info('WebSocket is closed.')
     
     # 接続がない場合は終了
     check_exist_websocket()
@@ -249,5 +249,5 @@ def check_exist_websocket():
     if len(_websockets) == 0:
         time.sleep(3)
         if len(_websockets) == 0:
-            _logger.debug('exiting moray application.')
+            _logger.info('exiting moray application.')
             os._exit(0)

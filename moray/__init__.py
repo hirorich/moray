@@ -59,11 +59,11 @@ if not _logger.hasHandlers():
     _formatter = logging.Formatter(_format)
     
     _handler = logging.StreamHandler()
-    _handler.setLevel(logging.DEBUG)
+    _handler.setLevel(logging.INFO)
     _handler.setFormatter(_formatter)
     
     _logger.addHandler(_handler)
-    _logger.setLevel(logging.DEBUG)
+    _logger.setLevel(logging.INFO)
 
 # ==================================================
 # morayが提供するAPIのInterface

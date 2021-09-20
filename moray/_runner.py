@@ -40,7 +40,7 @@ def open_browser():
     # サーバ起動確認
     connect_timeout = 3.0
     read_timeout = 5.0
-    _logger.debug('confirming server running.')
+    _logger.info('confirming server running.')
     try:
         res = requests.get(
             _server.generate_confirm_running_url(),
@@ -56,7 +56,7 @@ def open_browser():
     url = _server.generate_start_url()
     
     # 初期ページ表示
-    _logger.debug('opening start page.')
+    _logger.info('opening start page.')
     _browser.open(_config.browser, url, _config.cmdline_args)
     
     # 接続がない場合は終了
