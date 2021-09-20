@@ -1,3 +1,3 @@
-import {expose} from '/moray/static/core'
+import {moray} from '/moray/static/core'
 
-export {expose};
+export default moray;

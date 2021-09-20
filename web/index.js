@@ -1,6 +1,6 @@
 import nomal from '/nomal.js'
 import nomal_exception from '/nomal_exception.js'
-import {expose} from '/moray.js'
+import moray from '/moray.js'
 
 const component = {
     components: {
@@ -37,9 +37,13 @@ let log_msg = function(msg) {
     console.log(msg);
     return 'JavaScript: ' + msg
 };
-expose(log_msg);
+moray.expose(log_msg);
 
 let raise_js_exception = function() {
     throw "JavaScript Error"
 };
-expose(raise_js_exception)
+moray.expose(raise_js_exception)
+
+moray.onclose = function(evt) {
+    alert('moray closed');
+};

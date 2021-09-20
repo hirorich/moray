@@ -3,6 +3,10 @@ import positioning_window from '/moray/core/window_position'
 // 画面サイズ・位置変更
 positioning_window();
 
+// morayオブジェクト
+let moray = new Object();
+moray.onclose = function(evt){};
+
 // WebSocketオブジェクト
 let ws;
 
@@ -20,7 +24,7 @@ if (!window.WebSocket) {
     if (window.MozWebSocket) {
         window.WebSocket = window.MozWebSocket;
     } else {
-        console.log("Your browser doesn't support WebSockets.");
+        throw new Error("Your browser doesn't support WebSockets.");
     }
 }
 
@@ -83,6 +87,7 @@ ws.onmessage = function(evt) {
 }
 ws.onclose = function(evt) {
     console.log('ws.onclose');
+    moray.onclose(null);
 }
 
 // 一意なIDを作成
@@ -129,7 +134,7 @@ let call_python = function(module, func_name, args) {
 }
 
 // JavaScriptの関数を公開
-let expose = function(func) {
+moray.expose = function(func) {
 
     // 公開するJavaScriptの関数を登録
     let func_name = func.name;
@@ -143,4 +148,4 @@ let expose = function(func) {
     send_msg(data);
 }
 
-export {call_python, expose};
+export {call_python, moray};
