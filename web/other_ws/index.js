@@ -1,19 +1,20 @@
-import nomal from '/nomal.js'
-import nomal_exception from '/nomal_exception.js'
-import moray from '/moray.js'
+import nomal_case01 from '/test_case/nomal_case01.js'
+import error_case03 from '/test_case/error_case03.js'
 
 const component = {
     components: {
-        'nomal': nomal,
-        'nomal_exception': nomal_exception,
+        'nomal_case01': nomal_case01,
+        'error_case03': error_case03,
     },
     template: `
-<div class="row">
-    <div class="col-6">
-        <nomal></nomal>
+<div class="container">
+    <div class="row">正常系</div>
+    <div class="row">
+        <div class="col-lg-3"><nomal_case01 /></div>
     </div>
-    <div class="col-6">
-        <nomal_exception></nomal_exception>
+    <div class="row">異常系</div>
+    <div class="row">
+        <div class="col-lg-3"><error_case03 /></div>
     </div>
 </div>
 `
@@ -22,14 +23,3 @@ const component = {
 const Vue = window.Vue;
 const app = Vue.createApp(component);
 app.mount('#app');
-
-let log_msg = function(msg) {
-    console.log(msg);
-    return 'JavaScript: ' + msg
-};
-moray.expose(log_msg);
-
-let raise_js_exception2 = function() {
-    throw "JavaScript Error"
-};
-moray.expose(raise_js_exception2)

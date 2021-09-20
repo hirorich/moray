@@ -8,22 +8,23 @@ export default {
     data() {
         return {
             result: 0,
-            title: '引数：なし、返却値：なし',
+            title: '非公開JavaScript呼び出し',
         }
     },
     template: `
 <base_case
     :result="result"
     :title="title"
+    :annotation="annotation"
     @on-test="test()
 "></base_case>
     `,
     methods: {
         test() {
             log_msg().then(
-                v => {this.result = 1;}
-            ).catch(
                 v => {this.result = -1;}
+            ).catch(
+                v => {this.result = 1;}
             );
         },
     },
