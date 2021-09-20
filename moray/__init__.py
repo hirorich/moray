@@ -42,28 +42,15 @@ def _error_handle(logger, can_exit = False):
             raise ConfigurationError('"moray._error_handle" can only be used for "function".')
         
         @wraps(func)
-        def wrapper(*args, **dict):
+        def wrapper(*args, **kwargs):
             try:
-                return func(*args, **dict)
+                return func(*args, **kwargs)
             except Exception as e:
                 logger.exception(e.args[0])
                 if can_exit:
                     os._exit(1)
         return wrapper
     return impl
-
-# ロガーにハンドラーが設定されていない場合StreamHandlerを設定
-_logger = logging.getLogger(__name__)
-if not _logger.hasHandlers():
-    _format = '[%(asctime)s][%(levelname)s] %(message)s (at %(name)s:%(lineno)s)'
-    _formatter = logging.Formatter(_format)
-    
-    _handler = logging.StreamHandler()
-    _handler.setLevel(logging.INFO)
-    _handler.setFormatter(_formatter)
-    
-    _logger.addHandler(_handler)
-    _logger.setLevel(logging.INFO)
 
 # ==================================================
 # morayが提供するAPIのInterface

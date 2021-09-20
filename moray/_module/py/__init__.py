@@ -60,8 +60,8 @@ def _js_renderer(func):
     """
     
     @wraps(func)
-    def wrapper(*args, **dict):
-        body = func(*args, **dict)
+    def wrapper(*args, **kwargs):
+        body = func(*args, **kwargs)
         res = HTTPResponse(status=200, body=body)
         res.set_header('Content-type', 'text/javascript')
         return res

@@ -22,9 +22,13 @@ _websockets=[]
 
 _logger = logging.getLogger(__name__)
 
-def log_to_logger(func):
+def _log_to_logger(func):
+    """
+    Bottleログ出力プラグイン
+    """
+    
     @wraps(func)
-    def wrapper(*args, **dict):
+    def wrapper(*args, **kwargs):
         
         # リクエスト情報ログ出力
         request = bottle.request
@@ -33,7 +37,7 @@ def log_to_logger(func):
         
         try:
             # app.routeを設定した関数を呼び出す
-            result = func(*args, **dict)
+            result = func(*args, **kwargs)
             
             # レスポンス情報ログ出力
             if isinstance(result, bottle.HTTPResponse):
@@ -70,7 +74,9 @@ def log_to_logger(func):
             # サーバ側に処理を任せるためにリスロー
             raise
     return wrapper
-app.install(log_to_logger)
+
+# Bottleログ出力プラグインインストール
+app.install(_log_to_logger)
 
 @app.route('/moray/confirm_running')
 def run_check():
@@ -183,7 +189,8 @@ def run():
         port = _config.port,
         reloader = False,
         debug = False,
-        server = GeventWebSocketServer
+        server = GeventWebSocketServer,
+        quiet = True
     )
 
 def generate_port(port):
