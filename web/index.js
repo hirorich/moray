@@ -46,7 +46,7 @@ const component = {
     </div>
     <div class="col-6">
         <div><a href="/error/">異常データ送信系</a></div>
-        <div><a href="/unexposed_module/">公開されていないモジュール</a></div>
+        <div><a href="/unexposed_module/">非公開モジュール(正常に画面が表示されない)</a></div>
     </div>
 </div>
 `
