@@ -8,6 +8,7 @@ ToDo:
 
 import bottle, logging, pkg_resources, os, socket, time
 from bottle.ext.websocket import GeventWebSocketServer, websocket
+from functools import wraps
 from threading import Thread
 
 import moray
@@ -21,6 +22,56 @@ _websockets=[]
 
 _logger = logging.getLogger(__name__)
 
+def log_to_logger(func):
+    @wraps(func)
+    def wrapper(*args, **dict):
+        
+        # リクエスト情報ログ出力
+        request = bottle.request
+        request_str = '{0} {1} {2}'.format(request.remote_addr, request.method, request.urlparts.path)
+        _logger.debug('Request: {0}'.format(request_str))
+        
+        try:
+            # app.routeを設定した関数を呼び出す
+            result = func(*args, **dict)
+            
+            # レスポンス情報ログ出力
+            if isinstance(result, bottle.HTTPResponse):
+                
+                # ステータスコード取得
+                status_code = result.status_code
+                response_str = 'Response: {0} {1}'.format(request_str, status_code)
+                
+                # ログレベルを分けてログ出力
+                if status_code < 400:
+                    _logger.debug(response_str)
+                else:
+                    if request.urlparts.path == r'/favicon.ico':
+                        _logger.warn(response_str)
+                    else:
+                        _logger.critical(response_str)
+                
+                # 返り値がない場合のログ出力
+            elif result is None:
+                _logger.debug('No Response: {0}'.format(request_str))
+                
+                # 返り値の型が正常でない場合のログ出力
+            else:
+                _logger.warn('resonse is not "HTTPResponse" type or "None".')
+                _logger.warn('Response: {0} {1}'.format(request_str, 'xxx'))
+                
+                # サーバ側に処理を任せるためにそのまま返却
+                pass
+            
+            return result
+        except Exception as e:
+            _logger.exception(e.args[0])
+            
+            # サーバ側に処理を任せるためにリスロー
+            raise
+    return wrapper
+app.install(log_to_logger)
+
 @app.route('/moray/confirm_running')
 def run_check():
     """
@@ -30,7 +81,7 @@ def run_check():
         固定メッセージページ
     """
     
-    return 'Success'
+    return
 
 @app.route('/moray/core/window_position')
 def window_position_script():
