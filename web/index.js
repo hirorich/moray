@@ -1,4 +1,3 @@
-import nomal_exception from '/nomal_exception.js'
 import moray from '/moray.js'
 import nomal_case01 from '/test_case/nomal_case01.js'
 import nomal_case02 from '/test_case/nomal_case02.js'
@@ -7,10 +6,11 @@ import nomal_case04 from '/test_case/nomal_case04.js'
 import nomal_case05 from '/test_case/nomal_case05.js'
 import nomal_case06 from '/test_case/nomal_case06.js'
 import nomal_case07 from '/test_case/nomal_case07.js'
+import error_case01 from '/test_case/error_case01.js'
+import error_case02 from '/test_case/error_case02.js'
 
 const component = {
     components: {
-        'nomal_exception': nomal_exception,
         'nomal_case01': nomal_case01,
         'nomal_case02': nomal_case02,
         'nomal_case03': nomal_case03,
@@ -18,23 +18,25 @@ const component = {
         'nomal_case05': nomal_case05,
         'nomal_case06': nomal_case06,
         'nomal_case07': nomal_case07,
+        'error_case01': error_case01,
+        'error_case02': error_case02,
     },
     template: `
 <div class="container">
-<div class="row">正常系</div>
-<div class="row">
-    <div class="col-lg-3"><nomal_case01 /></div>
-    <div class="col-lg-3"><nomal_case02 /></div>
-    <div class="col-lg-3"><nomal_case03 /></div>
-    <div class="col-lg-3"><nomal_case04 /></div>
-    <div class="col-lg-3"><nomal_case05 /></div>
-    <div class="col-lg-3"><nomal_case06 /></div>
-    <div class="col-lg-3"><nomal_case07 /></div>
-</div>
-</div>
-<div class="row">
-    <div class="col-6">
-        <nomal_exception></nomal_exception>
+    <div class="row">正常系</div>
+    <div class="row">
+        <div class="col-lg-3"><nomal_case01 /></div>
+        <div class="col-lg-3"><nomal_case02 /></div>
+        <div class="col-lg-3"><nomal_case03 /></div>
+        <div class="col-lg-3"><nomal_case04 /></div>
+        <div class="col-lg-3"><nomal_case05 /></div>
+        <div class="col-lg-3"><nomal_case06 /></div>
+        <div class="col-lg-3"><nomal_case07 /></div>
+    </div>
+    <div class="row">異常系</div>
+    <div class="row">
+        <div class="col-lg-3"><error_case01 /></div>
+        <div class="col-lg-3"><error_case02 /></div>
     </div>
 </div>
 <div class="row">

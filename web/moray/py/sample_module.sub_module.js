@@ -43,14 +43,14 @@ export let return_tuple = function() {
     });
 }
 
-export let raise_js_exception = function() {
+export let raise_py_exception = function() {
     return new Promise((resolve, reject) => {
-        reject('error msg');
+        reject('called python function is faild.');
     });
 }
 
-export let raise_py_exception = function() {
+export let raise_js_exception = function() {
     return new Promise((resolve, reject) => {
-        reject('error msg');
+        reject('called python function is faild.');
     });
 }
