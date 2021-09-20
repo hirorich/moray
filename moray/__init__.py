@@ -46,8 +46,9 @@ def _error_handle(logger, can_exit = False):
             try:
                 return func(*args, **kwargs)
             except Exception as e:
-                logger.exception(e.args[0])
+                logger.exception('internal error has occurred.')
                 if can_exit:
+                    logger.error('exiting moray application.')
                     os._exit(1)
         return wrapper
     return impl
@@ -186,7 +187,7 @@ def run(
         })))
     except Exception as e:
         _logger.exception(e.args[0])
-        raise ConfigurationError(e.args[0]) from e
+        raise ConfigurationError(e.args[0])
     
     # サーバ起動・ブラウザ起動
     _runner.run()

@@ -69,7 +69,7 @@ def _log_to_logger(func):
             
             return result
         except Exception as e:
-            _logger.exception(e.args[0])
+            _logger.exception('inner Bottle server catched exception.')
             
             # サーバ側に処理を任せるためにリスロー
             raise

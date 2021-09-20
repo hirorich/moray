@@ -148,9 +148,8 @@ def _call_py_func(module, func_name, args):
         result = py.call(module, func_name, args)
         return result, True
     except Exception as e:
-        _logger.exception(e.args[0])
-        
         result = 'called python function is faild.'
+        _logger.exception(result)
         return result, False
 
 def _create_js_func(ws, func_name):
