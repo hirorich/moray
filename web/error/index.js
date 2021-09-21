@@ -10,10 +10,10 @@ const component = {
 <div class="container">
     <div class="row">異常系</div>
     <div class="row">
-        <div class="col-lg-3 card"><error_case05 /></div>
+        <div class="col-lg-6 card"><error_case05 /></div>
     </div>
     <div class="row">
-        <div class="col-lg-3 card"><error_case06 /></div>
+        <div class="col-lg-6 card"><error_case06 /></div>
     </div>
 </div>
 `,

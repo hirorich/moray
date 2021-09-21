@@ -9,6 +9,7 @@ export default {
         return {
             result: 0,
             title: '異常データ送信',
+            annotation: 'ログに "internal error has occurred." が出力されること',
             send_data: '{"id": "ID"}',
         }
     },
@@ -16,6 +17,7 @@ export default {
 <base_case
     :result="result"
     :title="title"
+    :annotation="annotation"
     @on-test="test()
 "></base_case>
     `,
