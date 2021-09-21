@@ -56,7 +56,7 @@ def log_msg():
     print('end: log_msg')
 
 @moray.expose
-def log_msg3():
+def log_msg2():
     print('start: log_msg2')
     try:
         result = moray.js.log_msg2('Python: exposed')()
@@ -116,6 +116,15 @@ def raise_js_exception():
     except Exception as e:
         print(e.args[0])
         raise
+
+@moray.expose
+def raise_js_exception2():
+    try:
+        moray.js.raise_js_exception()()
+    except Exception as e:
+        r = '{0} {1}'.format(type(e), e.args[0])
+        print(r)
+        return r
 
 def not_expose():
     """

@@ -1,5 +1,5 @@
 import base_case from '/test_case/base.js'
-import {log_msg3} from '/moray/py/sample_module.sub_module.js'
+import {raise_js_exception2} from '/moray/py/sample_module.sub_module.js'
 
 export default {
     components: {
@@ -8,21 +8,20 @@ export default {
     data() {
         return {
             result: 0,
-            title: '非公開JavaScript呼び出し',
-            correct: "<class 'AttributeError'> '_CLASS' object has no attribute 'log_msg2'",
+            title: 'JavaScript側でエラー2',
+            correct: "<class 'moray.exception.MorayRuntimeError'> called javascript function is faild.",
         }
     },
     template: `
 <base_case
     :result="result"
     :title="title"
-    :annotation="annotation"
     @on-test="test()
 "></base_case>
     `,
     methods: {
         test() {
-            log_msg3().then(
+            raise_js_exception2().then(
                 v => {
                     if (v == this.correct) {
                         this.result = 1;

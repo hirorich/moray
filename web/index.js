@@ -8,6 +8,7 @@ import nomal_case06 from '/test_case/nomal_case06.js'
 import nomal_case07 from '/test_case/nomal_case07.js'
 import error_case01 from '/test_case/error_case01.js'
 import error_case02 from '/test_case/error_case02.js'
+import error_case03 from '/test_case/error_case03.js'
 
 const component = {
     components: {
@@ -20,6 +21,7 @@ const component = {
         'nomal_case07': nomal_case07,
         'error_case01': error_case01,
         'error_case02': error_case02,
+        'error_case03': error_case03,
     },
     template: `
 <div class="container">
@@ -37,6 +39,7 @@ const component = {
     <div class="row">
         <div class="col-lg-3 card"><error_case01 /></div>
         <div class="col-lg-3 card"><error_case02 /></div>
+        <div class="col-lg-3 card"><error_case03 /></div>
     </div>
     <div class="row">画面遷移</div>
     <div class="row">

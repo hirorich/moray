@@ -25,7 +25,7 @@ export let log_msg = function() {
     });
 }
 
-export let log_msg3 = function() {
+export let log_msg2 = function() {
     return new Promise((resolve, reject) => {
         resolve("<class 'AttributeError'> '_CLASS' object has no attribute 'log_msg2'");
     });
@@ -58,5 +58,11 @@ export let raise_py_exception = function() {
 export let raise_js_exception = function() {
     return new Promise((resolve, reject) => {
         reject('called python function is faild.');
+    });
+}
+
+export let raise_js_exception2 = function() {
+    return new Promise((resolve, reject) => {
+        resolve("<class 'moray.exception.MorayRuntimeError'> called javascript function is faild.");
     });
 }
