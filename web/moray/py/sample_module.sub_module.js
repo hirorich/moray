@@ -66,3 +66,9 @@ export let raise_js_exception2 = function() {
         resolve("<class 'moray.exception.MorayRuntimeError'> called javascript function is faild.");
     });
 }
+
+export let branch_thread = function() {
+    return new Promise((resolve, reject) => {
+        resolve(true);
+    });
+}

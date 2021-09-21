@@ -2,6 +2,8 @@
 expose機能の検証用
 """
 
+import threading
+
 import moray
 
 @moray.expose
@@ -125,6 +127,23 @@ def raise_js_exception2():
         r = '{0} {1}'.format(type(e), e.args[0])
         print(r)
         return r
+
+@moray.expose
+def branch_thread():
+    dd = {}
+    dd['result'] = False
+    
+    def func(dd):
+        try:
+            moray.js.log_msg('Python: exposed')
+        except:
+            dd['result'] = True
+    
+    th = threading.Thread(target=func, args=(dd,))
+    th.start()
+    th.join()
+    
+    return dd['result']
 
 def not_expose():
     """

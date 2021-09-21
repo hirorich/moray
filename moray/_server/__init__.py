@@ -152,12 +152,12 @@ def bottle_websocket(ws):
         
         # スレッドを分けて処理
         deamon_t = _module.WebsocketReact(ws, msg)
-        deamon_t.setDaemon(True)
+        deamon_t.setDaemon(False)
         deamon_t.start()
     
     # websocketが閉じられた際の処理
     deamon_t = Thread(target=_onclose_websocket, args=(ws,))
-    deamon_t.setDaemon(True)
+    deamon_t.setDaemon(False)
     deamon_t.start()
 
 @app.route('/')
