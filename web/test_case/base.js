@@ -4,14 +4,12 @@ export default {
         title: String,
     },
     template: `
-<div class="card">
-    <h6 class="card-title">{{title}}</h6>
-    <div class="card-body">
-        <button type="button" class="btn btn-primary" @click="$emit('onTest')">テスト実行</button>
-        <span v-if="result==1">〇</span>
-        <span v-else-if="result==-1">×</span>
-        <span v-else>－</span>
-    </div>
+<h6 class="card-title">{{title}}</h6>
+<div class="card-body">
+    <button type="button" class="btn btn-primary" @click="$emit('onTest')">テスト実行</button>
+    <span v-if="result==1">〇</span>
+    <span v-else-if="result==-1">×</span>
+    <span v-else>－</span>
 </div>
 `,
 };

@@ -1,5 +1,5 @@
 import base_case from '/test_case/base.js'
-import {log_msg} from '/moray/py/sample_module.sub_module.js'
+import {log_msg2} from '/moray/py/sample_module.sub_module.js'
 
 export default {
     components: {
@@ -9,6 +9,7 @@ export default {
         return {
             result: 0,
             title: '非公開JavaScript呼び出し',
+            correct: "<class 'AttributeError'> '_CLASS' object has no attribute 'log_msg2'",
         }
     },
     template: `
@@ -21,10 +22,16 @@ export default {
     `,
     methods: {
         test() {
-            log_msg().then(
-                v => {this.result = -1;}
+            log_msg2().then(
+                v => {
+                    if (v == this.correct) {
+                        this.result = 1;
+                    } else {
+                        this.result = -1;
+                    }
+                }
             ).catch(
-                v => {this.result = 1;}
+                v => {this.result = -1;}
             );
         },
     },

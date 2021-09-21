@@ -56,6 +56,18 @@ def log_msg():
     print('end: log_msg')
 
 @moray.expose
+def log_msg2():
+    print('start: log_msg2')
+    try:
+        result = moray.js.log_msg2('Python: exposed')()
+        print(result)
+        print('end: log_msg2')
+    except Exception as e:
+        r = '{0} {1}'.format(type(e), e.args[0])
+        print(r)
+        return r
+
+@moray.expose
 def return_two(a, b):
     """
     複数返却

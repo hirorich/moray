@@ -25,28 +25,47 @@ const component = {
 <div class="container">
     <div class="row">正常系</div>
     <div class="row">
-        <div class="col-lg-3"><nomal_case01 /></div>
-        <div class="col-lg-3"><nomal_case02 /></div>
-        <div class="col-lg-3"><nomal_case03 /></div>
-        <div class="col-lg-3"><nomal_case04 /></div>
-        <div class="col-lg-3"><nomal_case05 /></div>
-        <div class="col-lg-3"><nomal_case06 /></div>
-        <div class="col-lg-3"><nomal_case07 /></div>
+        <div class="col-lg-3 card"><nomal_case01 /></div>
+        <div class="col-lg-3 card"><nomal_case02 /></div>
+        <div class="col-lg-3 card"><nomal_case03 /></div>
+        <div class="col-lg-3 card"><nomal_case04 /></div>
+        <div class="col-lg-3 card"><nomal_case05 /></div>
+        <div class="col-lg-3 card"><nomal_case06 /></div>
+        <div class="col-lg-3 card"><nomal_case07 /></div>
     </div>
     <div class="row">異常系</div>
     <div class="row">
-        <div class="col-lg-3"><error_case01 /></div>
-        <div class="col-lg-3"><error_case02 /></div>
+        <div class="col-lg-3 card"><error_case01 /></div>
+        <div class="col-lg-3 card"><error_case02 /></div>
     </div>
-</div>
-<div class="row">
-    <div class="col-6">
-    <div><a href="/other_ws/">Other WebSocket Page</a></div>
-    <div><a href="/table/">No WebSocket Page</a></div>
-    </div>
-    <div class="col-6">
-        <div><a href="/error/">異常データ送信系</a></div>
-        <div><a href="/unexposed_module/">非公開モジュール(正常に画面が表示されない)</a></div>
+    <div class="row">画面遷移</div>
+    <div class="row">
+        <div class="col-lg-6 card">
+            <h6 class="card-title">別morayページ遷移</h6>
+            <div class="card-body">
+                <div><a href="/other_ws/">ページ遷移</a></div>
+            </div>
+        </div>
+        <div class="col-lg-6 card">
+            <h6 class="card-title">非morayページ遷移</h6>
+            <div class="card-body">
+                <div>別ウィンドウでない場合はサーバ終了</div>
+                <div><a href="/table/">ページ遷移</a></div>
+            </div>
+        </div>
+        <div class="col-lg-6 card">
+        <h6 class="card-title">異常データ送信系</h6>
+            <div class="card-body">
+                <div><a href="/error/">ページ遷移</a></div>
+            </div>
+        </div>
+        <div class="col-lg-6 card">
+            <h6 class="card-title">非公開モジュール(正常に画面が表示されない)</h6>
+            <div class="card-body">
+                <div>別ウィンドウでない場合はサーバ終了</div>
+                <div><a href="/unexposed_module/">ページ遷移</a></div>
+            </div>
+        </div>
     </div>
 </div>
 `

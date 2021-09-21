@@ -10,11 +10,11 @@ const component = {
 <div class="container">
     <div class="row">正常系</div>
     <div class="row">
-        <div class="col-lg-3"><nomal_case01 /></div>
+        <div class="col-lg-3 card"><nomal_case01 /></div>
     </div>
     <div class="row">異常系</div>
     <div class="row">
-        <div class="col-lg-3"><error_case03 /></div>
+        <div class="col-lg-3 card"><error_case03 /></div>
     </div>
 </div>
 `

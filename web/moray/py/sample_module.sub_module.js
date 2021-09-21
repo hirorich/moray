@@ -25,6 +25,12 @@ export let log_msg = function() {
     });
 }
 
+export let log_msg2 = function() {
+    return new Promise((resolve, reject) => {
+        resolve("<class 'AttributeError'> '_CLASS' object has no attribute 'log_msg2'");
+    });
+}
+
 export let return_two = function() {
     return new Promise((resolve, reject) => {
         resolve([8, 5]);
