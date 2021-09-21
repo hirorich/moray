@@ -1,24 +1,16 @@
 """
-moray初期化処理
 morayが提供するAPIのInterface
-
-ToDo:
-    デフォルトログハンドラ: logging.getLogger('moray')
 """
 
 import logging, os
 from functools import wraps
 
-from moray import _checker
+from moray import _checker, js
 from moray.exception import ConfigurationError
 
 # ==================================================
 # moray初期化処理
 # ==================================================
-
-class _CLASS():
-    pass
-js = _CLASS()
 
 def _error_handle(logger, can_exit = False):
     """

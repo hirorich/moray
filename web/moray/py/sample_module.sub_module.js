@@ -27,7 +27,7 @@ export let log_msg = function() {
 
 export let log_msg2 = function() {
     return new Promise((resolve, reject) => {
-        resolve("<class 'AttributeError'> '_CLASS' object has no attribute 'log_msg2'");
+        resolve("<class 'AttributeError'> module 'moray.js' has no attribute 'log_msg2'");
     });
 }
 

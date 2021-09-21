@@ -1,9 +1,6 @@
 """
 morayで起動する内部サーバ設定
 http://localhost:port/
-
-ToDo:
-    サーバ起動後のログ出力
 """
 
 import bottle, logging, pkg_resources, os, socket, time
@@ -178,9 +175,6 @@ def page(path = 'index.html'):
 def run():
     """
     サーバ起動
-    
-    ToDo:
-        サーバ起動後のログ出力
     """
     
     _logger.debug('running moray on "{0}:{1}".'.format(_config.host, _config.port))

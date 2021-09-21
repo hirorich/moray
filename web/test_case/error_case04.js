@@ -9,7 +9,7 @@ export default {
         return {
             result: 0,
             title: '非公開JavaScript呼び出し',
-            correct: "<class 'AttributeError'> '_CLASS' object has no attribute 'log_msg2'",
+            correct: "<class 'AttributeError'> module 'moray.js' has no attribute 'log_msg2'",
         }
     },
     template: `
