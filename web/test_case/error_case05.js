@@ -1,5 +1,5 @@
 import base_case from '/test_case/base.js'
-import {log_msg2} from '/moray/py/sample_module.sub_module.js'
+import {log_msg3} from '/moray/py/sample_module.sub_module.js'
 
 export default {
     components: {
@@ -22,7 +22,7 @@ export default {
     `,
     methods: {
         test() {
-            log_msg2().then(
+            log_msg3().then(
                 v => {
                     if (v == this.correct) {
                         this.result = 1;

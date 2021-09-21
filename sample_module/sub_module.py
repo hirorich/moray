@@ -56,7 +56,7 @@ def log_msg():
     print('end: log_msg')
 
 @moray.expose
-def log_msg2():
+def log_msg3():
     print('start: log_msg2')
     try:
         result = moray.js.log_msg2('Python: exposed')()

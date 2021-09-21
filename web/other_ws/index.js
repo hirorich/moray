@@ -1,10 +1,10 @@
 import nomal_case01 from '/test_case/nomal_case01.js'
-import error_case03 from '/test_case/error_case03.js'
+import error_case05 from '/test_case/error_case05.js'
 
 const component = {
     components: {
         'nomal_case01': nomal_case01,
-        'error_case03': error_case03,
+        'error_case05': error_case05,
     },
     template: `
 <div class="container">
@@ -14,7 +14,7 @@ const component = {
     </div>
     <div class="row">異常系</div>
     <div class="row">
-        <div class="col-lg-3 card"><error_case03 /></div>
+        <div class="col-lg-3 card"><error_case05 /></div>
     </div>
 </div>
 `
