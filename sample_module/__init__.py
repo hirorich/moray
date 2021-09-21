@@ -3,7 +3,7 @@ https://blog.hiros-dot.net/?p=10328
 """
 
 import logging
-from logging import FileHandler, Formatter, DEBUG, INFO, ERROR
+from logging import FileHandler, StreamHandler, Formatter, DEBUG, INFO, ERROR
 from pathlib import Path
 
 _UTF_8 = 'utf-8'
@@ -30,8 +30,13 @@ _error_handler = FileHandler(_error_log, encoding=_UTF_8)
 _error_handler.setLevel(ERROR)
 _error_handler.setFormatter(_formatter)
 
+_stream_handler = StreamHandler()
+_stream_handler.setLevel(ERROR)
+_stream_handler.setFormatter(_formatter)
+
 logger = logging.getLogger('moray')
 logger.addHandler(_debug_handler)
 logger.addHandler(_info_handler)
 logger.addHandler(_error_handler)
+logger.addHandler(_stream_handler)
 logger.setLevel(DEBUG)
