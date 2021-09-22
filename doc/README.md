@@ -22,6 +22,9 @@
 ### [unittest](Python/unittest.md)
 - JUnitに触発されたPythonのユニットテストフレームワーク
 
+### [logging](Python/logging.md)
+- ソフトウェアが実行されているときに起こったイベントを追跡するための標準モジュール
+
 ### [jinja2](Python/jinja2.md)
 - 高速で表現力豊かな拡張可能なテンプレート・エンジン
 
