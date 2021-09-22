@@ -1,6 +1,5 @@
 # decorator
-- 別の関数を返す関数
-- 通常 @wrapper 構文で関数変換として適用される
+- 通常 @wrapper 構文で関数変換として適用される別の関数を返す関数
 
 ***
 ## 目次
@@ -11,16 +10,20 @@
 
 ***
 ## ざっくりとした概要
-- 別の関数を返す関数
-- 通常 @wrapper 構文で関数変換として適用される
-- 関数定義は一つ以上のデコレータ式でラップ可能
-- 同様にクラスもデコレート可能
+通常 @wrapper 構文で関数変換として適用される別の関数を返す関数
+
+関数定義は一つ以上のデコレータ式でラップ可能
+
+同様にクラスもデコレート可能
 
 ***
 ## サンプルコード
 - 引数なしデコレータ
 ``` python
+from functools import wraps
+
 def deco(f):
+    @wraps(f)
     def wrapper(*args, **kwargs):
         print('--start--')
         f(*args, **kwargs)
@@ -41,8 +44,11 @@ Hello Decorator
 
 - 引数ありデコレータ
 ``` python
+from functools import wraps
+
 def deco(a, b):
     def _deco(f):
+        @wraps(f)
         def wrapper(*args, **kwargs):
             print('a: {0}, b: {1}'.format(a, b))
             f(*args, **kwargs)
@@ -62,7 +68,10 @@ Hello Decorator
 
 - 返却値ありデコレータ
 ``` python
+from functools import wraps
+
 def deco(f):
+    @wraps(f)
     def wrapper(*args, **kwargs):
         return f(*args, **kwargs) * 3
     return wrapper
@@ -77,6 +86,54 @@ print(func(1, 2))
 9
 ```
 
+- @wraps(f) 適用あり
+``` python
+from functools import wraps
+
+def deco(f):
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        """
+        wrapper docstring
+        """
+        return f(*args, **kwargs)
+    return wrapper
+
+@deco
+def func(msg):
+    """
+    func docstring
+    """
+    pass
+
+print(func.__doc__)
+```
+```
+func docstring
+```
+
+- @wraps(f) 適用なし
+``` python
+def deco(f):
+    def wrapper(*args, **kwargs):
+        """
+        wrapper docstring
+        """
+        return f(*args, **kwargs)
+    return wrapper
+
+@deco
+def func(msg):
+    """
+    func docstring
+    """
+    pass
+
+print(func.__doc__)
+```
+```
+wrapper docstring
+```
 ***
 ## API仕様
 

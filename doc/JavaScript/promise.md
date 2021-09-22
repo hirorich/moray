@@ -11,12 +11,14 @@
 
 ***
 ## ざっくりとした概要
-- Promiseとは、JavaScriptにおいて非同期処理の操作が完了したときに結果を返すオブジェクト
-  - 非同期処理とは、ある処理が実行されてから終わるまで待たずに次に控えている別の処理を行うこと
-- 処理を待機することや、その結果に応じて次の処理をすること約束することができる
-- 詳細は以下を参照
-  - [Promise](https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/Promise)
-  - [Promiseを使う](https://developer.mozilla.org/ja/docs/Web/JavaScript/Guide/Using_promises)
+Promiseとは、JavaScriptにおいて非同期処理の操作が完了したときに結果を返すオブジェクト
+- 非同期処理とは、ある処理が実行されてから終わるまで待たずに次に控えている別の処理を行うこと
+
+処理を待機することや、その結果に応じて次の処理をすること約束することができる
+
+詳細は以下を参照
+- [Promise](https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/Promise)
+- [Promiseを使う](https://developer.mozilla.org/ja/docs/Web/JavaScript/Guide/Using_promises)
 
 ***
 ## サンプルコード

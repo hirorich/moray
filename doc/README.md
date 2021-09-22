@@ -26,8 +26,7 @@
 - 高速で表現力豊かな拡張可能なテンプレート・エンジン
 
 ### [decorator](Python/decorator.md)
-- 別の関数を返す関数
-- 通常 @wrapper 構文で関数変換として適用される
+- 通常 @wrapper 構文で関数変換として適用される別の関数を返す関数
 
 ***
 ## JavaScript
