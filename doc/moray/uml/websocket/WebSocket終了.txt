@@ -1,0 +1,5 @@
+|Python|
+#Red:サーバ終了;
+|JavaScript|
+:WebSocketクローズ;
+:moray.onclose|
