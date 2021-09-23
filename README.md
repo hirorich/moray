@@ -1,9 +1,18 @@
 # moray
-
-***
-## moray とは
 - eelを参考にしたJavaScriptによるGUI作成ライブラリ
 - Python関数をモジュール単位で管理する
+
+***
+## 目次
+- [経緯](#経緯)
+- [開発環境構築](#開発環境構築)
+- [使用ライブラリ一覧](#使用ライブラリ一覧)
+- [使用方法](#使用方法)
+  - [JavaScriptからPython関数呼び出し](#javascriptからpython関数呼び出し)
+  - [PythonからJavaScript関数呼び出し](#pythonからjavascript関数呼び出し)
+  - [moray起動](#moray起動)
+  - [終了検知](#終了検知)
+- [参考](#参考)
 
 ***
 ## 経緯
@@ -12,7 +21,7 @@
 - よって、モジュールも含めて管理することで名前被りを防ぐよう対応する
 
 ***
-## 環境構築
+## 開発環境構築
 ### Python
 - python v.3.9
   - 環境作成
@@ -33,7 +42,7 @@
     ```
 
 ***
-## 使用ライブラリ
+## 使用ライブラリ一覧
 ### Python
 - [bottle](https://pypi.org/project/bottle/)
   - MIT License
@@ -74,7 +83,7 @@
 
 ***
 ## 使用方法
-### JavascriptからPython関数呼び出し
+### JavaScriptからPython関数呼び出し
 - 呼び出されたPython関数はメインスレッドでないため注意
 - py_module.py
   ``` python
@@ -105,7 +114,7 @@
   py_func('arg')
   ```
 
-### PythonからJavascript関数呼び出し
+### PythonからJavaScript関数呼び出し
 - 呼び出されたJavaScript関数内でさらにPython関数を呼び出した場合、呼び出し元のPython関数と別スレッドであるため注意
 - js_module.js
   ``` javascript
@@ -142,6 +151,10 @@
       # 同一スレッド内であれば別関数からも呼び出し可能
       other_func()
   ```
+
+### moray起動
+
+### 終了検知
 
 ***
 ## 参考
