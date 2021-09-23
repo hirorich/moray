@@ -5,13 +5,14 @@
 ***
 ## 目次
 - [経緯](#経緯)
-- [開発環境構築](#開発環境構築)
-- [使用ライブラリ一覧](#使用ライブラリ一覧)
+- [使用Pyrhonライブラリ一覧](#使用pythonライブラリ一覧)
+- [フォルダ構造](#フォルダ構造)
 - [使用方法](#使用方法)
+  - [アプリ起動](#アプリ起動)
   - [JavaScriptからPython関数呼び出し](#javascriptからpython関数呼び出し)
   - [PythonからJavaScript関数呼び出し](#pythonからjavascript関数呼び出し)
-  - [moray起動](#moray起動)
   - [終了検知](#終了検知)
+- [開発環境構築](#開発環境構築)
 - [参考](#参考)
 
 ***
@@ -21,68 +22,28 @@
 - よって、モジュールも含めて管理することで名前被りを防ぐよう対応する
 
 ***
-## 開発環境構築
-### Python
-- python v.3.9
-  - 環境作成
-    ``` bash
-    py -3.9 -m venv .venv
-    ```
-  - 環境切り替え
-    ``` bash
-    .venv\Scripts\activate
-    ```
-  - pip最新化
-    ``` bash
-    python -m pip install --upgrade pip
-    ```
-  - 使用ライブラリを一括インストール
-    ``` bash
-    pip install -r requirements.txt
-    ```
-
-***
-## 使用ライブラリ一覧
-### Python
+## 使用Pythonライブラリ一覧
+各ライブラリの詳細は [使用ライブラリを個別にインストールする場合](#使用ライブラリを個別にインストールする場合) を確認
 - [bottle](https://pypi.org/project/bottle/)
   - MIT License
-  - 軽量Webフレームワーク
-  - 以下を実行することでインストール
-    ``` bash
-    pip install bottle
-    ```
 - [bottle-websocket](https://pypi.org/project/bottle-websocket/)
   - MIT License
-  - bottleでWebSocketを使用するためのプラグイン
-  - 以下を実行することでインストール
-    ``` bash
-    pip install bottle-websocket
-    ```
 - [gevent](https://pypi.org/project/gevent/)
   - MIT License
-  - bottle-websocketの依存ライブラリ
-  - bottle-websocketインストール時にインストール
 - [gevent-websocket](https://pypi.org/project/gevent-websocket/)
   - [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0)
-  - bottle-websocketの依存ライブラリ
-  - bottle-websocketインストール時にインストール
 - [requests](https://pypi.org/project/requests/)
   - [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0)
-  - サーバ起動確認に使用
-  - 以下を実行することでインストール
-    ``` bash
-    pip install requests
-    ```
 - [Jinja2](https://pypi.org/project/Jinja2/)
   - BSD License (BSD-3-Clause)
-  - テンプレートエンジン
-  - 以下を実行することでインストール
-    ``` bash
-    pip install Jinja2
-    ```
+
+***
+## フォルダ構造
 
 ***
 ## 使用方法
+### アプリ起動
+
 ### JavaScriptからPython関数呼び出し
 - 呼び出されたPython関数はメインスレッドでないため注意
 - py_module.py
@@ -152,8 +113,6 @@
       other_func()
   ```
 
-### moray起動
-
 ### 終了検知
 - 不測の事態によりmorayが終了してしまった場合 moray.onclose によって終了したことを検知可能
 - js_module.js
@@ -166,6 +125,64 @@
       alert('moray closed');
   }
   ```
+
+***
+## 開発環境構築
+### Python
+- 環境作成
+  ``` bash
+  py -3.9 -m venv .venv
+  ```
+- 環境切り替え
+  ``` bash
+  .venv\Scripts\activate
+  ```
+- pip最新化
+  ``` bash
+  python -m pip install --upgrade pip
+  ```
+- 使用ライブラリを一括インストール
+  ``` bash
+  pip install -r requirements.txt
+  ```
+
+### 使用ライブラリを個別にインストールする場合
+- [bottle](https://pypi.org/project/bottle/)
+  - MIT License
+  - 軽量Webフレームワーク
+  - 以下を実行することでインストール
+    ``` bash
+    pip install bottle
+    ```
+- [bottle-websocket](https://pypi.org/project/bottle-websocket/)
+  - MIT License
+  - bottleでWebSocketを使用するためのプラグイン
+  - 以下を実行することでインストール
+    ``` bash
+    pip install bottle-websocket
+    ```
+- [gevent](https://pypi.org/project/gevent/)
+  - MIT License
+  - bottle-websocketの依存ライブラリ
+  - bottle-websocketインストール時にインストール
+- [gevent-websocket](https://pypi.org/project/gevent-websocket/)
+  - [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0)
+  - bottle-websocketの依存ライブラリ
+  - bottle-websocketインストール時にインストール
+- [requests](https://pypi.org/project/requests/)
+  - [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0)
+  - サーバ起動確認に使用
+  - 以下を実行することでインストール
+    ``` bash
+    pip install requests
+    ```
+- [Jinja2](https://pypi.org/project/Jinja2/)
+  - BSD License (BSD-3-Clause)
+  - テンプレートエンジン
+  - 以下を実行することでインストール
+    ``` bash
+    pip install Jinja2
+    ```
 
 ***
 ## 参考
