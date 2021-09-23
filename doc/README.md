@@ -38,5 +38,8 @@
 
 ***
 ## moray
+### [基本設計](moray/basic_design_doc.md)
+- 機能一覧とPython・JavaScript間の相互呼び出し
+
 ### [送受信jsonデータ定義](moray/json_format.md)
 - WebSocketで送受信するjsonデータの定義
