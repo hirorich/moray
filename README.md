@@ -1,22 +1,15 @@
 # moray
+
 ***
 ## moray とは
-- eelを参考にしたGUI部品
-- 関数をパッケージごとに管理
-- 使用想定ライブラリ
-  - Python
-    - bottle 0.12
-  - JavaScript
-    - React 17
-  - CSS
-    - Bootstrap 5
+- eelを参考にしたJavaScriptによるGUI作成ライブラリ
+- Python関数をモジュール単位で管理する
 
 ***
 ## 経緯
-- pythonによるGUI作成のライブラリのうち、eelがjavascriptでGUIを作成できるため愛用していた
-- しかし、eelによるpythonの関数管理は関数名により行われるため、名前かぶりがないように管理するのが面倒
-- よって、モジュールも含めて管理することで名前被りを防ぐよう対応したい
-- またeel.jsも管理したpythonモジュールごとに分割し、javascriptモジュールとして読み込めるようにしたい
+- PythonによるGUI作成のライブラリのうち、eelがJavaScriptでGUIを作成できるため愛用していた
+- しかし、eelによるPythonの関数管理は関数名により行われるため、名前かぶりがないように管理するのが面倒
+- よって、モジュールも含めて管理することで名前被りを防ぐよう対応する
 
 ***
 ## 環境構築
@@ -80,43 +73,74 @@
     ```
 
 ***
-## 使用方法(想定)
-### Javascript -> Python
+## 使用方法
+### JavascriptからPython関数呼び出し
+- 呼び出されたPython関数はメインスレッドでないため注意
 - py_module.py
   ``` python
   import moray
   
-  # jsから呼び出せるよう登録
+  # jsから呼び出せるようデコレータにより登録
   @moray.expose
-  def py_func():
-      ・・・
+  def py_func(arg):
+      return 'result'
   ```
 - js_module.js
   ``` javascript
-  // 登録されたpythonモジュール読み込み
-  import {py_func} from '/moray/py/py_module'
+  // 登録されたPython関数読み込み
+  // import {関数名} from '/moray/py/モジュール名.js'
+  import {py_func} from '/moray/py/py_module.js'
   
-  py_func().then(
-      value => ・・・
+  // 返却値を取得する場合
+  // Promiseオブジェクトのthen, catchにより取得
+  py_func('arg').then(
+      // 正常終了時は実行結果が返却される
+      v => ・・・
+  ).catch(
+      // 異常終了時は例外メッセージが返却される
+      v => ・・・
   )
+
+  // 実行結果の取得が不要な場合は 関数名(引数) で良い
+  py_func('arg')
   ```
 
-### Python -> Javascript
+### PythonからJavascript関数呼び出し
+- 呼び出されたJavaScript関数内でさらにPython関数を呼び出した場合、呼び出し元のPython関数と別スレッドであるため注意
 - js_module.js
   ``` javascript
-  import {expose} from 'moray/js'
+  import moray from '/moray.js'
+  import {py_func} from '/moray/py/py_module.js'
   
   // pythonから呼び出せるよう登録
-  const js_func() = function() {
-    ・・・
+  const js_func(arg) = function() {
+      return 'result'
   }
-  expose(js_func)
+  moray.expose(js_func)
+  
+  // Python関数呼び出し
+  py_func()
   ```
 - py_module.py
   ``` python
-  from moray.js import js_module
+  import moray
   
-  js_module.js_func()
+  def other_func():
+      # 実行結果の取得が不要な場合は moray.js.関数名(引数) で良い
+      moray.js.js_func('arg')
+  
+  @moray.expose
+  def py_func():
+      
+      try:
+          # 実行結果は moray.js.関数名(引数)() で取得
+          result = moray.js.js_func('arg')()
+      except Exception as e:
+          # 異常終了時は実行結果取得時に例外発生
+          print(e)
+      
+      # 同一スレッド内であれば別関数からも呼び出し可能
+      other_func()
   ```
 
 ***
