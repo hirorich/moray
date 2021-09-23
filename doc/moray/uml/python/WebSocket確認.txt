@@ -1,0 +1,10 @@
+start
+if (WebSocket数 = 0) then (no)
+  end
+else (yes)
+  :スリープ;
+  if (WebSocket数 = 0) then (no)
+    end
+  else (yes)
+    :アプリ終了;
+    kill

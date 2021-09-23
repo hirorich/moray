@@ -1,0 +1,5 @@
+start
+:送信データ作成;
+:WebSocket送信;
+:<color:green>実行結果取得関数</color>返却;
+end

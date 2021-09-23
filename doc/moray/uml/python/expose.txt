@@ -1,0 +1,4 @@
+start
+:JavaScript関数名取得;
+:JavaScript関数名登録;
+end
