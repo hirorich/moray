@@ -155,6 +155,17 @@
 ### moray起動
 
 ### 終了検知
+- 不測の事態によりmorayが終了してしまった場合 moray.onclose によって終了したことを検知可能
+- js_module.js
+  ``` javascript
+  import moray from '/moray.js'
+  
+  // moray.onclose に関数を登録する
+  // evt には null が渡される
+  moray.onclose = function(evt) {
+      alert('moray closed');
+  }
+  ```
 
 ***
 ## 参考
