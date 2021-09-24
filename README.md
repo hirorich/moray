@@ -26,14 +26,14 @@
 ***
 ## 使用Pythonライブラリ一覧
 各ライブラリの詳細は [使用ライブラリを個別にインストールする場合](#使用ライブラリを個別にインストールする場合) を確認
-- [bottle](https://pypi.org/project/bottle/)
-  - MIT License
 - [bottle-websocket](https://pypi.org/project/bottle-websocket/)
   - MIT License
-- [gevent](https://pypi.org/project/gevent/)
+- [bottle](https://pypi.org/project/bottle/)
   - MIT License
 - [gevent-websocket](https://pypi.org/project/gevent-websocket/)
   - [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0)
+- [gevent](https://pypi.org/project/gevent/)
+  - MIT License
 - [requests](https://pypi.org/project/requests/)
   - [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0)
 - [Jinja2](https://pypi.org/project/Jinja2/)
@@ -231,13 +231,6 @@
   ```
 
 ### 使用ライブラリを個別にインストールする場合
-- [bottle](https://pypi.org/project/bottle/)
-  - MIT License
-  - 軽量Webフレームワーク
-  - 以下を実行することでインストール
-    ``` bash
-    pip install bottle
-    ```
 - [bottle-websocket](https://pypi.org/project/bottle-websocket/)
   - MIT License
   - bottleでWebSocketを使用するためのプラグイン
@@ -245,13 +238,18 @@
     ``` bash
     pip install bottle-websocket
     ```
-- [gevent](https://pypi.org/project/gevent/)
+- [bottle](https://pypi.org/project/bottle/)
   - MIT License
+  - 軽量Webフレームワーク
   - bottle-websocketの依存ライブラリ
   - bottle-websocketインストール時にインストール
 - [gevent-websocket](https://pypi.org/project/gevent-websocket/)
   - [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0)
   - bottle-websocketの依存ライブラリ
+  - bottle-websocketインストール時にインストール
+- [gevent](https://pypi.org/project/gevent/)
+  - MIT License
+  - gevent-websocketの依存ライブラリ
   - bottle-websocketインストール時にインストール
 - [requests](https://pypi.org/project/requests/)
   - [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0)
