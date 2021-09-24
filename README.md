@@ -9,6 +9,7 @@
 - [フォルダ構造](#フォルダ構造)
 - [使用方法](#使用方法)
   - [アプリ起動](#アプリ起動)
+  - [起動オプション](#起動オプション)
   - [JavaScriptからPython関数呼び出し](#javascriptからpython関数呼び出し)
   - [PythonからJavaScript関数呼び出し](#pythonからjavascript関数呼び出し)
   - [終了検知](#終了検知)
@@ -43,6 +44,59 @@
 ***
 ## 使用方法
 ### アプリ起動
+- 初期表示ページ index.html を含む全てのフロントエンドファイルを web ディレクトリに配置した場合、以下のように起動する
+  ``` python
+  import moray
+  
+  moray.run('web')
+  ```
+
+### 起動オプション
+- moray.run() には、キーワード引数として以下の追加オプションを渡すことができる
+  - start_page
+    - str 型（デフォルト：''）
+    - 初期表示するページ
+      - '' の場合は index.html が表示される
+  - host
+    - str 型（デフォルト：'localhost'）
+    - サーバのホスト
+      - 'localhost' または IPアドレス の形式で指定可能
+  - port
+    - int 型（デフォルト：0）
+    - サーバのポート番号
+      -  0 または 1025以上65535以下の値 が指定可能
+  - browser
+    - str 型（デフォルト：'chrome'）
+    - 使用するブラウザ
+      - 'chrome' のみサポート
+  - cmdline_args
+    - list<str> 型（デフォルト：[]）
+    - ブラウザの起動引数
+      - chromeの場合以下引数が自動的に指定される
+        - '--disable-http-cache' '--incognito'
+  - position
+    - tuple<int, int> 型（デフォルト：None）
+    - ブラウザを開いた際の位置(x, y)
+      - 位置を指定しない場合は None を指定する
+  - size
+    - tuple<int, int> 型（デフォルト：None）
+    - ブラウザを開いた際のサイズ(x, y)
+      - サイズを指定しない場合は None を指定する
+- 使用例
+  ``` python
+  import moray
+  
+  moray.run(
+      'web',
+      start_page = 'index.html',
+      host = 'localhost',
+      port = 8000,
+      browser = 'chrome',
+      cmdline_args = [--disable-dev-tools],
+      position = (400, 200),
+      size = (800, 600)
+  )
+  ```
 
 ### JavaScriptからPython関数呼び出し
 - 呼び出されたPython関数はメインスレッドでないため注意
