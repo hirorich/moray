@@ -27,17 +27,17 @@
 ## 使用Pythonライブラリ一覧
 各ライブラリの詳細は [使用ライブラリを個別にインストールする場合](#使用ライブラリを個別にインストールする場合) を確認
 - [bottle-websocket](https://pypi.org/project/bottle-websocket/)
-  - MIT License
+  - [MIT License](https://github.com/zeekay/bottle-websocket/blob/master/LICENSE)
 - [bottle](https://pypi.org/project/bottle/)
-  - MIT License
+  - [MIT License](https://bottlepy.org/docs/dev/#license)
 - [gevent-websocket](https://pypi.org/project/gevent-websocket/)
-  - [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0)
+  - [Apache License 2.0](https://gitlab.com/noppo/gevent-websocket/-/blob/master/LICENSE)
 - [gevent](https://pypi.org/project/gevent/)
-  - MIT License
+  - [MIT License](https://github.com/gevent/gevent/blob/master/LICENSE)
 - [requests](https://pypi.org/project/requests/)
-  - [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0)
+  - [Apache License 2.0](https://github.com/psf/requests/blob/main/LICENSE)
 - [Jinja2](https://pypi.org/project/Jinja2/)
-  - BSD License (BSD-3-Clause)
+  - [BSD License (BSD-3-Clause)](https://github.com/pallets/jinja/blob/main/LICENSE.rst)
 
 ***
 ## フォルダ構造
