@@ -61,7 +61,7 @@
   
   moray.run('web')
   ```
-    - http://localhost:動的に割り当てられたポート番号/index.html が表示される
+    - http://<span>localhost:動的に割り当てられたポート番号</span>/index.html が表示される
 
 ### 起動オプション
 - moray.run() には、キーワード引数として以下の追加オプションを渡すことができる
