@@ -13,6 +13,7 @@
   - [JavaScriptからPython関数呼び出し](#javascriptからpython関数呼び出し)
   - [PythonからJavaScript関数呼び出し](#pythonからjavascript関数呼び出し)
   - [終了検知](#終了検知)
+  - [ログ取得](#ログ取得)
 - [開発環境構築](#開発環境構築)
 - [参考](#参考)
 
@@ -189,6 +190,24 @@
   moray.onclose = function(evt) {
       alert('moray closed');
   }
+  ```
+
+### ログ取得
+- moray 内では logging モジュールによるログ出力を行うため、 moray モジュールに対してロガーを設定することでロギング可能
+- ロガー設定例
+  ``` python
+  import logging
+  
+  format = '[%(asctime)s][%(levelname)s] %(message)s (at %(name)s:%(lineno)s)'
+  formatter = logging.Formatter(format)
+  
+  handler = logging.StreamHandler()
+  handler.setLevel(logging.DEBUG)
+  handler.setFormatter(formatter)
+  
+  logger = logging.getLogger('moray')
+  logger.addHandler(handler)
+  logger.setLevel(logging.INFO)
   ```
 
 ***
