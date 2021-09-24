@@ -22,12 +22,14 @@
 ### [unittest](Python/unittest.md)
 - JUnitに触発されたPythonのユニットテストフレームワーク
 
+### [logging](Python/logging.md)
+- ソフトウェアが実行されているときに起こったイベントを追跡するための標準モジュール
+
 ### [jinja2](Python/jinja2.md)
 - 高速で表現力豊かな拡張可能なテンプレート・エンジン
 
 ### [decorator](Python/decorator.md)
-- 別の関数を返す関数
-- 通常 @wrapper 構文で関数変換として適用される
+- 通常 @wrapper 構文で関数変換として適用される別の関数を返す関数
 
 ***
 ## JavaScript
@@ -36,5 +38,14 @@
 
 ***
 ## moray
+### [基本設計](moray/basic_design_doc.md)
+- 機能一覧とPython・JavaScript間の相互呼び出し
+
+### 詳細設計
+- [Python編](moray/detailed_design_doc/dd_python.md)
+  - Python側の詳細設計
+- [JavaScript編](moray/detailed_design_doc/dd_javascript.md)
+  - JavaScript側の詳細設計
+
 ### [送受信jsonデータ定義](moray/json_format.md)
 - WebSocketで送受信するjsonデータの定義

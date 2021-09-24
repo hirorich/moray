@@ -1,0 +1,5 @@
+start
+:対象Python関数取得;
+:Python関数実行;
+:実行結果送信;
+end

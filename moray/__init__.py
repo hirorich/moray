@@ -2,10 +2,59 @@
 morayが提供するAPIのInterface
 """
 
-from moray import _browser, _checker, _config, _runner, _server
+import logging, os
+from functools import wraps
+
+from moray import _checker, js
+from moray.exception import ConfigurationError
+
+# ==================================================
+# moray初期化処理
+# ==================================================
+
+def _error_handle(logger, can_exit = False):
+    """
+    デコレータ
+    エラー時にログを出力
+    
+    Attributes:
+        logger (logging.Logger): ロガー
+        can_exit (bool, optional): エラー時にアプリ終了
+    
+    Raises:
+        ConfigurationError: チェックエラー
+    """
+    
+    if not type(logger) is logging.Logger:
+        raise ConfigurationError('"logger" is not "logging.Logger" type.')
+    _checker.check_bool(can_exit, 'can_exit')
+    
+    def impl(func):
+        if not callable(func):
+            raise ConfigurationError('"moray._error_handle" can only be used for "function".')
+        
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            try:
+                return func(*args, **kwargs)
+            except Exception as e:
+                logger.exception('internal error has occurred.')
+                if can_exit:
+                    logger.error('exiting moray application.')
+                    os._exit(1)
+        return wrapper
+    return impl
+
+# ==================================================
+# morayが提供するAPIのInterface
+# ==================================================
+
+import json
+
+from moray import _browser, _config, _runner, _server
 from moray._browser import chrome
 from moray._module import py
-from moray.exception import ConfigurationError, SupportError
+from moray.exception import SupportError
 
 _ROOT = 'root'
 _START_PAGE = 'start_page'
@@ -16,9 +65,7 @@ _SIZE = 'size'
 _HOST = 'host'
 _PORT = 'port'
 
-class _CLASS():
-    pass
-js = _CLASS()
+_logger = logging.getLogger(__name__)
 
 def run(
         root,
@@ -40,8 +87,11 @@ def run(
         port (int, optional): サーバのポート番号
         browser (str, optional): 使用するブラウザ
         cmdline_args (list<str>, optional): ブラウザの起動引数
-        position (tuple<int, int>, optional): ブラウザを開いた際の位置
-        size (tuple<int, int>, optional): ブラウザを開いた際のサイズ
+        position (tuple<int, int>, optional): ブラウザを開いた際の位置(x, y)
+        size (tuple<int, int>, optional): ブラウザを開いた際のサイズ(x, y)
+    
+    Raises:
+        ConfigurationError: チェックエラー
     
     Examples:
         >>> import moray
@@ -116,8 +166,20 @@ def run(
         _config.cmdline_args = cmdline_args
         _config.position = position
         _config.size = size
+        
+        _logger.debug('moray running configuration: {0}'.format(json.dumps({
+            _ROOT: _config.root,
+            _START_PAGE: _config.start_page,
+            _HOST: _config.host,
+            _PORT: _config.port,
+            _BROWSER: _config.browser,
+            _CMDLINE_ARGS: _config.cmdline_args,
+            _POSITION:  _config.position,
+            _SIZE: _config.size
+        })))
     except Exception as e:
-        raise ConfigurationError(e.args[0]) from e
+        _logger.exception(e.args[0])
+        raise ConfigurationError(e.args[0])
     
     # サーバ起動・ブラウザ起動
     _runner.run()
@@ -134,9 +196,10 @@ def expose(func):
         ConfigurationError: 型チェックエラー
     """
     
-    if callable(func):
-        py.register(func)
-    else:
+    if not callable(func):
         raise ConfigurationError('"moray.expose" can only be used for "function".')
+    
+    py.register(func)
+    _logger.debug('exposed Python function: {0}.{1}'.format(func.__module__, func.__name__))
     
     return func

@@ -1,0 +1,27 @@
+left to right direction
+
+actor "Python" as py
+actor "公開されたPython関数" as py_ex
+py_ex -|> py
+
+actor "JavaScript" as js
+actor "公開されたJavaScript関数" as js_ex
+js <|- js_ex
+
+rectangle moray {
+  usecase "ブラウザ起動" as browser
+  usecase "Python関数公開" as ex_py
+  usecase "JavaScript関数呼び出し" as ca_js
+  usecase "Python関数呼び出し" as ca_py
+  usecase "JavaScript関数公開" as ex_js
+  usecase "終了検知" as close
+}
+
+py --> browser
+py --> ex_py
+py --> ca_js
+ca_js ..> js_ex
+ex_js <-- js
+ca_py <-- js
+py_ex <.. ca_py
+close ..> js

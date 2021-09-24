@@ -1,0 +1,14 @@
+start
+:受信データパース;
+if (Python実行結果) then (yes)
+  if (正常終了) then (yes)
+    :Promise.resolve;
+  else (no)
+    :Promise.reject;
+  endif
+else (no)
+  :対象JavaScript関数取得;
+  :JavaScript関数実行;
+  :実行結果送信;
+endif
+end

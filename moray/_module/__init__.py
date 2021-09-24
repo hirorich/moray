@@ -1,13 +1,9 @@
 """
 呼び出す関数を管理
 呼び出す・呼び出される関数を制御
-
-ToDo:
-    受信データの型チェック(str, 一部tuple)
-    例外処理・ログ出力・エラー通知
 """
 
-import json, random, time
+import json, logging, random, threading, time
 from datetime import datetime
 
 import moray
@@ -26,97 +22,113 @@ _ARGS = 'args'
 _RESULT = 'result'
 _IS_SUCCESS = 'is_success'
 
+_js_funcs ={}
 _call_result = {}
 
-def websocket_react(ws, msg):
+_logger = logging.getLogger(__name__)
+
+class WebsocketReact(threading.Thread):
     """
-    受信したメッセージによって処理を実行
+    受信したメッセージによって処理を実行するスレッドクラス
     
     Attributes:
         ws (geventwebsocket.websocket.WebSocket): WebSocket接続オブジェクト
         msg (str): 受信したメッセージ
-    
-    Raises:
-        MorayRuntimeError: 入力値エラー
-    
-    ToDo:
-        デコレータによる例外処理・ログ出力・エラー通知
     """
     
-    print(msg)
-    parsed_msg = json.loads(msg)
-    method = parsed_msg[_METHOD]
-    _checker.check_str(method, _METHOD)
+    def __init__(self, ws, msg):
+        super().__init__()
+        self.__ws = ws
+        self.__msg = msg
+        self.__parsed_msg = None
     
-    if method == _CALL:
-        _called(ws, parsed_msg)
-    elif method == _RETURN:
-        _returned(parsed_msg)
-    elif method == _EXPOSE:
-        _exposed(ws, parsed_msg)
-    else:
-        raise MorayRuntimeError('not correct "{0}".'.format(_METHOD))
-
-def _called(ws, parsed_msg):
-    """
-    呼び出されたPythonの関数を実行
+    @property
+    def ws(self):
+        """
+        読み取り専用WebSocket接続オブジェクト
+        
+        Returns:
+            WebSocket接続オブジェクト
+        """
+        
+        return self.__ws
     
-    Attributes:
-        ws (geventwebsocket.websocket.WebSocket): WebSocket接続オブジェクト
-        parsed_msg (dict): 受信したメッセージ
-    """
+    @moray._error_handle(_logger)
+    def run(self):
+        """
+        受信したメッセージによって処理を実行
+        
+        Raises:
+            MorayRuntimeError: 入力値エラー
+        """
+        
+        _logger.debug('received data: {0}'.format(self.__msg))
+        
+        self.__parsed_msg = json.loads(self.__msg)
+        method = self.__parsed_msg[_METHOD]
+        _checker.check_str(method, _METHOD)
+        
+        if method == _CALL:
+            self.__called()
+        elif method == _RETURN:
+            self.__returned()
+        elif method == _EXPOSE:
+            self.__exposed()
+        else:
+            raise MorayRuntimeError('not correct "{0}".'.format(_METHOD))
     
-    id = parsed_msg[_ID]
-    _checker.check_str(id, _ID)
-    module = parsed_msg[_MODULE]
-    _checker.check_str(module, _MODULE)
-    func_name = parsed_msg[_FUNC_NAME]
-    _checker.check_str(func_name, _FUNC_NAME)
-    args = parsed_msg[_ARGS]
-    _checker.check_list_or_tuple(args, _ARGS)
+    def __called(self):
+        """
+        呼び出されたPythonの関数を実行
+        """
+        
+        id = self.__parsed_msg[_ID]
+        _checker.check_str(id, _ID)
+        module = self.__parsed_msg[_MODULE]
+        _checker.check_str(module, _MODULE)
+        func_name = self.__parsed_msg[_FUNC_NAME]
+        _checker.check_str(func_name, _FUNC_NAME)
+        args = self.__parsed_msg[_ARGS]
+        _checker.check_list_or_tuple(args, _ARGS)
+        
+        result, is_success = _call_py_func(module, func_name, args)
+        
+        return_msg = {}
+        return_msg[_ID] = id
+        return_msg[_RETURN] = True
+        return_msg[_RESULT] = result
+        return_msg[_IS_SUCCESS] = is_success
+        msg = json.dumps(return_msg)
+        
+        _logger.debug('send data: {0}'.format(msg))
+        self.__ws.send(msg)
     
-    result, is_success = _call_py_func(module, func_name, args)
+    def __returned(self):
+        """
+        呼び出したJavaScriptの結果を格納
+        """
+        
+        id = self.__parsed_msg[_ID]
+        _checker.check_str(id, _ID)
+        is_success = self.__parsed_msg[_IS_SUCCESS]
+        _checker.check_bool(is_success, _IS_SUCCESS)
+        result = self.__parsed_msg[_RESULT]
+        _checker.check_str(result, _RESULT)
+        
+        _call_result[id] = {
+            _IS_SUCCESS: is_success,
+            _RESULT: result
+        }
     
-    return_msg = {}
-    return_msg[_ID] = id
-    return_msg[_RETURN] = True
-    return_msg[_RESULT] = result
-    return_msg[_IS_SUCCESS] = is_success
-    
-    ws.send(json.dumps(return_msg))
-
-def _returned(parsed_msg):
-    """
-    呼び出したJavaScriptの結果を格納
-    
-    Attributes:
-        parsed_msg (dict): 受信したメッセージ
-    """
-    
-    id = parsed_msg[_ID]
-    _checker.check_str(id, _ID)
-    is_success = parsed_msg[_IS_SUCCESS]
-    _checker.check_bool(is_success, _IS_SUCCESS)
-    result = parsed_msg[_RESULT]
-    _checker.check_str(result, _RESULT)
-    
-    _call_result[id] = {
-        _IS_SUCCESS: is_success,
-        _RESULT: result
-    }
-
-def _exposed(ws, parsed_msg):
-    """
-    exposeされたJavaScript関数を登録
-    
-    Attributes:
-        ws (geventwebsocket.websocket.WebSocket): WebSocket接続オブジェクト
-        parsed_msg (dict): 受信したメッセージ
-    """
-    
-    func_name = parsed_msg[_FUNC_NAME]
-    _checker.check_str(func_name, _FUNC_NAME)
-    moray.js.__setattr__(func_name, _create_js_func(ws, func_name))
+    def __exposed(self):
+        """
+        exposeされたJavaScript関数を登録
+        """
+        
+        func_name = self.__parsed_msg[_FUNC_NAME]
+        _checker.check_str(func_name, _FUNC_NAME)
+        setattr(moray.js, func_name, _create_js_func(self.__ws, func_name))
+        _logger.debug('exposed Javascript function: {0}'.format(func_name))
 
 def _call_py_func(module, func_name, args):
     """
@@ -130,17 +142,14 @@ def _call_py_func(module, func_name, args):
     Returns:
         関数の実行結果
         実行成否(True:成功, False:失敗)
-    
-    ToDo:
-        ログ出力
     """
     
     try:
         result = py.call(module, func_name, args)
         return result, True
-    except:
-        # ToDo: ログ出力
-        result = 'calling python function is faild.'
+    except Exception as e:
+        result = 'called python function is faild.'
+        _logger.exception(result)
         return result, False
 
 def _create_js_func(ws, func_name):
@@ -155,16 +164,31 @@ def _create_js_func(ws, func_name):
         生成したPythonからJavaScriptを呼ぶ関数
     """
     
+    _js_funcs.setdefault(ws, [])
+    if not func_name in _js_funcs[ws]:
+        _js_funcs[ws].append(func_name)
+    
     def call_js(*args):
         """
         PythonからJavaScriptを呼ぶ関数
         
         Attributes:
             args: 引数
+            
+        Raises:
+            MorayRuntimeError: 呼び出したJavaScript側でエラー発生
         
         Returns:
             実行結果取得関数
         """
+        
+        ws = threading.current_thread().ws
+        
+        if ws not in _js_funcs:
+            raise MorayRuntimeError('websocket is not connected.')
+        
+        if func_name not in _js_funcs[ws]:
+            raise MorayRuntimeError('"{0}" is not exposed.'.format(func_name))
         
         id = _uniqueId()
         
@@ -173,8 +197,10 @@ def _create_js_func(ws, func_name):
         call_msg[_RETURN] = False
         call_msg[_FUNC_NAME] = func_name
         call_msg[_ARGS] = args
+        msg = json.dumps(call_msg)
         
-        ws.send(json.dumps(call_msg))
+        _logger.debug('send data: {0}'.format(msg))
+        ws.send(msg)
         
         def get_result():
             """
@@ -191,7 +217,8 @@ def _create_js_func(ws, func_name):
                 _call_result にはJavaScriptからの返却時の処理で格納される
             """
             
-            for i in range(10):
+            start_time = time.time()
+            while time.time() - start_time < 10:
                 if id in _call_result:
                     result = _call_result[id][_RESULT]
                     is_success = _call_result[id][_IS_SUCCESS]
@@ -208,6 +235,31 @@ def _create_js_func(ws, func_name):
         return get_result
     
     return call_js
+
+def unexpose(ws):
+    """
+    exposeされたJavaScript関数を登録解除
+    
+    Attributes:
+        ws (geventwebsocket.websocket.WebSocket): WebSocket接続オブジェクト
+    """
+    
+    # exposeされたJavaScript関数がない場合は終了
+    if not ws in _js_funcs:
+        return
+    
+    # exposeされたJavaScript関数を登録解除
+    js_funcs =_js_funcs[ws]
+    del _js_funcs[ws]
+    
+    for _, v in _js_funcs.items():
+        for func_name in tuple(js_funcs):
+            if func_name in v:
+                js_funcs.remove(func_name)
+    
+    for func_name in js_funcs:
+        delattr(moray.js, func_name)
+        _logger.debug('unexposed Javascript function: {0}'.format(func_name))
 
 def _uniqueId(strong = 1000):
     """

@@ -2,6 +2,8 @@
 expose機能の検証用
 """
 
+import threading
+
 import moray
 
 @moray.expose
@@ -56,6 +58,18 @@ def log_msg():
     print('end: log_msg')
 
 @moray.expose
+def log_msg2():
+    print('start: log_msg2')
+    try:
+        result = moray.js.log_msg2('Python: exposed')()
+        print(result)
+        print('end: log_msg2')
+    except Exception as e:
+        r = '{0} {1}'.format(type(e), e.args[0])
+        print(r)
+        return r
+
+@moray.expose
 def return_two(a, b):
     """
     複数返却
@@ -65,11 +79,11 @@ def return_two(a, b):
         b (int): 入力値2
     
     Return:
-        a (int): 入力値1
         b (int): 入力値2
+        a (int): 入力値1
     """
     
-    return a, b
+    return b, a
 
 @moray.expose
 def return_list():
@@ -104,6 +118,32 @@ def raise_js_exception():
     except Exception as e:
         print(e.args[0])
         raise
+
+@moray.expose
+def raise_js_exception2():
+    try:
+        moray.js.raise_js_exception()()
+    except Exception as e:
+        r = '{0} {1}'.format(type(e), e.args[0])
+        print(r)
+        return r
+
+@moray.expose
+def branch_thread():
+    dd = {}
+    dd['result'] = False
+    
+    def func(dd):
+        try:
+            moray.js.log_msg('Python: exposed')
+        except:
+            dd['result'] = True
+    
+    th = threading.Thread(target=func, args=(dd,))
+    th.start()
+    th.join()
+    
+    return dd['result']
 
 def not_expose():
     """

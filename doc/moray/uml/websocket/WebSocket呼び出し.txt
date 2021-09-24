@@ -1,0 +1,18 @@
+|Python|
+|JavaScript|
+start
+:Python呼び出し;
+|Python|
+:Python関数実行;
+partition JavaScript呼び出し {
+  :JavaScript呼び出し;
+  |JavaScript|
+  :JavaScript関数実行;
+  :実行結果返却;
+  |Python|
+  :実行結果取得;
+}
+:実行結果返却;
+|JavaScript|
+:実行結果取得;
+end

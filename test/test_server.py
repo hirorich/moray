@@ -3,6 +3,10 @@ from unittest.mock import patch
 
 from moray import _server
 
+def raise_mock(arg):
+    raise
+
+@patch('moray._server._logger.exception', raise_mock)
 class ServerTest(unittest.TestCase):
     
     def test_generate_port_1(self):

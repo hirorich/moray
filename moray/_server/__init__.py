@@ -3,17 +3,77 @@ morayで起動する内部サーバ設定
 http://localhost:port/
 """
 
-import bottle, pkg_resources, socket
-from bottle import HTTPResponse
+import bottle, logging, pkg_resources, os, socket, time
 from bottle.ext.websocket import GeventWebSocketServer, websocket
+from functools import wraps
 from threading import Thread
 
+import moray
 from moray import _config, _module
 from moray._module import py
 
-root_module_js = pkg_resources.resource_filename('moray', r'_module\js')
+_root_static_module = pkg_resources.resource_filename('moray', r'_module\static')
 
 app = bottle.Bottle()
+_websockets=[]
+
+_logger = logging.getLogger(__name__)
+
+def _log_to_logger(func):
+    """
+    Bottleログ出力プラグイン
+    """
+    
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        
+        # リクエスト情報ログ出力
+        request = bottle.request
+        request_str = '{0} {1} {2}'.format(request.remote_addr, request.method, request.urlparts.path)
+        _logger.info('Request: {0}'.format(request_str))
+        
+        try:
+            # app.routeを設定した関数を呼び出す
+            result = func(*args, **kwargs)
+            
+            # レスポンス情報ログ出力
+            if isinstance(result, bottle.HTTPResponse):
+                
+                # ステータスコード取得
+                status_code = result.status_code
+                response_str = 'Response: {0} {1}'.format(request_str, status_code)
+                
+                # ログレベルを分けてログ出力
+                if status_code < 400:
+                    _logger.info(response_str)
+                else:
+                    if request.urlparts.path == r'/favicon.ico':
+                        _logger.warn(response_str)
+                    else:
+                        _logger.error(response_str)
+                
+                # 返り値がない場合のログ出力
+            elif result is None:
+                _logger.info('No Response: {0}'.format(request_str))
+                
+                # 返り値の型が正常でない場合のログ出力
+            else:
+                _logger.warn('resonse is not "HTTPResponse" type or "None".')
+                _logger.warn('Response: {0} {1}'.format(request_str, 'xxx'))
+                
+                # サーバ側に処理を任せるためにそのまま返却
+                pass
+            
+            return result
+        except Exception as e:
+            _logger.exception('inner Bottle server catched exception.')
+            
+            # サーバ側に処理を任せるためにリスロー
+            raise
+    return wrapper
+
+# Bottleログ出力プラグインインストール
+app.install(_log_to_logger)
 
 @app.route('/moray/confirm_running')
 def run_check():
@@ -24,62 +84,78 @@ def run_check():
         固定メッセージページ
     """
     
-    return 'Success'
+    return
+
+@app.route('/moray/core/window_position')
+def window_position_script():
+    """
+    画面サイズ・位置を変更するJavaScriptを生成
+    
+    Returns:
+        画面サイズ・位置を変更するJavaScript
+    """
+    
+    return py.render_window_position()
 
 @app.route('/moray/py/<py_module>.js')
 def py_module_script(py_module):
     """
     JavaScriptからPythonを呼び出すためのjsモジュールを生成
-    生成したモジュールを返却
     
     Returns:
         JavaScriptからPythonを呼び出すためのjsモジュール
     """
     
-    body = py.render(py_module)
-    res = HTTPResponse(status=200, body=body)
-    res.set_header('Content-type', 'text/javascript')
-    return res
+    return py.render_js_module(py_module)
 
-@app.route('/moray/js/<core_module>')
-def core_module_script(core_module):
+@app.route('/moray/static/<static_module>')
+def static_module_script(static_module):
     """
-    生成したjsモジュール内で呼び出されるjsモジュールを生成
-    生成したモジュールを返却
+    静的jsモジュールを生成
     
     Returns:
-        生成したjsモジュール内で呼び出されるjsモジュール
+        静的jsモジュール
     """
     
-    return bottle.static_file('{0}.js'.format(core_module), root=root_module_js)
+    return bottle.static_file('{0}.js'.format(static_module), root=_root_static_module)
 
 @app.route('/moray.js')
 def moray_script():
     """
-    生成したjsモジュール内で呼び出されるjsモジュールを生成
-    生成したモジュールを返却
+    JavaScript関数を公開するためのjsモジュールを生成
     
     Returns:
-        生成したjsモジュール内で呼び出されるjsモジュール
+        JavaScript関数を公開するためのjsモジュール
     """
     
-    return bottle.static_file('moray.js', root=root_module_js)
+    return bottle.static_file('moray.js', root=_root_static_module)
 
 @app.route('/moray/ws', apply=[websocket])
 def bottle_websocket(ws):
     """
     WebSocketの受け取り口
+    
+    Attributes:
+        ws (geventwebsocket.websocket.WebSocket): WebSocket接続オブジェクト
     """
     
+    _logger.info('WebSocket is opened.')
+    
+    _websockets.append(ws)
     while True:
         msg = ws.receive()
         if msg is None:
             break
         
         # スレッドを分けて処理
-        deamon_t = Thread(target=_module.websocket_react, args=(ws, msg))
-        deamon_t.setDaemon(True)
+        deamon_t = _module.WebsocketReact(ws, msg)
+        deamon_t.setDaemon(False)
         deamon_t.start()
+    
+    # websocketが閉じられた際の処理
+    deamon_t = Thread(target=_onclose_websocket, args=(ws,))
+    deamon_t.setDaemon(False)
+    deamon_t.start()
 
 @app.route('/')
 @app.route('/<path:path>')
@@ -101,12 +177,14 @@ def run():
     サーバ起動
     """
     
+    _logger.debug('running moray on "{0}:{1}".'.format(_config.host, _config.port))
     app.run(
         host = _config.host,
         port = _config.port,
         reloader = False,
         debug = False,
-        server = GeventWebSocketServer
+        server = GeventWebSocketServer,
+        quiet = True
     )
 
 def generate_port(port):
@@ -143,3 +221,34 @@ def generate_confirm_running_url():
     """
     
     return 'http://localhost:{0}/moray/confirm_running'.format(_config.port)
+
+@moray._error_handle(_logger, True)
+def _onclose_websocket(ws):
+    """
+    WebSocketが閉じられた際の処理
+    
+    Attributes:
+        ws (geventwebsocket.websocket.WebSocket): WebSocket接続オブジェクト
+    """
+    
+    _logger.info('closing WebSocket.')
+    
+    # websocketに紐づくメモリを解放
+    _module.unexpose(ws)
+    _websockets.remove(ws)
+    _logger.info('WebSocket is closed.')
+    
+    # 接続がない場合は終了
+    check_exist_websocket()
+
+def check_exist_websocket():
+    """
+    websocketの接続有無をチェック
+    接続がない場合は終了
+    """
+    
+    if len(_websockets) == 0:
+        time.sleep(3)
+        if len(_websockets) == 0:
+            _logger.info('exiting moray application.')
+            os._exit(0)

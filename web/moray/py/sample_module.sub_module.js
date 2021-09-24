@@ -3,19 +3,19 @@
 
 export let get_module_name = function() {
     return new Promise((resolve, reject) => {
-        resolve('stub: get_module_name');
+        resolve('sample_module.sub_module');
     });
 }
 
 export let sum = function() {
     return new Promise((resolve, reject) => {
-        resolve(9);
+        resolve(13);
     });
 }
 
 export let sum_list = function() {
     return new Promise((resolve, reject) => {
-        resolve(64);
+        resolve(20);
     });
 }
 
@@ -25,9 +25,15 @@ export let log_msg = function() {
     });
 }
 
+export let log_msg2 = function() {
+    return new Promise((resolve, reject) => {
+        resolve("<class 'AttributeError'> module 'moray.js' has no attribute 'log_msg2'");
+    });
+}
+
 export let return_two = function() {
     return new Promise((resolve, reject) => {
-        resolve([6, 4]);
+        resolve([8, 5]);
     });
 }
 
@@ -39,18 +45,30 @@ export let return_list = function() {
 
 export let return_tuple = function() {
     return new Promise((resolve, reject) => {
-        resolve([9, 8, 7]);
-    });
-}
-
-export let raise_js_exception = function() {
-    return new Promise((resolve, reject) => {
-        reject('error msg');
+        resolve([4, 5, 6]);
     });
 }
 
 export let raise_py_exception = function() {
     return new Promise((resolve, reject) => {
-        reject('error msg');
+        reject('called python function is faild.');
+    });
+}
+
+export let raise_js_exception = function() {
+    return new Promise((resolve, reject) => {
+        reject('called python function is faild.');
+    });
+}
+
+export let raise_js_exception2 = function() {
+    return new Promise((resolve, reject) => {
+        resolve("<class 'moray.exception.MorayRuntimeError'> called javascript function is faild.");
+    });
+}
+
+export let branch_thread = function() {
+    return new Promise((resolve, reject) => {
+        resolve(true);
     });
 }

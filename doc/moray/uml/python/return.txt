@@ -1,0 +1,4 @@
+start
+:JavaScript実行結果取得;
+:実行結果蓄積;
+end

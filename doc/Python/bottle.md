@@ -10,6 +10,7 @@
   - [Bottle](#bottle-1)
     - [route](#route)
     - [run](#run)
+    - [install](#install)
   - [static_file](#staticfile)
 - [参考](#参考)
 
@@ -45,17 +46,22 @@ app.run(host = 'locahost', port = 8080)
 - インスタンスは呼び出し可能なWSGIアプリケーション
 - ルート、コールバック、プラグイン、リソース、設定で構成されている
 
-### [route](https://bottlepy.org/docs/dev/api.html#bottle.Bottle.route)
+#### [route](https://bottlepy.org/docs/dev/api.html#bottle.Bottle.route)
 - route(path=None, method='GET', callback=None, name=None, apply=None, skip=None, **config)
 - 関数をリクエストURLにバインドするデコレーター
 - <>で囲った部分はワイルドカード
 - 詳細は以下参照
   - [Request Routing](https://bottlepy.org/docs/dev/routing.html?highlight=routing)
 
-### [run](https://bottlepy.org/docs/dev/api.html#bottle.run)
+#### [run](https://bottlepy.org/docs/dev/api.html#bottle.run)
 - run(app=None, server='wsgiref', host='127.0.0.1', port=8080, interval=1, reloader=False, quiet=False, plugins=None, debug=None, config=None, **kargs)
 - サーバーインスタンスを起動
 - サーバーが終了するまでブロックする
+
+#### [install](https://bottlepy.org/docs/dev/api.html#bottle.Bottle.install)
+- install(plugin)
+- プラグインをプラグインリストに追加し、このアプリケーションのすべてのルートに適用
+- plugin はシンプルなデコレータや [プラグインAPI](https://bottlepy.org/docs/dev/plugindev.html#bottle.Plugin) を実装したオブジェクト
 
 ### [static_file](https://bottlepy.org/docs/dev/tutorial.html#routing-static-files)
 - 画像やCSSファイルなどの静的ファイルを提供する

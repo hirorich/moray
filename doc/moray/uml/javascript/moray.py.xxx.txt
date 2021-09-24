@@ -1,0 +1,5 @@
+start
+:送信データ作成;
+:WebSocket送信;
+:Promiseオブジェクト返却;
+end

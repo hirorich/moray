@@ -1,0 +1,8 @@
+start
+:実行結果確認;
+if (正常終了) then (yes)
+  :実行結果返却;
+  end
+else (no)
+  #Red:例外発生;
+  kill

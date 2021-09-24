@@ -1,0 +1,11 @@
+start
+:入力チェック;
+fork
+  :サーバ起動;
+fork again
+  :サーバ起動確認;
+  :ブラウザ起動;
+  #LightGreen:WebSocket確認|
+  kill
+end fork
+:サーバ起動中;

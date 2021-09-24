@@ -1,15 +1,15 @@
 """
 サーバ起動とブラウザ起動を制御
-
-ToDo:
-    例外処理・ログ出力・エラー通知
 """
 
-import requests
+import logging, requests
 from threading import Thread
 
+import moray
 from moray import _browser, _config, _server
 from moray.exception import MorayRuntimeError
+
+_logger = logging.getLogger(__name__)
 
 def run():
     """
@@ -26,6 +26,7 @@ def run():
     # サーバ起動
     _server.run()
 
+@moray._error_handle(_logger, True)
 def open_browser():
     """
     requestsによるGETでサーバーが起動しているか確認
@@ -34,14 +35,12 @@ def open_browser():
     Raises:
         MorayRuntimeError: サーバ起動エラー
         requests.exceptions.xxx: サーバ起動タイムアウトエラー
-    
-    ToDo:
-        デコレータによる例外処理・ログ出力・終了処理
     """
     
     # サーバ起動確認
     connect_timeout = 3.0
     read_timeout = 5.0
+    _logger.info('confirming server running.')
     try:
         res = requests.get(
             _server.generate_confirm_running_url(),
@@ -57,4 +56,8 @@ def open_browser():
     url = _server.generate_start_url()
     
     # 初期ページ表示
+    _logger.info('opening start page.')
     _browser.open(_config.browser, url, _config.cmdline_args)
+    
+    # 接続がない場合は終了
+    _server.check_exist_websocket()

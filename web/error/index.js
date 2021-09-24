@@ -1,29 +1,22 @@
-import {send_msg} from './core.js'
+import error_case05 from '/test_case/error_case05.js'
+import error_case06 from '/test_case/error_case06.js'
 
 const component = {
-    data() {
-        return {
-            error_data: '{"id": "ID"}',
-            unexpose_data: '{"id":"ID","method":"call","module":"sample_module.sub_module","func_name":"not_expose","args":[]}',
-        }
+    components: {
+        'error_case05': error_case05,
+        'error_case06': error_case06,
     },
     template: `
-<div>異常系</div>
-<div>異常データ送信</div>
-<div>送信データ：{{error_data}}</div>
-<button type="button" class="btn btn-danger" @click="send_error_data">send_error_data</button>
-<div>exposeされてない関数呼び出し</div>
-<div>送信データ：{{unexpose_data}}</div>
-<button type="button" class="btn btn-danger" @click="send_unexpose_data">send_unexpose_data</button>
-    `,
-    methods: {
-        send_error_data() {
-            send_msg(this.error_data);
-        },
-        send_unexpose_data() {
-            send_msg(this.unexpose_data);
-        },
-    },
+<div class="container">
+    <div class="row">異常系</div>
+    <div class="row">
+        <div class="col-lg-6 card"><error_case05 /></div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6 card"><error_case06 /></div>
+    </div>
+</div>
+`,
 };
 
 const Vue = window.Vue;

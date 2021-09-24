@@ -1,4 +1,6 @@
-let expose = function(func) {
+let moray = new Object();
+moray.onclose = function(evt){};
+moray.expose = function(func) {
     let func_name = func.name;
 
     let data = JSON.stringify({
@@ -8,4 +10,4 @@ let expose = function(func) {
     console.log(data);
 }
 
-export {expose};
+export default moray;

@@ -1,0 +1,8 @@
+|Python|
+start
+:サーバ起動;
+:ブラウザ起動;
+|JavaScript|
+:WebSocket接続;
+|Python|
+:WebSocket受信待機;

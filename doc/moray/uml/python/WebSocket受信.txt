@@ -1,0 +1,30 @@
+start
+while (True)
+  :WebSocket受信待機中;
+  :WebSocket受信;
+  if (受信データ is null) then (yes)
+    break
+  endif
+  fork
+  fork again
+    :受信データパース;
+    switch (method?)
+    case ( call )
+      #LightGreen:call|
+      kill
+    case ( return )
+      #LightGreen:return|
+      kill
+    case ( expose )
+      #LightGreen:expose|
+      kill
+    endswitch
+  end fork
+endwhile
+fork
+fork again
+  :WebSocket関連メモリ解放;
+  #LightGreen:WebSocket確認|
+  kill
+end fork
+end
