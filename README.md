@@ -40,6 +40,16 @@
 
 ***
 ## フォルダ構造
+- moray のアプリケーションは、.html, .js, .css などのフロントエンドと、Pythonスクリプトによるバックエンドに分かれる
+  ```
+  python_script.py     <-- Pythonスクリプト
+  web/                 <-- 静的ウェブフォルダ
+    index.html
+    css/
+      style.css
+    img/
+      logo.png
+  ```
 
 ***
 ## 使用方法
@@ -50,6 +60,7 @@
   
   moray.run('web')
   ```
+    - http://localhost:動的に割り当てられたポート番号/index.html が表示される
 
 ### 起動オプション
 - moray.run() には、キーワード引数として以下の追加オプションを渡すことができる
