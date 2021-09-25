@@ -76,6 +76,8 @@ build-backend = "setuptools.build_meta"
 
 静的メタデータ(`setup.cfg`)の方が望ましいです。動的メタデータ (`setup.py`) は、絶対に必要な場合のエスケープハッチとしてのみ使用すべきです。 `setup.py` は以前は必須でしたが、新しいバージョンの setuptools や pip では省略できます。
 
+以下で紹介するもの以外にもたくさんあります。詳しくは、[プロジェクトのパッケージ化と配布](https://packaging.python.org/guides/distributing-packages-using-setuptools/)をご覧ください。
+
 ## setup.cfg（静的メタデータ）
 `setup.cfg` は、setuptoolsの設定ファイルです。setuptoolsにパッケージの情報(名前やバージョンなど)や、どのコードファイルをインクルードするかを伝えます。最終的には、この設定の多くを `pyproject.toml` に移すことができるかもしれません。
 
@@ -167,8 +169,6 @@ setuptools.setup(
 - `package_dir` は、パッケージ名をキーに、ディレクトリを値に持つ辞書です。空のパッケージ名は `root package` を表します。つまり、そのパッケージの全てのPythonソースファイルを含むプロジェクト内のディレクトリを表します。この場合、 `src` ディレクトリがルートパッケージに指定されます。
 - `packages` は、配布パッケージに含まれるべき全てのPython importパッケージのリストです。各パッケージを手動でリストアップする代わりに、 `find_packages()` を使って、 `package_dir` 以下のすべてのパッケージとサブパッケージを自動的に検出することができます。この場合、`example_package` が唯一のパッケージであるため、パッケージのリストは `example_package` となります。
 - `python_requires` は、プロジェクトがサポートするPythonのバージョンを示します。pip のようなインストーラーは、Python のバージョンが一致するパッケージを見つけるまで、古いバージョンのパッケージを探します。
-
-ここで紹介したもの以外にもたくさんあります。詳しくは、[プロジェクトのパッケージ化と配布](https://packaging.python.org/guides/distributing-packages-using-setuptools/)をご覧ください。
 
 ***
 ## README.mdの作成
