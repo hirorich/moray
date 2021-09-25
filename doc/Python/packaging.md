@@ -76,7 +76,54 @@ build-backend = "setuptools.build_meta"
 
 静的メタデータ(`setup.cfg`)の方が望ましいです。動的メタデータ (`setup.py`) は、絶対に必要な場合のエスケープハッチとしてのみ使用すべきです。 `setup.py` は以前は必須でしたが、新しいバージョンの setuptools や pip では省略できます。
 
-> ToDo: 静的メタデータ例とオプションの説明
+## setup.cfg（静的メタデータ）
+`setup.cfg` は、setuptoolsの設定ファイルです。setuptoolsにパッケージの情報(名前やバージョンなど)や、どのコードファイルをインクルードするかを伝えます。最終的には、この設定の多くを `pyproject.toml` に移すことができるかもしれません。
+
+`setup.cfg` を開き、以下の内容を入力します。`name` をユーザー名が入るように変更します。これにより、固有のパッケージ名を持つことができ、このチュートリアルに従っている他の人がアップロードしたパッケージと衝突することがなくなります。
+``` cfg
+[metadata]
+name = example-pkg-YOUR-USERNAME-HERE
+version = 0.0.1
+author = Example Author
+author_email = author@example.com
+description = A small example package
+long_description = file: README.md
+long_description_content_type = text/markdown
+url = https://github.com/pypa/sampleproject
+project_urls =
+    Bug Tracker = https://github.com/pypa/sampleproject/issues
+classifiers =
+    Programming Language :: Python :: 3
+    License :: OSI Approved :: MIT License
+    Operating System :: OS Independent
+
+[options]
+package_dir =
+    = src
+packages = find:
+python_requires = >=3.6
+
+[options.packages.find]
+where = src
+```
+ここでは[様々なメタデータやオプション](https://setuptools.pypa.io/en/latest/userguide/declarative_config.html)がサポートされています。これは [configparser](https://docs.python.org/3/library/configparser.html) のフォーマットで、値を引用符で囲まないようにします。このサンプルパッケージでは、比較的最小限の `metadata` のセットを使用しています。
+- `name` は、パッケージのディストリビューション名です。アルファベット、数字、 `_` 、 `-` のみであれば、どのような名前でも構いません。また、pypi.orgで既に使用されていてはいけません。既に存在するパッケージと同じ名前のパッケージをアップロードしようとしないように、**必ず自分のユーザー名で更新してください**。
+- `version` は、パッケージのバージョンです。バージョンについての詳細は [PEP 440](https://www.python.org/dev/peps/pep-0440/) を参照してください。ファイルやパッケージの属性を読み取るには、 `file:` または `attr:` ディレクティブを使用します。
+- `author` および `author_email` は、パッケージの作成者を特定するために使用されます。
+- `description` は、パッケージの短い1文の要約です。
+- `long_description` は、パッケージの詳細な説明です。これは Python Package Index のパッケージ詳細ページに表示されます。この場合、長い説明文は、 `file:` ディレクティブを使って `README.md` から読み込まれます（これはよくあるパターンです）。
+- `long_description_content_type` は、長い説明文にどのようなタイプのマークアップが使われているかをインデックスに伝えます。ここでは、Markdownです。
+- `url` は、プロジェクトのホームページのURLです。多くのプロジェクトでは、GitHub、GitLab、Bitbucketなどのコードホスティングサービスへのリンクを指定します。
+- `project_urls` は、PyPI に表示する追加リンクをいくつでも列挙できます。一般的には、ドキュメントや課題追跡システムなどへのリンクです。
+- `classifiers` は、インデックスと [pip](https://packaging.python.org/key_projects/#pip) にパッケージに関する追加のメタデータを与えます。この場合、パッケージは Python 3 とのみ互換性があり、MIT ライセンスで提供され、OS に依存しません。少なくとも、どのバージョンのPythonで動作するか、どのライセンスでパッケージが利用できるか、どのOSでパッケージが動作するかを常に含めるべきです。分類器の完全なリストについては，https://pypi.org/classifiers/ を参照してください。
+
+`options` のカテゴリーには、setuptools自体のコントロールがあります。
+- `package_dir` は、パッケージ名とディレクトリのマッピングです。空のパッケージ名は `root package` を表します。つまり、そのパッケージの全てのPythonソースファイルを含むプロジェクト内のディレクトリで、この場合は `src` ディレクトリがルートパッケージに指定されます。
+- `packages` は、[配布パッケージ](https://packaging.python.org/glossary/#term-Distribution-Package)に含まれるべき全てのPython [importパッケージ](https://packaging.python.org/glossary/#term-Import-Package)のリストです。各パッケージを手動でリストアップする代わりに、 `find:` ディレクティブを使ってすべてのパッケージとサブパッケージを自動的に検出し、 `options.packages.find` で使用する `package_dir` を指定することができます。この場合、 `example_package` が唯一のパッケージであるため、パッケージのリストは `example_package` となります。
+- `python_requires` は、プロジェクトがサポートするPythonのバージョンを指定します。[pip](https://packaging.python.org/key_projects/#pip) などのインストーラーは、Python のバージョンが一致するパッケージが見つかるまで、古いバージョンのパッケージを検索します。
+
+
+
 
 > ToDo: 動的メタデータ例とオプションの説明
 
