@@ -122,10 +122,51 @@ where = src
 - `packages` は、[配布パッケージ](https://packaging.python.org/glossary/#term-Distribution-Package)に含まれるべき全てのPython [importパッケージ](https://packaging.python.org/glossary/#term-Import-Package)のリストです。各パッケージを手動でリストアップする代わりに、 `find:` ディレクティブを使ってすべてのパッケージとサブパッケージを自動的に検出し、 `options.packages.find` で使用する `package_dir` を指定することができます。この場合、 `example_package` が唯一のパッケージであるため、パッケージのリストは `example_package` となります。
 - `python_requires` は、プロジェクトがサポートするPythonのバージョンを指定します。[pip](https://packaging.python.org/key_projects/#pip) などのインストーラーは、Python のバージョンが一致するパッケージが見つかるまで、古いバージョンのパッケージを検索します。
 
+## <span>setup.py</span>（動的メタデータ）
+`setup.py` は、 [setuptools](https://packaging.python.org/key_projects/#setuptools) のビルドスクリプトです。setuptoolsにお客様のパッケージの情報（名前やバージョンなど）と、どのコードファイルをインクルードするかを伝えます。
 
+`setup.py`を開き、以下の内容を入力します。 `name` をあなたのユーザー名を含むように変更してください。これにより、固有のパッケージ名を持つことになり、このチュートリアルに従っている他の人がアップロードしたパッケージと衝突しないようになります。
+``` python
+import setuptools
 
+with open("README.md", "r", encoding="utf-8") as fh:
+    long_description = fh.read()
 
-> ToDo: 動的メタデータ例とオプションの説明
+setuptools.setup(
+    name="example-pkg-YOUR-USERNAME-HERE",
+    version="0.0.1",
+    author="Example Author",
+    author_email="author@example.com",
+    description="A small example package",
+    long_description=long_description,
+    long_description_content_type="text/markdown",
+    url="https://github.com/pypa/sampleproject",
+    project_urls={
+        "Bug Tracker": "https://github.com/pypa/sampleproject/issues",
+    },
+    classifiers=[
+        "Programming Language :: Python :: 3",
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: OS Independent",
+    ],
+    package_dir={"": "src"},
+    packages=setuptools.find_packages(where="src"),
+    python_requires=">=3.6",
+)
+```
+`setup()` はいくつかの引数をとります。このサンプルパッケージでは、比較的最小限のセットを使用しています。
+- `name` は、パッケージのディストリビューション名です。アルファベット、数字、 `_` 、 `-` のみであれば、どのような名前でも構いません。また、pypi.orgで既に使用されていてはいけません。既に存在するパッケージと同じ名前のパッケージをアップロードしようとしないように、**必ず自分のユーザー名で更新してください**。
+- `version` は、パッケージのバージョンです。バージョンについての詳細は [PEP 440](https://www.python.org/dev/peps/pep-0440/) を参照してください。
+- `author` および `author_email` は、パッケージの作成者を特定するために使用されます。
+- `description` は、パッケージの短い1文の要約です。
+- `long_description` は、パッケージの詳細な説明です。これは Python Package Index のパッケージ詳細ページに表示されます。この場合、長い説明文は、 `README.md` から読み込まれますが、これはよくあるパターンです。
+- `long_description_content_type` は、長い説明文にどのようなタイプのマークアップが使われているかをインデックスに伝えます。ここでは、Markdownです。
+- `url` は、プロジェクトのホームページのURLです。多くのプロジェクトでは、GitHub、GitLab、Bitbucketなどのコードホスティングサービスへのリンクを指定します。
+- `project_urls` は、PyPI に表示する追加リンクをいくつでも列挙できます。一般的には、ドキュメントや課題追跡システムなどへのリンクです。
+- `classifiers` は、インデックスと [pip](https://packaging.python.org/key_projects/#pip) にパッケージに関する追加のメタデータを与えます。この場合、パッケージは Python 3 とのみ互換性があり、MIT ライセンスで提供され、OS に依存しません。少なくとも、どのバージョンのPythonで動作するか、どのライセンスでパッケージが利用できるか、どのOSでパッケージが動作するかを常に含めるべきです。分類器の完全なリストについては，https://pypi.org/classifiers/ を参照してください。
+- `package_dir` は、パッケージ名をキーに、ディレクトリを値に持つ辞書です。空のパッケージ名は `root package` を表します。つまり、そのパッケージの全てのPythonソースファイルを含むプロジェクト内のディレクトリを表します。この場合、 `src` ディレクトリがルートパッケージに指定されます。
+- `packages` は、配布パッケージに含まれるべき全てのPython importパッケージのリストです。各パッケージを手動でリストアップする代わりに、 `find_packages()` を使って、 `package_dir` 以下のすべてのパッケージとサブパッケージを自動的に検出することができます。この場合、`example_package` が唯一のパッケージであるため、パッケージのリストは `example_package` となります。
+- `python_requires` は、プロジェクトがサポートするPythonのバージョンを示します。pip のようなインストーラーは、Python のバージョンが一致するパッケージを見つけるまで、古いバージョンのパッケージを探します。
 
 ここで紹介したもの以外にもたくさんあります。詳しくは、[プロジェクトのパッケージ化と配布](https://packaging.python.org/guides/distributing-packages-using-setuptools/)をご覧ください。
 
