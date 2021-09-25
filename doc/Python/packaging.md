@@ -1,4 +1,4 @@
-# [Packaging Python Projects](https://packaging.python.org/tutorials/packaging-projects/)
+# Pythonプロジェクトをパッケージ化する方法
 このチュートリアルでは、シンプルなPythonプロジェクトをパッケージ化する方法を説明します。パッケージを作成するために必要なファイルと構造を追加する方法、パッケージをビルドする方法、そしてPython Package Indexにアップロードする方法を示します。
 
 > このチュートリアルのコマンドの実行に問題がある場合は、コマンドとその出力をコピーしてから、GitHubの [packaging-problems](https://github.com/pypa/packaging-problems) リポジトリの[問題を開いてください](https://github.com/pypa/packaging-problems/issues/new?template=packaging_tutorial.yml&title=Trouble+with+the+packaging+tutorial&guide=https://packaging.python.org/tutorials/packaging-projects)。全力でサポートいたします。
@@ -222,3 +222,7 @@ py
 - [setuptools](https://packaging.python.org/key_projects/#setuptools) を使用したライブラリのパッケージ化については、[プロジェクトのパッケージ化と配布](https://packaging.python.org/guides/distributing-packages-using-setuptools/)を参照してください。
 - [バイナリ拡張のパッケージ化](https://packaging.python.org/guides/packaging-binary-extensions/)についてもお読みください。
 - [flit](https://packaging.python.org/key_projects/#flit) 、 [hatch](https://packaging.python.org/key_projects/#hatch) 、 [poetry](https://packaging.python.org/key_projects/#poetry) など、 [setuptools](https://packaging.python.org/key_projects/#setuptools) の代替手段を検討してください。
+
+***
+## 翻訳元ページ
+[Packaging Python Projects](https://packaging.python.org/tutorials/packaging-projects/)
