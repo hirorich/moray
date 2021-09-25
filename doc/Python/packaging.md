@@ -5,7 +5,7 @@
 
 いくつかのコマンドは、より新しいバージョンのpipを必要とするので、まずは最新のバージョンがインストールされていることを確認してください。
 ```
-py -m pip install --upgrade pip
+python -m pip install --upgrade pip
 ```
 
 ***
@@ -131,13 +131,13 @@ SOFTWARE.
 
 PyPAの最新版の[ビルド](https://packaging.python.org/key_projects/#build)がインストールされていることを確認してください。
 ```
-py -m pip install --upgrade build
+python -m pip install --upgrade build
 ```
 > これらのインストールに問題がある場合は、チュートリアルの [Installing Packages](https://packaging.python.org/tutorials/installing-packages/) をご覧ください。
 
 次に、 `pyproject.toml` が置かれているのと同じディレクトリで、このコマンドを実行します。
 ```
-py -m build
+python -m build
 ```
 このコマンドは、大量のテキストを出力し、完了すると `dist` ディレクトリに2つのファイルを生成します。
 ```
@@ -157,11 +157,11 @@ dist/
 
 登録が完了したら、 [twine](https://packaging.python.org/key_projects/#twine) を使って配布パッケージをアップロードすることができます。そのためにはTwineをインストールする必要があります。
 ```
-py -m pip install --upgrade twine
+python -m pip install --upgrade twine
 ```
 インストールが完了したら、Twineを起動して、 `dist` 以下のすべてのアーカイブをアップロードします。
 ```
-py -m twine upload --repository testpypi dist/*
+python -m twine upload --repository testpypi dist/*
 ```
 ユーザー名とパスワードの入力を求められます。ユーザー名には `__token__` を使用します。パスワードには、 `pypi-` のプレフィックスを含むトークンの値を使用します。
 
@@ -181,7 +181,7 @@ Uploading example_package_YOUR_USERNAME_HERE-0.0.1.tar.gz
 ## 新しくアップロードしたパッケージのインストール
 [pip](https://packaging.python.org/key_projects/#pip) を使ってパッケージをインストールし、動作を確認することができます。[仮想環境](https://packaging.python.org/tutorials/installing-packages/#creating-and-using-virtual-environments)を作成し、TestPyPIからパッケージをインストールします。
 ```
-py -m pip install --index-url https://test.pypi.org/simple/ --no-deps example-pkg-YOUR-USERNAME-HERE
+python -m pip install --index-url https://test.pypi.org/simple/ --no-deps example-pkg-YOUR-USERNAME-HERE
 ```
 パッケージ名にあなたのユーザー名を必ず指定してください。
 
@@ -196,7 +196,7 @@ Successfully installed example-pkg-YOUR-USERNAME-HERE-0.0.1
 
 パッケージをインポートすることで、正しくインストールされたかどうかをテストできます。仮想環境にいることを確認し、Pythonを実行してください。
 ```
-py
+python
 ```
 そしてパッケージをインポートします。
 ```
@@ -226,3 +226,5 @@ py
 ***
 ## 翻訳元ページ
 [Packaging Python Projects](https://packaging.python.org/tutorials/packaging-projects/)
+- コマンドはWindows側を記載
+- `py` コマンドは `venv` で環境切り替えたあとの `python` コマンドに変更
