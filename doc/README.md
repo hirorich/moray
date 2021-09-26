@@ -7,6 +7,7 @@
 - [Python](#python)
 - [JavaScript](#javascript)
 - [moray](#moray)
+- [github](#github)
 
 ***
 ## Python
@@ -52,3 +53,8 @@
 
 ### [送受信jsonデータ定義](moray/json_format.md)
 - WebSocketで送受信するjsonデータの定義
+
+***
+## github
+### [リポジトリへのライセンスの追加](https://docs.github.com/ja/communities/setting-up-your-project-for-healthy-contributions/adding-a-license-to-a-repository)
+- 外部リンク
