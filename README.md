@@ -1,5 +1,5 @@
 # moray
-- eelを参考にしたPython関数をモジュール単位で管理するJavaScriptによるGUI作成ライブラリ
+- Python関数をモジュール単位で管理するJavaScriptによるGUI作成ライブラリ
 
 ***
 ## 目次
