@@ -8,7 +8,7 @@ setuptools.setup(
     version = '0.0.1',
     author = 'hirorich',
     author_email = 'author@example.com',
-    description = 'A small example package',
+    description = 'eelを参考にしたPython関数をモジュール単位で管理するJavaScriptによるGUI作成ライブラリ',
     long_description = long_description,
     long_description_content_type = 'text/markdown',
     url = 'https://github.com/hirorich/moray',
