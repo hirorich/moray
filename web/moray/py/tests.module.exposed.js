@@ -3,7 +3,7 @@
 
 export let get_module_name = function() {
     return new Promise((resolve, reject) => {
-        resolve('sample_module.sub_module');
+        resolve('tests.module.exposed');
     });
 }
 

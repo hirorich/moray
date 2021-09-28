@@ -1,5 +1,5 @@
 import base_case from '/test_case/base.js'
-import {raise_js_exception2} from '/moray/py/sample_module.sub_module.js'
+import {raise_js_exception2} from '/moray/py/tests.module.exposed.js'
 
 export default {
     components: {

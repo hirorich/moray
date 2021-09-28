@@ -1,5 +1,5 @@
 import base_case from '/test_case/base.js'
-import {get_module_name} from '/moray/py/sample_module.sub_module.js'
+import {get_module_name} from '/moray/py/tests.module.exposed.js'
 
 export default {
     components: {
@@ -9,7 +9,7 @@ export default {
         return {
             result: 0,
             title: '引数：なし、返却値：1',
-            correct: 'sample_module.sub_module',
+            correct: 'tests.module.exposed',
         }
     },
     template: `

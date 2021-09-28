@@ -84,10 +84,10 @@ class MorayTest_Run(unittest.TestCase):
     def test_run_root_4(self):
         
         self.init_config()
-        error_msg = '"tests" is not exist.'
+        error_msg = '"abcde" is not exist.'
         
         try:
-            moray.run('tests')
+            moray.run('abcde')
         except Exception as e:
             self.assertIs(type(e), ConfigurationError)
             self.assertEqual(e.args[0], error_msg)
