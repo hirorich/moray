@@ -15,7 +15,7 @@ setuptools.setup(
         'Bug Tracker': 'https://github.com/hirorich/moray/issues',
     },
     classifiers=[
-        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.9',
         'License :: OSI Approved :: MIT License',
         'Operating System :: Microsoft :: Windows :: Windows 10',
     ],
@@ -28,5 +28,6 @@ setuptools.setup(
         ],
     },
     python_requires = '>=3.9',
-    install_requires=['bottle-websocket', 'requests', 'Jinja2'],
+    keywords = ['gui', 'html', 'javascript'],
+    install_requires = ['bottle-websocket', 'requests', 'Jinja2'],
 )
