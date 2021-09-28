@@ -7,29 +7,33 @@
 - [Python](#python)
 - [JavaScript](#javascript)
 - [moray](#moray)
+- [github](#github)
 
 ***
 ## Python
 ### [Docstring](Python/docstring_google.md)
 - Pythonにおけるクラスやメソッド(関数)についての説明を記載したコメント文
 
-### [WebSocket](Python/websocket.md)
-- クライアントとサーバの双方向通信を可能にする、単一のTCPコネクション上のプロトコル
-
-### [Bottle](Python/bottle.md)
-- Python用のWSGIマイクロWebフレームワーク
+### [decorator](Python/decorator.md)
+- 通常 @wrapper 構文で関数変換として適用される別の関数を返す関数
 
 ### [unittest](Python/unittest.md)
 - JUnitに触発されたPythonのユニットテストフレームワーク
 
+### [Pythonプロジェクトをパッケージ化する方法](Python/packaging.md)
+- シンプルなPythonプロジェクトをパッケージ化する方法のチュートリアル
+
 ### [logging](Python/logging.md)
 - ソフトウェアが実行されているときに起こったイベントを追跡するための標準モジュール
 
+### [Bottle](Python/bottle.md)
+- Python用のWSGIマイクロWebフレームワーク
+
+### [WebSocket](Python/websocket.md)
+- クライアントとサーバの双方向通信を可能にする、単一のTCPコネクション上のプロトコル
+
 ### [jinja2](Python/jinja2.md)
 - 高速で表現力豊かな拡張可能なテンプレート・エンジン
-
-### [decorator](Python/decorator.md)
-- 通常 @wrapper 構文で関数変換として適用される別の関数を返す関数
 
 ***
 ## JavaScript
@@ -49,3 +53,8 @@
 
 ### [送受信jsonデータ定義](moray/json_format.md)
 - WebSocketで送受信するjsonデータの定義
+
+***
+## github
+### [リポジトリへのライセンスの追加](https://docs.github.com/ja/communities/setting-up-your-project-for-healthy-contributions/adding-a-license-to-a-repository)
+- 外部リンク

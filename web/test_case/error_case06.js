@@ -10,7 +10,7 @@ export default {
             result: 0,
             title: 'exposeされてない関数呼び出し',
             correct: 'called python function is faild.',
-            send_data: '{"id":"ID","method":"call","module":"sample_module.sub_module","func_name":"not_expose","args":[]}',
+            send_data: '{"id":"ID","method":"call","module":"tests.module.exposed","func_name":"not_expose","args":[]}',
         }
     },
     template: `

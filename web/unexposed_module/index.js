@@ -1,4 +1,4 @@
-import {not_expose} from '/moray/py/sample_module.unexposed_module.js'
+import {not_expose} from '/moray/py/tests.module.unexposed.js'
 
 const component = {
     data() {

@@ -1,11 +1,9 @@
 # moray
-- eelを参考にしたJavaScriptによるGUI作成ライブラリ
-- Python関数をモジュール単位で管理する
+- Python関数をモジュール単位で管理するJavaScriptによるGUI作成ライブラリ
 
 ***
 ## 目次
-- [経緯](#経緯)
-- [使用Pyrhonライブラリ一覧](#使用pythonライブラリ一覧)
+- [インストール](#インストール)
 - [フォルダ構造](#フォルダ構造)
 - [使用方法](#使用方法)
   - [アプリ起動](#アプリ起動)
@@ -14,34 +12,21 @@
   - [PythonからJavaScript関数呼び出し](#pythonからjavascript関数呼び出し)
   - [終了検知](#終了検知)
   - [ログ取得](#ログ取得)
-- [開発環境構築](#開発環境構築)
+- [依存ライブラリ一覧](#依存ライブラリ一覧)
 - [参考](#参考)
 
 ***
-## 経緯
-- PythonによるGUI作成のライブラリのうち、eelがJavaScriptでGUIを作成できるため愛用していた
-- しかし、eelによるPythonの関数管理は関数名により行われるため、名前かぶりがないように管理するのが面倒
-- よって、モジュールも含めて管理することで名前被りを防ぐよう対応する
-
-***
-## 使用Pythonライブラリ一覧
-各ライブラリの詳細は [使用ライブラリを個別にインストールする場合](#使用ライブラリを個別にインストールする場合) を確認
-- [bottle-websocket](https://pypi.org/project/bottle-websocket/)
-  - MIT License
-- [bottle](https://pypi.org/project/bottle/)
-  - MIT License
-- [gevent-websocket](https://pypi.org/project/gevent-websocket/)
-  - [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0)
-- [gevent](https://pypi.org/project/gevent/)
-  - MIT License
-- [requests](https://pypi.org/project/requests/)
-  - [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0)
-- [Jinja2](https://pypi.org/project/Jinja2/)
-  - BSD License (BSD-3-Clause)
+## インストール
+- dist フォルダから whl ファイルをダウンロード
+- 以下コマンドを実行
+  ```
+  pip install moray-0.0.1-py3-none-any.whl
+  ```
 
 ***
 ## フォルダ構造
 - moray のアプリケーションは、.html, .js, .css などのフロントエンドと、Pythonスクリプトによるバックエンドに分かれる
+- **/moray.js および /moray/ 配下は moray 内部で使用するため使用不可**
   ```
   python_script.py     <-- Pythonスクリプト
   web/                 <-- 静的ウェブフォルダ
@@ -61,7 +46,7 @@
   
   moray.run('web')
   ```
-    - http://localhost:動的に割り当てられたポート番号/index.html が表示される
+    - http://<span>localhost:動的に割り当てられたポート番号</span>/index.html が表示される
 
 ### 起動オプション
 - moray.run() には、キーワード引数として以下の追加オプションを渡すことができる
@@ -111,7 +96,7 @@
   ```
 
 ### JavaScriptからPython関数呼び出し
-- 呼び出されたPython関数はメインスレッドでないため注意
+- **Python関数の呼び出しごとに別スレッド上で動作する**
 - py_module.py
   ``` python
   import moray
@@ -211,60 +196,13 @@
   ```
 
 ***
-## 開発環境構築
-### Python
-- 環境作成
-  ``` bash
-  py -3.9 -m venv .venv
-  ```
-- 環境切り替え
-  ``` bash
-  .venv\Scripts\activate
-  ```
-- pip最新化
-  ``` bash
-  python -m pip install --upgrade pip
-  ```
-- 使用ライブラリを一括インストール
-  ``` bash
-  pip install -r requirements.txt
-  ```
-
-### 使用ライブラリを個別にインストールする場合
+## 依存ライブラリ一覧
 - [bottle-websocket](https://pypi.org/project/bottle-websocket/)
-  - MIT License
-  - bottleでWebSocketを使用するためのプラグイン
-  - 以下を実行することでインストール
-    ``` bash
-    pip install bottle-websocket
-    ```
-- [bottle](https://pypi.org/project/bottle/)
-  - MIT License
-  - 軽量Webフレームワーク
-  - bottle-websocketの依存ライブラリ
-  - bottle-websocketインストール時にインストール
-- [gevent-websocket](https://pypi.org/project/gevent-websocket/)
-  - [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0)
-  - bottle-websocketの依存ライブラリ
-  - bottle-websocketインストール時にインストール
-- [gevent](https://pypi.org/project/gevent/)
-  - MIT License
-  - gevent-websocketの依存ライブラリ
-  - bottle-websocketインストール時にインストール
+  - [MIT License](https://github.com/zeekay/bottle-websocket/blob/master/LICENSE)
 - [requests](https://pypi.org/project/requests/)
-  - [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0)
-  - サーバ起動確認に使用
-  - 以下を実行することでインストール
-    ``` bash
-    pip install requests
-    ```
+  - [Apache License 2.0](https://github.com/psf/requests/blob/main/LICENSE)
 - [Jinja2](https://pypi.org/project/Jinja2/)
-  - BSD License (BSD-3-Clause)
-  - テンプレートエンジン
-  - 以下を実行することでインストール
-    ``` bash
-    pip install Jinja2
-    ```
+  - [BSD License (BSD-3-Clause)](https://github.com/pallets/jinja/blob/main/LICENSE.rst)
 
 ***
 ## 参考

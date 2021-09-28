@@ -94,13 +94,13 @@ class MyModuleTest(unittest.TestCase):
             self.assertEqual(my_module.class_func(), True)
 ```
 - .vscode\setting.json
-  - testフォルダ直下の test_ から始まるモジュールがテストケースである場合
+  - testsフォルダ直下の test_ から始まるモジュールがテストケースである場合
 ``` json
 {
     "python.testing.unittestArgs": [
         "-v",
         "-s",
-        "./test",
+        "./tests",
         "-p",
         "test_*.py"
     ],
