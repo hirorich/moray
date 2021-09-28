@@ -194,6 +194,9 @@ def expose(func):
     
     Raises:
         ConfigurationError: 型チェックエラー
+    
+    Note:
+        呼び出しごとに別スレッド上で動作する
     """
     
     if not callable(func):

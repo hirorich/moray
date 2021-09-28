@@ -26,6 +26,7 @@
 ***
 ## フォルダ構造
 - moray のアプリケーションは、.html, .js, .css などのフロントエンドと、Pythonスクリプトによるバックエンドに分かれる
+- **/moray.js および /moray/ 配下は moray 内部で使用するため使用不可**
   ```
   python_script.py     <-- Pythonスクリプト
   web/                 <-- 静的ウェブフォルダ
@@ -95,7 +96,7 @@
   ```
 
 ### JavaScriptからPython関数呼び出し
-- 呼び出されたPython関数はメインスレッドでないため注意
+- **Python関数の呼び出しごとに別スレッド上で動作する**
 - py_module.py
   ``` python
   import moray
