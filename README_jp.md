@@ -1,36 +1,34 @@
 # moray
-**<span>README</span>.md is a translation of README_jp.md.**
-
-- Package for creating HTML GUI using Python modules and JavaScript.
-- Managing Python functions in modules.
+- PythonモジュールとJavaScriptを使ってHTML GUIを作成するパッケージ。
+- Pythonの関数をモジュールで管理する。
 
 ***
-## Contents
-- [Install](#install)
-- [Directory Structure](#directory-structure)
-- [Usage](#usage)
-  - [Starting the app](#starting-the-app)
-  - [App options](#app-options)
-  - [Call Python from JavaScript](#call-python-from-javascript)
-  - [Call JavaScript from Python](#call-javascript-from-python)
-  - [Abnormal exit handler](#abnormal-exit-handler)
-  - [Logging](#logging)
-- [Packages using](#packages-using)
+## 目次
+- [インストール](#インストール)
+- [ディレクトリ構造](#ディレクトリ構造)
+- [使用方法](#使用方法)
+  - [アプリ起動](#アプリ起動)
+  - [起動オプション](#起動オプション)
+  - [JavaScriptからPython関数呼び出し](#javascriptからpython関数呼び出し)
+  - [PythonからJavaScript関数呼び出し](#pythonからjavascript関数呼び出し)
+  - [終了検知](#終了検知)
+  - [ログ取得](#ログ取得)
+- [使用パッケージ一覧](#使用パッケージ一覧)
 
 ***
-## Install
-- Execute the following command.
+## インストール
+- 以下コマンドを実行。
   ```
   pip install moray
   ```
 
 ***
-## Directory Structure
-- The moray application consists of a front-end with .html, .js, .css, etc., and a back-end with Python scripts.
-- **/moray.js and /moray/ cannot be used, because moray use them.**
+## ディレクトリ構造
+- moray のアプリケーションは、.html, .js, .css などのフロントエンドと、Pythonスクリプトによるバックエンドで構成される。
+- **/moray.js および /moray/ 配下は moray 内部で使用するため使用不可**
   ```
-  python_script.py     <-- Python script
-  web/                 <-- static web directory
+  python_script.py     <-- Pythonスクリプト
+  web/                 <-- 静的ウェブディレクトリ
     index.html
     css/
       style.css
@@ -39,8 +37,8 @@
   ```
 
 ***
-## Usage
-### Starting the app
+## 使用方法
+### アプリ起動
 - 初期表示ページ index.html を含む全てのフロントエンドファイルを web ディレクトリに配置した場合、以下のように起動する
   ``` python
   import moray
@@ -49,7 +47,7 @@
   ```
     - http://<span>localhost:動的に割り当てられたポート番号</span>/index.html が表示される
 
-### App options
+### 起動オプション
 - moray.run() には、キーワード引数として以下の追加オプションを渡すことができる
   - start_page
     - str 型（デフォルト：''）
@@ -96,7 +94,7 @@
   )
   ```
 
-### Call Python from JavaScript
+### JavaScriptからPython関数呼び出し
 - **Python関数の呼び出しごとに別スレッド上で動作する**
 - py_module.py
   ``` python
@@ -127,7 +125,7 @@
   py_func('arg')
   ```
 
-### Call JavaScript from Python
+### PythonからJavaScript関数呼び出し
 - 呼び出されたJavaScript関数内でさらにPython関数を呼び出した場合、呼び出し元のPython関数と別スレッドであるため注意
 - js_module.js
   ``` javascript
@@ -165,7 +163,7 @@
       other_func()
   ```
 
-### Abnormal exit handler
+### 終了検知
 - 不測の事態によりmorayが終了してしまった場合 moray.onclose によって終了したことを検知可能
 - js_module.js
   ``` javascript
@@ -178,7 +176,7 @@
   }
   ```
 
-### Logging
+### ログ取得
 - moray 内では logging モジュールによるログ出力を行うため、 moray モジュールに対してロガーを設定することでロギング可能
 - ロガー設定例
   ``` python
@@ -197,7 +195,7 @@
   ```
 
 ***
-## Packages using
+## 使用パッケージ一覧
 - [bottle-websocket](https://pypi.org/project/bottle-websocket/)
   - [MIT License](https://github.com/zeekay/bottle-websocket/blob/master/LICENSE)
 - [requests](https://pypi.org/project/requests/)
