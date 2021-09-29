@@ -96,72 +96,69 @@
   ```
 
 ### Call Python from JavaScript
-- **Python関数の呼び出しごとに別スレッド上で動作する**
+- **New thread is created for each Python call.**
 - py_module.py
   ``` python
   import moray
   
-  # jsから呼び出せるようデコレータにより登録
+  # Expose by decorator so that it can be called from JavaScript.
   @moray.expose
   def py_func(arg):
       return 'result'
   ```
 - js_module.js
   ``` javascript
-  // 登録されたPython関数読み込み
-  // import {関数名} from '/moray/py/モジュール名.js'
+  // Import exposed Python function.
+  // import {<function name>} from '/moray/py/<module name>.js'
   import {py_func} from '/moray/py/py_module.js'
   
-  // 返却値を取得する場合
-  // Promiseオブジェクトのthen, catchにより取得
+  // Call Python function.
+  py_func('arg')
+  
+  // To get the return value,
+  // use "then" and "catch" of Promise object.
   py_func('arg').then(
-      // 正常終了時は実行結果が返却される
+      // Execution result is returned.
       v => ・・・
   ).catch(
-      // 異常終了時は例外メッセージが返却される
+      // Exception message is returned.
       v => ・・・
   )
-
-  // 実行結果の取得が不要な場合は 関数名(引数) で良い
-  py_func('arg')
   ```
 
 ### Call JavaScript from Python
-- 呼び出されたJavaScript関数内でさらにPython関数を呼び出した場合、呼び出し元のPython関数と別スレッドであるため注意
+- **If a Python function is called within a JavaScript function, it will be in a different thread than the calling Python function.**
 - js_module.js
   ``` javascript
   import moray from '/moray.js'
   import {py_func} from '/moray/py/py_module.js'
   
-  // pythonから呼び出せるよう登録
+  // Expose so that it can be called from Python.
   const js_func(arg) = function() {
       return 'result'
   }
   moray.expose(js_func)
   
-  // Python関数呼び出し
+  // Call Python function.
   py_func()
   ```
 - py_module.py
   ``` python
   import moray
   
-  def other_func():
-      # 実行結果の取得が不要な場合は moray.js.関数名(引数) で良い
-      moray.js.js_func('arg')
-  
   @moray.expose
   def py_func():
       
+      # Call JavaScript function.
+      moray.js.js_func('arg')
+      
       try:
-          # 実行結果は moray.js.関数名(引数)() で取得
+          # To get the return value,
+          # use "moray.js.<function name>(<arguments>)()".
           result = moray.js.js_func('arg')()
       except Exception as e:
-          # 異常終了時は実行結果取得時に例外発生
+          # When an exception is raised in JavaScript.
           print(e)
-      
-      # 同一スレッド内であれば別関数からも呼び出し可能
-      other_func()
   ```
 
 ### Abnormal exit handler

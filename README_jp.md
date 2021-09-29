@@ -99,7 +99,7 @@
   ``` python
   import moray
   
-  # jsから呼び出せるようデコレータにより登録
+  # JavaScriptから呼び出せるようデコレータにより登録
   @moray.expose
   def py_func(arg):
       return 'result'
@@ -107,10 +107,13 @@
 - js_module.js
   ``` javascript
   // 登録されたPython関数読み込み
-  // import {関数名} from '/moray/py/モジュール名.js'
+  // import {<関数名>} from '/moray/py/<モジュール名>.js'
   import {py_func} from '/moray/py/py_module.js'
   
-  // 返却値を取得する場合
+  // Python関数呼び出し
+  py_func('arg')
+  
+  // 返却値を取得する場合、
   // Promiseオブジェクトのthen, catchにより取得
   py_func('arg').then(
       // 正常終了時は実行結果が返却される
@@ -119,19 +122,16 @@
       // 異常終了時は例外メッセージが返却される
       v => ・・・
   )
-
-  // 実行結果の取得が不要な場合は 関数名(引数) で良い
-  py_func('arg')
   ```
 
 ### PythonからJavaScript関数呼び出し
-- 呼び出されたJavaScript関数内でさらにPython関数を呼び出した場合、呼び出し元のPython関数と別スレッドであるため注意
+- **呼び出されたJavaScript関数内でさらにPython関数を呼び出した場合、呼び出し元のPython関数と別スレッドであるため注意**
 - js_module.js
   ``` javascript
   import moray from '/moray.js'
   import {py_func} from '/moray/py/py_module.js'
   
-  // pythonから呼び出せるよう登録
+  // Pythonから呼び出せるよう登録
   const js_func(arg) = function() {
       return 'result'
   }
@@ -144,22 +144,19 @@
   ``` python
   import moray
   
-  def other_func():
-      # 実行結果の取得が不要な場合は moray.js.関数名(引数) で良い
-      moray.js.js_func('arg')
-  
   @moray.expose
   def py_func():
       
+      # JavaScript関数呼び出し
+      moray.js.js_func('arg')
+      
       try:
-          # 実行結果は moray.js.関数名(引数)() で取得
+          # 返却値を取得する場合、
+          # moray.js.<関数名>(<引数>)() で取得
           result = moray.js.js_func('arg')()
       except Exception as e:
           # 異常終了時は実行結果取得時に例外発生
           print(e)
-      
-      # 同一スレッド内であれば別関数からも呼び出し可能
-      other_func()
   ```
 
 ### 終了検知
