@@ -1,5 +1,5 @@
 # moray
-**<span>README</span>.md is a translation of README_jp.md.**
+>**<span>README</span>.md is a translation of README_jp.md.<br />So, there may be a mistranslation.**
 
 - Package for creating HTML GUI using Python modules and JavaScript.
 - Managing Python functions in modules.
@@ -162,21 +162,22 @@
   ```
 
 ### Abnormal exit handler
-- 不測の事態によりmorayが終了してしまった場合 moray.onclose によって終了したことを検知可能
+- `"moray.onclose"` is handler that moray end.
 - js_module.js
   ``` javascript
   import moray from '/moray.js'
   
-  // moray.onclose に関数を登録する
-  // evt には null が渡される
+  // Define a function in "moray.onclose".
+  // "evt" is null.
   moray.onclose = function(evt) {
       alert('moray closed');
   }
   ```
 
 ### Logging
-- moray 内では logging モジュールによるログ出力を行うため、 moray モジュールに対してロガーを設定することでロギング可能
-- ロガー設定例
+- `moray` uses `logging` module to logging.
+- So you can set up a logger for `"moray"` to logging.
+- Example
   ``` python
   import logging
   

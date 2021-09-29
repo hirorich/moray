@@ -160,20 +160,21 @@
   ```
 
 ### 終了検知
-- 不測の事態によりmorayが終了してしまった場合 moray.onclose によって終了したことを検知可能
+- 不測の事態によりmorayが終了してしまった場合 `moray.onclose` によって終了したことを検知可能
 - js_module.js
   ``` javascript
   import moray from '/moray.js'
   
-  // moray.onclose に関数を登録する
-  // evt には null が渡される
+  // "moray.onclose" に関数を定義する
+  // "evt" には null が渡される
   moray.onclose = function(evt) {
       alert('moray closed');
   }
   ```
 
 ### ログ取得
-- moray 内では logging モジュールによるログ出力を行うため、 moray モジュールに対してロガーを設定することでロギング可能
+- `moray` 内では `logging` モジュールによるログ出力を行う
+- `moray` モジュールに対してロガーを設定することでロギング可能
 - ロガー設定例
   ``` python
   import logging
