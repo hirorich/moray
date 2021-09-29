@@ -11,16 +11,16 @@ class ChromeTest(unittest.TestCase):
         url = 'http://localhost:port/'
         cmdline_args = []
         
-        correct = [path, '--app={0}'.format(url), '--disable-http-cache', '--incognito']
+        correct = [path, '--app={0}'.format(url)]
         
         self.assertEqual(chrome.create_command(path, url, cmdline_args), correct)
     
     def test_create_command_2(self):
         path = 'path'
         url = 'url'
-        cmdline_args = ['--incognito', 'aaa', '--disable-http-cache', 'bbb']
+        cmdline_args = ['--incognito', '--disable-http-cache']
         
-        correct = [path, '--app={0}'.format(url), '--disable-http-cache', '--incognito', 'aaa', 'bbb']
+        correct = [path, '--app={0}'.format(url), '--incognito', '--disable-http-cache']
         
         self.assertEqual(chrome.create_command(path, url, cmdline_args), correct)
     

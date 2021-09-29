@@ -41,46 +41,45 @@
 ***
 ## Usage
 ### Starting the app
-- 初期表示ページ index.html を含む全てのフロントエンドファイルを web ディレクトリに配置した場合、以下のように起動する
+- Suppose you put all the frontend files in `web` directory, including your start page `index.html`, then the app is started like this.
   ``` python
   import moray
   
   moray.run('web')
   ```
-    - http://<span>localhost:動的に割り当てられたポート番号</span>/index.html が表示される
+    - This will open a browser to `http://localhost:<automatically picked port>/index.html`.
 
 ### App options
-- moray.run() には、キーワード引数として以下の追加オプションを渡すことができる
+- Additional options can be passed to `moray.run()` as keyword arguments.
   - start_page
-    - str 型（デフォルト：''）
-    - 初期表示するページ
-      - '' の場合は index.html が表示される
+    - str type (Default: '')
+    - Your start page.
+      - If `''`, index.html will be opened.
   - host
-    - str 型（デフォルト：'localhost'）
-    - サーバのホスト
-      - 'localhost' または IPアドレス の形式で指定可能
+    - str type (Default: 'localhost')
+    - Hostname to use for the Bottle server.
+      - `'localhost'` or IP address is allowed.
   - port
-    - int 型（デフォルト：0）
-    - サーバのポート番号
-      -  0 または 1025以上65535以下の値 が指定可能
+    - int type (Default: 0)
+    - Port to use for the Bottle server.
+      - `0` or a value between `1025` and `65535` is allowed.
   - browser
-    - str 型（デフォルト：'chrome'）
-    - 使用するブラウザ
-      - 'chrome' のみサポート
+    - str type (Default: 'chrome')
+    - Browser to use.
+      - Only `'chrome'` can be used.
   - cmdline_args
-    - list<str> 型（デフォルト：[]）
-    - ブラウザの起動引数
-      - chromeの場合以下引数が自動的に指定される
-        - '--disable-http-cache' '--incognito'
+    - list of str type (Default: [])
+    - Command line arguments to start the browser.
   - position
-    - tuple<int, int> 型（デフォルト：None）
-    - ブラウザを開いた際の位置(x, y)
-      - 位置を指定しない場合は None を指定する
+    - tuple of 2 int type (Default: None)
+    - The (left, top) of the main window in pixels.
+      - If not specified, `None`.
   - size
-    - tuple<int, int> 型（デフォルト：None）
-    - ブラウザを開いた際のサイズ(x, y)
-      - サイズを指定しない場合は None を指定する
-- 使用例
+    - tuple of 2 int type (Default: None)
+    - The (width, height) of the main window in pixels.
+      - If not specified, `None`.
+
+- Example
   ``` python
   import moray
   
@@ -90,7 +89,7 @@
       host = 'localhost',
       port = 8000,
       browser = 'chrome',
-      cmdline_args = [--disable-dev-tools],
+      cmdline_args = ['--disable-http-cache', '--incognito'],
       position = (400, 200),
       size = (800, 600)
   )

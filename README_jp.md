@@ -39,45 +39,44 @@
 ***
 ## 使用方法
 ### アプリ起動
-- 初期表示ページ index.html を含む全てのフロントエンドファイルを web ディレクトリに配置した場合、以下のように起動する
+- 初期表示ページ `index.html` を含む全てのフロントエンドファイルを `web` ディレクトリに配置した場合、以下のように起動する。
   ``` python
   import moray
   
   moray.run('web')
   ```
-    - http://<span>localhost:動的に割り当てられたポート番号</span>/index.html が表示される
+    - `http://localhost:<動的に割り当てられたポート番号>/index.html` が表示される。
 
 ### 起動オプション
-- moray.run() には、キーワード引数として以下の追加オプションを渡すことができる
+- `moray.run()` には、キーワード引数として以下の追加オプションを渡すことができる。
   - start_page
     - str 型（デフォルト：''）
-    - 初期表示するページ
-      - '' の場合は index.html が表示される
+    - 初期表示するページ。
+      - `''` の場合は index.html が表示される。
   - host
     - str 型（デフォルト：'localhost'）
-    - サーバのホスト
-      - 'localhost' または IPアドレス の形式で指定可能
+    - Bottle サーバで使用するホスト。
+      - `'localhost'` または IPアドレス の形式が使用可能。
   - port
     - int 型（デフォルト：0）
-    - サーバのポート番号
-      -  0 または 1025以上65535以下の値 が指定可能
+    - Bottle サーバで使用するポート番号。
+      -  `0` または `1025` 以上 `65535` 以下の値 が使用可能。
   - browser
     - str 型（デフォルト：'chrome'）
-    - 使用するブラウザ
-      - 'chrome' のみサポート
+    - 使用するブラウザ。
+      - `'chrome'` のみ使用可能。
   - cmdline_args
-    - list<str> 型（デフォルト：[]）
-    - ブラウザの起動引数
-      - chromeの場合以下引数が自動的に指定される
-        - '--disable-http-cache' '--incognito'
+    - list of str 型（デフォルト：[]）
+    - ブラウザの起動引数。
   - position
-    - tuple<int, int> 型（デフォルト：None）
-    - ブラウザを開いた際の位置(x, y)
-      - 位置を指定しない場合は None を指定する
+    - tuple of 2 int 型（デフォルト：None）
+    - ブラウザを開いた際の位置(x, y)。
+      - 位置を指定しない場合は `None` を指定する。
   - size
-    - tuple<int, int> 型（デフォルト：None）
-    - ブラウザを開いた際のサイズ(x, y)
-      - サイズを指定しない場合は None を指定する
+    - tuple of 2 int 型（デフォルト：None）
+    - ブラウザを開いた際のサイズ(x, y)。
+      - サイズを指定しない場合は `None` を指定する。
+
 - 使用例
   ``` python
   import moray
@@ -88,7 +87,7 @@
       host = 'localhost',
       port = 8000,
       browser = 'chrome',
-      cmdline_args = [--disable-dev-tools],
+      cmdline_args = ['--disable-http-cache', '--incognito'],
       position = (400, 200),
       size = (800, 600)
   )
