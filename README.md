@@ -1,35 +1,36 @@
 # moray
-- Python関数をモジュール単位で管理するJavaScriptによるGUI作成ライブラリ
+>**<span>README</span>.md is a translation of README_jp.md.<br />So, there may be a mistranslation.**
+
+- Package for creating HTML GUI using Python modules and JavaScript.
+- Managing Python functions in modules.
 
 ***
-## 目次
-- [インストール](#インストール)
-- [フォルダ構造](#フォルダ構造)
-- [使用方法](#使用方法)
-  - [アプリ起動](#アプリ起動)
-  - [起動オプション](#起動オプション)
-  - [JavaScriptからPython関数呼び出し](#javascriptからpython関数呼び出し)
-  - [PythonからJavaScript関数呼び出し](#pythonからjavascript関数呼び出し)
-  - [終了検知](#終了検知)
-  - [ログ取得](#ログ取得)
-- [依存ライブラリ一覧](#依存ライブラリ一覧)
-- [参考](#参考)
+## Contents
+- [Install](#install)
+- [Directory Structure](#directory-structure)
+- [Usage](#usage)
+  - [Starting the app](#starting-the-app)
+  - [App options](#app-options)
+  - [Call Python from JavaScript](#call-python-from-javascript)
+  - [Call JavaScript from Python](#call-javascript-from-python)
+  - [Abnormal exit handler](#abnormal-exit-handler)
+  - [Logging](#logging)
+- [Packages using](#packages-using)
 
 ***
-## インストール
-- dist フォルダから whl ファイルをダウンロード
-- 以下コマンドを実行
+## Install
+- Execute the following command.
   ```
-  pip install moray-0.0.1-py3-none-any.whl
+  pip install moray
   ```
 
 ***
-## フォルダ構造
-- moray のアプリケーションは、.html, .js, .css などのフロントエンドと、Pythonスクリプトによるバックエンドに分かれる
-- **/moray.js および /moray/ 配下は moray 内部で使用するため使用不可**
+## Directory Structure
+- The moray application consists of a front-end with .html, .js, .css, etc., and a back-end with Python scripts.
+- **/moray.js and /moray/ cannot be used, because moray use them.**
   ```
-  python_script.py     <-- Pythonスクリプト
-  web/                 <-- 静的ウェブフォルダ
+  python_script.py     <-- Python script
+  web/                 <-- static web directory
     index.html
     css/
       style.css
@@ -38,48 +39,47 @@
   ```
 
 ***
-## 使用方法
-### アプリ起動
-- 初期表示ページ index.html を含む全てのフロントエンドファイルを web ディレクトリに配置した場合、以下のように起動する
+## Usage
+### Starting the app
+- Suppose you put all the frontend files in `web` directory, including your start page `index.html`, then the app is started like this.
   ``` python
   import moray
   
   moray.run('web')
   ```
-    - http://<span>localhost:動的に割り当てられたポート番号</span>/index.html が表示される
+    - This will open a browser to `http://localhost:<automatically picked port>/index.html`.
 
-### 起動オプション
-- moray.run() には、キーワード引数として以下の追加オプションを渡すことができる
+### App options
+- Additional options can be passed to `moray.run()` as keyword arguments.
   - start_page
-    - str 型（デフォルト：''）
-    - 初期表示するページ
-      - '' の場合は index.html が表示される
+    - str type (Default: '')
+    - Your start page.
+      - If `''`, index.html will be opened.
   - host
-    - str 型（デフォルト：'localhost'）
-    - サーバのホスト
-      - 'localhost' または IPアドレス の形式で指定可能
+    - str type (Default: 'localhost')
+    - Hostname to use for the Bottle server.
+      - `'localhost'` or IP address is allowed.
   - port
-    - int 型（デフォルト：0）
-    - サーバのポート番号
-      -  0 または 1025以上65535以下の値 が指定可能
+    - int type (Default: 0)
+    - Port to use for the Bottle server.
+      - `0` or a value between `1025` and `65535` is allowed.
   - browser
-    - str 型（デフォルト：'chrome'）
-    - 使用するブラウザ
-      - 'chrome' のみサポート
+    - str type (Default: 'chrome')
+    - Browser to use.
+      - Only `'chrome'` can be used.
   - cmdline_args
-    - list<str> 型（デフォルト：[]）
-    - ブラウザの起動引数
-      - chromeの場合以下引数が自動的に指定される
-        - '--disable-http-cache' '--incognito'
+    - list of str type (Default: [])
+    - Command line arguments to start the browser.
   - position
-    - tuple<int, int> 型（デフォルト：None）
-    - ブラウザを開いた際の位置(x, y)
-      - 位置を指定しない場合は None を指定する
+    - tuple of 2 int type (Default: None)
+    - The (left, top) of the main window in pixels.
+      - If not specified, `None`.
   - size
-    - tuple<int, int> 型（デフォルト：None）
-    - ブラウザを開いた際のサイズ(x, y)
-      - サイズを指定しない場合は None を指定する
-- 使用例
+    - tuple of 2 int type (Default: None)
+    - The (width, height) of the main window in pixels.
+      - If not specified, `None`.
+
+- Example
   ``` python
   import moray
   
@@ -89,97 +89,95 @@
       host = 'localhost',
       port = 8000,
       browser = 'chrome',
-      cmdline_args = [--disable-dev-tools],
+      cmdline_args = ['--disable-http-cache', '--incognito'],
       position = (400, 200),
       size = (800, 600)
   )
   ```
 
-### JavaScriptからPython関数呼び出し
-- **Python関数の呼び出しごとに別スレッド上で動作する**
+### Call Python from JavaScript
+- **New thread is created for each Python call.**
 - py_module.py
   ``` python
   import moray
   
-  # jsから呼び出せるようデコレータにより登録
+  # Expose by decorator so that it can be called from JavaScript.
   @moray.expose
   def py_func(arg):
       return 'result'
   ```
 - js_module.js
   ``` javascript
-  // 登録されたPython関数読み込み
-  // import {関数名} from '/moray/py/モジュール名.js'
+  // Import exposed Python function.
+  // import {<function name>} from '/moray/py/<module name>.js'
   import {py_func} from '/moray/py/py_module.js'
   
-  // 返却値を取得する場合
-  // Promiseオブジェクトのthen, catchにより取得
+  // Call Python function.
+  py_func('arg')
+  
+  // To get the return value,
+  // use "then" and "catch" of Promise object.
   py_func('arg').then(
-      // 正常終了時は実行結果が返却される
+      // Execution result is returned.
       v => ・・・
   ).catch(
-      // 異常終了時は例外メッセージが返却される
+      // Exception message is returned.
       v => ・・・
   )
-
-  // 実行結果の取得が不要な場合は 関数名(引数) で良い
-  py_func('arg')
   ```
 
-### PythonからJavaScript関数呼び出し
-- 呼び出されたJavaScript関数内でさらにPython関数を呼び出した場合、呼び出し元のPython関数と別スレッドであるため注意
+### Call JavaScript from Python
+- **If a Python function is called within a JavaScript function, it will be in a different thread than the calling Python function.**
 - js_module.js
   ``` javascript
   import moray from '/moray.js'
   import {py_func} from '/moray/py/py_module.js'
   
-  // pythonから呼び出せるよう登録
+  // Expose so that it can be called from Python.
   const js_func(arg) = function() {
       return 'result'
   }
   moray.expose(js_func)
   
-  // Python関数呼び出し
+  // Call Python function.
   py_func()
   ```
 - py_module.py
   ``` python
   import moray
   
-  def other_func():
-      # 実行結果の取得が不要な場合は moray.js.関数名(引数) で良い
-      moray.js.js_func('arg')
-  
   @moray.expose
   def py_func():
       
+      # Call JavaScript function.
+      moray.js.js_func('arg')
+      
       try:
-          # 実行結果は moray.js.関数名(引数)() で取得
+          # To get the return value,
+          # use "moray.js.<function name>(<arguments>)()".
           result = moray.js.js_func('arg')()
       except Exception as e:
-          # 異常終了時は実行結果取得時に例外発生
+          # When an exception is raised in JavaScript.
           print(e)
-      
-      # 同一スレッド内であれば別関数からも呼び出し可能
-      other_func()
   ```
 
-### 終了検知
-- 不測の事態によりmorayが終了してしまった場合 moray.onclose によって終了したことを検知可能
+### Abnormal exit handler
+- `"moray.onclose"` is handler that moray end.
 - js_module.js
   ``` javascript
   import moray from '/moray.js'
   
-  // moray.onclose に関数を登録する
-  // evt には null が渡される
+  // Define a function in "moray.onclose".
+  // "evt" is null.
   moray.onclose = function(evt) {
       alert('moray closed');
   }
   ```
 
-### ログ取得
-- moray 内では logging モジュールによるログ出力を行うため、 moray モジュールに対してロガーを設定することでロギング可能
-- ロガー設定例
+### Logging
+- `moray` uses `logging` module to logging.
+- So you can set up a logger for `"moray"` to logging.
+- Example
   ``` python
   import logging
   
@@ -196,15 +194,10 @@
   ```
 
 ***
-## 依存ライブラリ一覧
+## Packages using
 - [bottle-websocket](https://pypi.org/project/bottle-websocket/)
   - [MIT License](https://github.com/zeekay/bottle-websocket/blob/master/LICENSE)
 - [requests](https://pypi.org/project/requests/)
   - [Apache License 2.0](https://github.com/psf/requests/blob/main/LICENSE)
 - [Jinja2](https://pypi.org/project/Jinja2/)
   - [BSD License (BSD-3-Clause)](https://github.com/pallets/jinja/blob/main/LICENSE.rst)
-
-***
-## 参考
-- [eel](https://github.com/ChrisKnott/Eel)
-

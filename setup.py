@@ -7,7 +7,7 @@ setuptools.setup(
     name = 'moray',
     version = '0.0.1',
     author = 'hirorich',
-    description = 'Python関数をモジュール単位で管理するJavaScriptによるGUI作成ライブラリ',
+    description = 'Package for creating HTML GUI using Python modules and JavaScript.',
     long_description = long_description,
     long_description_content_type = 'text/markdown',
     url = 'https://github.com/hirorich/moray',

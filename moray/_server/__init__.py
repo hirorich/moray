@@ -47,10 +47,7 @@ def _log_to_logger(func):
                 if status_code < 400:
                     _logger.info(response_str)
                 else:
-                    if request.urlparts.path == r'/favicon.ico':
-                        _logger.warn(response_str)
-                    else:
-                        _logger.error(response_str)
+                    _logger.error(response_str)
                 
                 # 返り値がない場合のログ出力
             elif result is None:
